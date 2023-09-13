@@ -11,8 +11,8 @@
     "prisma": "^5.2.0"
   },
   "scripts": {
-    "dev": "nodemon app.js",
-    "start": "node app.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
