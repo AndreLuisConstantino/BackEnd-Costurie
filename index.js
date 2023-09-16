@@ -86,7 +86,7 @@ app.post('/usuario/cadastro', cors(), bodyParserJSON, async (request, response) 
 })
 
 //Endpoint para autenticar o Usuário
-app.get('/usuario/login', cors(), bodyParserJSON, async (request, response) => {
+app.post('/usuario/login', cors(), bodyParserJSON, async (request, response) => {
     let contentType = request.headers['content-type']
 
     if (String(contentType).toLowerCase() == 'application/json') {
