@@ -89,15 +89,17 @@ const selectUserByLogin = async (dadosLogin) => {
   }
 };
 
-const getUserByEmail = async (dadosEmail) => {
-  let resultEmail = await usuarioModel.selectUserByEmailModel(dadosEmail);
+const getUserByEmail = async (email) => {
+  let resultEmail = await usuarioModel.selectUserByEmailModel(email);
 
   if (resultEmail) {
     let dadosEmailJson = {};
     dadosEmailJson.email = resultEmail;
+    dadosEmailJson.status = message.ERROR_EMAIL_ALREADY_EXISTS.status
+    dadosEmailJson.message = message.ERROR_EMAIL_ALREADY_EXISTS.message
     return dadosEmailJson;
   } else {
-    return false;
+    return message.ERROR_EMAIL_NOT_FOUND;
   }
 };
 

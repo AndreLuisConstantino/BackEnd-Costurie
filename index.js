@@ -75,19 +75,24 @@ app.post('/usuario/cadastro', cors(), bodyParserJSON, async (request, response) 
         //Recebe os dados encaminhados na requisição
         let dadosBody = request.body
 
-        let resultUsuarioExistente = await usuarioController.selectUserByEmailTagName(dadosBody)
-
-        if (resultUsuarioExistente.message == "Usuário já existe em nosso sistema") {
-            response.status(resultUsuarioExistente.status)
-            response.json(resultUsuarioExistente)
+        let dadosEmailExistente = await usuarioController.getUserByEmail(dadosBody.email)
+        
+        if (dadosEmailExistente.message == 'O email já existe em nosso sistema') {
+            response.status(dadosEmailExistente.status)
+            response.json(dadosEmailExistente)
         } else {
-            let resultDadosUsuario = await usuarioController.insertUsuario(dadosBody)
+            let resultUsuarioExistente = await usuarioController.selectUserByEmailTagName(dadosBody)
 
-            response.status(resultDadosUsuario.status)
-            response.json(resultDadosUsuario)
+            if (resultUsuarioExistente.message == "Usuário já existe em nosso sistema") {
+                response.status(resultUsuarioExistente.status)
+                response.json(resultUsuarioExistente)
+            } else {
+                let resultDadosUsuario = await usuarioController.insertUsuario(dadosBody)
+
+                response.status(resultDadosUsuario.status)
+                response.json(resultDadosUsuario)
+            }
         }
-
-
     } else {
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
         response.json(message.ERROR_INVALID_CONTENT_TYPE)
@@ -155,7 +160,7 @@ app.post('/usuario/esqueci_a_senha', cors(), bodyParserJSON, async (request, res
             }
 
             smtp.sendMail(mailOptions).then(info => {
-                response.json({message: 'Email enviado com sucesso', id_usuario: resultUserEmail.email[0].id})
+                response.json({ message: 'Email enviado com sucesso', id_usuario: resultUserEmail.email[0].id })
             }).catch(error => {
                 response.send(error)
             })
