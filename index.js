@@ -127,13 +127,13 @@ app.get('/usuario/token', verifyJWT, cors(), bodyParserJSON, async (request, res
 })
 
 //Endpoint para enviar email no esqueci a senha
-app.post('/usuario/esqueci_a_senha', cors(), bodyParserJSON, async (request, response) => {
+app.post('/usuario/esqueceu_a_senha', cors(), bodyParserJSON, async (request, response) => {
 
     let email = request.body
 
     let resultUserEmail = await usuarioController.getUserByEmail(email)
 
-    if (resultUserEmail) {
+    if (resultUserEmail.message == 'O email já existe em nosso sistema') {
 
         const token = Math.floor(Math.random() * 1000000)
 
@@ -144,9 +144,8 @@ app.post('/usuario/esqueci_a_senha', cors(), bodyParserJSON, async (request, res
 
         let updateToken = await usuarioController.updateUserTokenAndExpires(resultUserEmail.email[0].id, token, dataFormatada)
 
-        if (updateToken) {
+        if (updateToken.atualizado) {
             let nodemailer = require('./module/secret.js')
-
             let smtp = nodemailer.smtp
 
             let mailOptions = {
@@ -160,7 +159,8 @@ app.post('/usuario/esqueci_a_senha', cors(), bodyParserJSON, async (request, res
             }
 
             smtp.sendMail(mailOptions).then(info => {
-                response.json({ message: 'Email enviado com sucesso', id_usuario: resultUserEmail.email[0].id })
+                info.id = resultUserEmail.email[0].id
+                response.send(info)
             }).catch(error => {
                 response.send(error)
             })

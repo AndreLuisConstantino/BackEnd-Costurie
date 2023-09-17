@@ -58,10 +58,11 @@ const selectUserByLoginModel = async (dadosLogin) => {
 
 const selectUserByEmailModel = async (email) => {
 
-    let sql = `select tbl_usuario.id, tbl_usuario.nome_de_usuario, tbl_usuario.email from tbl_usuario where tbl_usuario.email = '${email}';`
+    let sql = `select tbl_usuario.id, tbl_usuario.nome_de_usuario, tbl_usuario.email from tbl_usuario where tbl_usuario.email = '${email.email}';`
+
+
 
     let response = await prisma.$queryRawUnsafe(sql)
-
     if (response.length > 0) {
         return response
     } else {

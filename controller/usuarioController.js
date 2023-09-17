@@ -91,7 +91,6 @@ const selectUserByLogin = async (dadosLogin) => {
 
 const getUserByEmail = async (email) => {
   let resultEmail = await usuarioModel.selectUserByEmailModel(email);
-
   if (resultEmail) {
     let dadosEmailJson = {};
     dadosEmailJson.email = resultEmail;
@@ -149,8 +148,7 @@ const selectTokenById = async (dadosBody) => {
 
       let now = new Date()
 
-      console.log(now);
-      ; let dataFormatada = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+      let dataFormatada = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
 
       if (dataArray[2] < dataFormatada) {
 
