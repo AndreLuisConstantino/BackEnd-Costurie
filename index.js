@@ -155,13 +155,11 @@ app.post('/usuario/esqueci_a_senha', cors(), bodyParserJSON, async (request, res
             }
 
             smtp.sendMail(mailOptions).then(info => {
-                response.send(info)
+                response.json({message: 'Email enviado com sucesso', id_usuario: resultUserEmail.email[0].id})
             }).catch(error => {
                 response.send(error)
             })
         }
-
-
     } else {
         response.status(message.ERROR_EMAIL_NOT_FOUND.status)
         response.json(message.ERROR_EMAIL_NOT_FOUND)

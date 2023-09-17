@@ -8,6 +8,9 @@
 //Import do arquivo de configuração das variáveis, constantes e funções globais
 var message = require("../controller/modulo/config.js");
 
+//Import JWT
+const jwt = require("../middleware/middlewareJWT.js");
+
 /* Imports Models */
 const usuarioModel = require("../model/usuarioModel.js");
 
@@ -41,9 +44,13 @@ const insertUsuario = async (dadosUsuario) => {
         //Chama a função que vai encontrar o ID gerado após o inser
         let novoUsuario = await usuarioModel.selectLastIDModel();
 
+        //Gera o token pelo jwt
+        let tokenUser = await jwt.createJWT(novoUsuario[0].id);
+
         let dadosUsuarioJson = {};
         dadosUsuarioJson.status = message.SUCCESS_CREATED_ITEM.status;
         dadosUsuarioJson.aluno = novoUsuario[0];
+        dadosUsuarioJson.token = tokenUser
 
         return dadosUsuarioJson; //StatusCode 201
       } else {
@@ -64,8 +71,6 @@ const selectUserByLogin = async (dadosLogin) => {
   ) {
     return message.ERROR_REQUIRED_FIELDS;
   } else {
-    //Import JWT
-    const jwt = require("../middleware/middlewareJWT.js");
 
     let login = await usuarioModel.selectUserByLoginModel(dadosLogin);
 
@@ -210,9 +215,9 @@ const updateUserProfile = async (dadosBody) => {
 const selectUserByEmailTagName = async (dadosBody) => {
   let dadosJson = {}
   if (dadosBody.nome_de_usuario == '' || dadosBody.nome_de_usuario == undefined || !isNaN(dadosBody.nome_de_usuario) ||
-      dadosBody.email == '' || dadosBody.email ==  undefined || !isNaN(dadosBody.email) ||
-      dadosBody.senha == '' || dadosBody.senha == undefined || !isNaN(dadosBody.senha)){
-        return message.ERROR_REQUIRED_FIELDS
+    dadosBody.email == '' || dadosBody.email == undefined || !isNaN(dadosBody.email) ||
+    dadosBody.senha == '' || dadosBody.senha == undefined || !isNaN(dadosBody.senha)) {
+    return message.ERROR_REQUIRED_FIELDS
   } else {
     let resultUserEmailTagName = await usuarioModel.selectUserByEmailTagNameModel(dadosBody)
 
