@@ -75,10 +75,19 @@ app.post('/usuario/cadastro', cors(), bodyParserJSON, async (request, response) 
         //Recebe os dados encaminhados na requisição
         let dadosBody = request.body
 
-        let resultDadosUsuario = await usuarioController.insertUsuario(dadosBody)
+        let resultUsuarioExistente = await usuarioController.selectUserByEmailTagName(dadosBody)
 
-        response.status(resultDadosUsuario.status)
-        response.json(resultDadosUsuario)
+        if (resultUsuarioExistente.message == "Usuário já existe em nosso sistema") {
+            response.status(resultUsuarioExistente.status)
+            response.json(resultUsuarioExistente)
+        } else {
+            let resultDadosUsuario = await usuarioController.insertUsuario(dadosBody)
+
+            response.status(resultDadosUsuario.status)
+            response.json(resultDadosUsuario)
+        }
+
+
     } else {
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
         response.json(message.ERROR_INVALID_CONTENT_TYPE)
@@ -202,14 +211,14 @@ app.put('/usuario/atualizar_senha', cors(), bodyParserJSON, async (request, resp
         response.json(message.ERROR_INVALID_CONTENT_TYPE)
     }
 
-    
+
 })
 
 /* Personalização de perfil */
 app.put('/usuario/personalizar_perfil', cors(), bodyParserJSON, async (request, response) => {
     //Recebe o content-type da requisição
     let contentType = request.headers['content-type']
-    
+
     if (String(contentType).toLowerCase() == 'application/json') {
         let dadosBody = request.body
 

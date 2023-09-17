@@ -142,6 +142,22 @@ const dadosUpdatePersonalizarPerfilModel = async (dadosBody) => {
     }
 }
 
+const selectUserByEmailTagNameModel = async (dadosBody) => {
+    let sql = `select tbl_usuario.id ,tbl_usuario.nome_de_usuario, tbl_usuario.email from tbl_usuario 
+                    where 
+                    tbl_usuario.email = '${dadosBody.email}' 
+                    and tbl_usuario.senha = '${dadosBody.senha}' 
+                    and tbl_usuario.nome_de_usuario = '${dadosBody.nome_de_usuario}';`
+
+    let response = await prisma.$queryRawUnsafe(sql)
+
+    if (response.length > 0) {
+        return response
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     insertUsuarioModel,
     selectLastIDModel,
@@ -151,5 +167,6 @@ module.exports = {
     updateUserTokenAndExpiresModel,
     selectTokenAndIdModel,
     updateUserPasswordModel,
-    dadosUpdatePersonalizarPerfilModel
+    dadosUpdatePersonalizarPerfilModel,
+    selectUserByEmailTagNameModel
 }

@@ -120,11 +120,11 @@ const updateUserTokenAndExpires = async (id, token, tempo_expiracao) => {
 const selectTokenById = async (dadosBody) => {
 
   if (dadosBody.id == '' || dadosBody.id == undefined || isNaN(dadosBody.id) ||
-      dadosBody.token == '' || dadosBody.token == undefined || isNaN(dadosBody.token) || dadosBody.token.length > 10) {
+    dadosBody.token == '' || dadosBody.token == undefined || isNaN(dadosBody.token) || dadosBody.token.length > 10) {
     return message.ERROR_MISTAKE_IN_THE_FILDS
   } else {
 
-  
+
     let resultUser = await usuarioModel.selectUserByIdModel(dadosBody.id)
 
 
@@ -143,8 +143,8 @@ const selectTokenById = async (dadosBody) => {
       let now = new Date()
 
       console.log(now);
-;    let dataFormatada = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
-      
+      ; let dataFormatada = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+
       if (dataArray[2] < dataFormatada) {
 
         let dadosTokenJson = {}
@@ -166,7 +166,7 @@ const updateUserPassword = async (dadosBody) => {
 
   if (dadosBody.senha == '' || dadosBody.senha == undefined || dadosBody.senha.length > 515 || !isNaN(dadosBody.senha)) {
     return message.ERROR_MISTAKE_IN_THE_FILDS
-  } else if (dadosBody.id == '' || dadosBody.id == undefined || isNaN(dadosBody.id)){
+  } else if (dadosBody.id == '' || dadosBody.id == undefined || isNaN(dadosBody.id)) {
     return message.ERROR_INVALID_ID
   } else {
 
@@ -188,7 +188,7 @@ const updateUserPassword = async (dadosBody) => {
 }
 
 const updateUserProfile = async (dadosBody) => {
-  if (dadosBody.id == ''|| dadosBody.id == undefined || isNaN(dadosBody.id)){
+  if (dadosBody.id == '' || dadosBody.id == undefined || isNaN(dadosBody.id)) {
     return message.ERROR_INVALID_ID
   } else {
     let dadosUpdatePersonalizarPerfil = usuarioModel.dadosUpdatePersonalizarPerfilModel(dadosBody)
@@ -207,6 +207,28 @@ const updateUserProfile = async (dadosBody) => {
   }
 }
 
+const selectUserByEmailTagName = async (dadosBody) => {
+  let dadosJson = {}
+  if (dadosBody.nome_de_usuario == '' || dadosBody.nome_de_usuario == undefined || !isNaN(dadosBody.nome_de_usuario) ||
+      dadosBody.email == '' || dadosBody.email ==  undefined || !isNaN(dadosBody.email) ||
+      dadosBody.senha == '' || dadosBody.senha == undefined || !isNaN(dadosBody.senha)){
+        return message.ERROR_REQUIRED_FIELDS
+  } else {
+    let resultUserEmailTagName = await usuarioModel.selectUserByEmailTagNameModel(dadosBody)
+
+    if (resultUserEmailTagName) {
+      dadosJson.message = 'Usuário já existe em nosso sistema'
+      dadosJson.status = 400
+
+      return dadosJson
+    } else {
+      dadosJson.message = 'Usuário não existe em nosso sistema'
+      dadosJson.status = 200
+      return dadosJson
+    }
+  }
+}
+
 module.exports = {
   insertUsuario,
   selectUserByLogin,
@@ -214,5 +236,6 @@ module.exports = {
   updateUserTokenAndExpires,
   selectTokenById,
   updateUserPassword,
-  updateUserProfile
+  updateUserProfile,
+  selectUserByEmailTagName
 };
