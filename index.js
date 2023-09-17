@@ -113,7 +113,7 @@ app.get('/usuario/token', verifyJWT, cors(), bodyParserJSON, async (request, res
 })
 
 //Endpoint para enviar email no esqueci a senha
-app.get('/usuario/esqueci_a_senha', cors(), bodyParserJSON, async (request, response) => {
+app.post('/usuario/esqueci_a_senha', cors(), bodyParserJSON, async (request, response) => {
 
     let email = request.body
 
@@ -160,7 +160,7 @@ app.get('/usuario/esqueci_a_senha', cors(), bodyParserJSON, async (request, resp
 })
 
 //Endpoint para a validação do token gerado no esqueci a senha
-app.get('/usuario/validar_token', cors(), bodyParserJSON, async (request, response) => {
+app.post('/usuario/validar_token', cors(), bodyParserJSON, async (request, response) => {
     let contentType = request.headers['content-type']
 
     let dadosBody = request.body

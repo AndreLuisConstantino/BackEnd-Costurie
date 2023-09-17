@@ -132,6 +132,8 @@ const selectTokenById = async (dadosBody) => {
 
       let resultToken = await usuarioModel.selectTokenAndIdModel(dadosBody)
 
+      console.log(resultToken);
+
       let dataToken = resultToken[0].tempo_expiracao
 
       let dataArray = String(dataToken).split('T')
