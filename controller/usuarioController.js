@@ -124,9 +124,8 @@ const updateUserTokenAndExpires = async (id, token, tempo_expiracao) => {
 };
 
 const selectTokenById = async (dadosBody) => {
-
   if (dadosBody.id == '' || dadosBody.id == undefined || isNaN(dadosBody.id) ||
-    dadosBody.token == '' || dadosBody.token == undefined || isNaN(dadosBody.token) || dadosBody.token.length > 10) {
+      dadosBody.token == '' || dadosBody.token == undefined || isNaN(dadosBody.token) || dadosBody.token.length > 10) {
     return message.ERROR_MISTAKE_IN_THE_FILDS
   } else {
 
@@ -215,8 +214,8 @@ const updateUserProfile = async (dadosBody) => {
 const selectUserByEmailTagName = async (dadosBody) => {
   let dadosJson = {}
   if (dadosBody.nome_de_usuario == '' || dadosBody.nome_de_usuario == undefined || !isNaN(dadosBody.nome_de_usuario) ||
-    dadosBody.email == '' || dadosBody.email == undefined || !isNaN(dadosBody.email) ||
-    dadosBody.senha == '' || dadosBody.senha == undefined || !isNaN(dadosBody.senha)) {
+      dadosBody.email == '' || dadosBody.email == undefined || !isNaN(dadosBody.email) ||
+      dadosBody.senha == '' || dadosBody.senha == undefined || !isNaN(dadosBody.senha)) {
     return message.ERROR_REQUIRED_FIELDS
   } else {
     let resultUserEmailTagName = await usuarioModel.selectUserByEmailTagNameModel(dadosBody)
@@ -227,9 +226,34 @@ const selectUserByEmailTagName = async (dadosBody) => {
 
       return dadosJson
     } else {
+
       dadosJson.message = 'Usuário não existe em nosso sistema'
       dadosJson.status = 200
       return dadosJson
+    }
+  }
+}
+
+const selectProfileById = async (id) => {
+
+  let dadosUsuarioJson = {}
+  if (id== '' || id == undefined || isNaN(id)) {
+    return message.ERROR_INVALID_ID
+  } else {
+    let dadosPerfilUsuario = await usuarioModel.selectProfileByIdModel(id)
+
+    if(dadosPerfilUsuario) {
+
+      dadosUsuarioJson.usuario = dadosPerfilUsuario[0]
+      dadosUsuarioJson.status = 200
+      dadosPerfilUsuario.message = 'Usuário encontrado com sucesso'
+
+      return dadosUsuarioJson
+    } else {
+      dadosUsuarioJson.message = 'Usuário não encontrado em nosso sistema'
+      dadosUsuarioJson.status = 404
+
+      return dadosUsuarioJson
     }
   }
 }
@@ -242,5 +266,6 @@ module.exports = {
   selectTokenById,
   updateUserPassword,
   updateUserProfile,
-  selectUserByEmailTagName
+  selectUserByEmailTagName,
+  selectProfileById
 };

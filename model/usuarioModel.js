@@ -60,8 +60,6 @@ const selectUserByEmailModel = async (email) => {
 
     let sql = `select tbl_usuario.id, tbl_usuario.nome_de_usuario, tbl_usuario.email from tbl_usuario where tbl_usuario.email = '${email.email}';`
 
-
-
     let response = await prisma.$queryRawUnsafe(sql)
     if (response.length > 0) {
         return response
@@ -147,8 +145,44 @@ const selectUserByEmailTagNameModel = async (dadosBody) => {
     let sql = `select tbl_usuario.id ,tbl_usuario.nome_de_usuario, tbl_usuario.email from tbl_usuario 
                     where 
                     tbl_usuario.email = '${dadosBody.email}' 
-                    and tbl_usuario.senha = '${dadosBody.senha}' 
                     and tbl_usuario.nome_de_usuario = '${dadosBody.nome_de_usuario}';`
+
+    let response = await prisma.$queryRawUnsafe(sql)
+
+    if (response.length > 0) {
+        return response
+    } else {
+        return false
+    }
+}
+
+const selectProfileByIdModel = async (id) => {
+    let sql = `select  tbl_usuario.id as id_usuario,
+		tbl_usuario.nome as nome,
+		tbl_usuario.descricao as descricao,
+        tbl_usuario.foto as foto,
+        tbl_usuario.nome_de_usuario as nome_de_usuario,
+        tbl_usuario.email as email,
+        tbl_usuario.senha as senha, 
+        tbl_usuario.id_localizacao as id_localizacao,
+		tbl_localizacao.bairro as bairro,
+        tbl_localizacao.cidade as cidade,
+        tbl_localizacao.estado as estado,
+        tbl_tag.id as id_tag,
+        tbl_tag.nome as nome_tag,
+        tbl_tag.imagem as imagem_tag,
+        tbl_categoria.id as id_categoria,
+        tbl_categoria.nome as nome_categoria
+from tbl_usuario
+	inner join tbl_localizacao
+		on tbl_localizacao.id = tbl_usuario.id_localizacao
+	inner join tbl_tag_usuario
+		on tbl_tag_usuario.id_usuario = tbl_usuario.id
+	inner join tbl_tag
+		on tbl_tag.id = tbl_tag_usuario.id_tag
+	inner join tbl_categoria
+		on tbl_categoria.id= tbl_tag.id_categoria
+where id_usuario = ${id};`
 
     let response = await prisma.$queryRawUnsafe(sql)
 
@@ -169,5 +203,6 @@ module.exports = {
     selectTokenAndIdModel,
     updateUserPasswordModel,
     dadosUpdatePersonalizarPerfilModel,
-    selectUserByEmailTagNameModel
+    selectUserByEmailTagNameModel,
+    selectProfileByIdModel
 }

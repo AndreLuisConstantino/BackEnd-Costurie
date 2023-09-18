@@ -48,14 +48,12 @@ const bodyParserJSON = bodyParser.json()
 // const server = require('http').createServer(app);
 // const io = require('socket.io')(server);
 
-//Import do crypto
-const crypto = require('crypto')
-
 //Receber o token encaminhado nas requisicões e solicitar a validacão
 const verifyJWT = async (request, response, next) => {
     const jwt = require('./middleware/middlewareJWT.js')
 
     let token = request.headers['x-access-token']
+    console.log(token);
 
     const autenticidadeToken = await jwt.validateJWT(token)
 
@@ -75,24 +73,42 @@ app.post('/usuario/cadastro', cors(), bodyParserJSON, async (request, response) 
         //Recebe os dados encaminhados na requisição
         let dadosBody = request.body
 
-        let dadosEmailExistente = await usuarioController.getUserByEmail(dadosBody.email)
+        // let dadosEmailExistente = await usuarioController.getUserByEmail(dadosBody.email)
         
-        if (dadosEmailExistente.message == 'O email já existe em nosso sistema') {
-            response.status(dadosEmailExistente.status)
-            response.json(dadosEmailExistente)
+        // if (dadosEmailExistente.message == 'O email já existe em nosso sistema') {
+        //     response.status(dadosEmailExistente.status)
+        //     response.json(dadosEmailExistente)
+        // } else {
+        //     let resultUsuarioExistente = await usuarioController.selectUserByEmailTagName(dadosBody)
+
+        //     if (resultUsuarioExistente.message == "Usuário já existe em nosso sistema") {
+        //         response.status(resultUsuarioExistente.status)
+        //         response.json(resultUsuarioExistente)
+        //     } else {
+        //         let resultDadosUsuario = await usuarioController.insertUsuario(dadosBody)
+
+        //         response.status(resultDadosUsuario.status)
+        //         response.json(resultDadosUsuario)
+        //     }
+        // }
+        let resultUsuarioExistente = await usuarioController.selectUserByEmailTagName(dadosBody)
+
+        if (resultUsuarioExistente.message == 'Usuário já existe em nosso sistema') {
+            response.status(resultUsuarioExistente.status)
+            response.json(resultUsuarioExistente)
         } else {
-            let resultUsuarioExistente = await usuarioController.selectUserByEmailTagName(dadosBody)
+            let resultDadosUsuario = await usuarioController.insertUsuario(dadosBody)
 
-            if (resultUsuarioExistente.message == "Usuário já existe em nosso sistema") {
-                response.status(resultUsuarioExistente.status)
-                response.json(resultUsuarioExistente)
+            if (resultDadosUsuario) {
+                response.status(resultDadosUsuario.status)
+                response.json(resultDadosUsuario)
             } else {
-                let resultDadosUsuario = await usuarioController.insertUsuario(dadosBody)
-
                 response.status(resultDadosUsuario.status)
                 response.json(resultDadosUsuario)
             }
+            
         }
+
     } else {
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
         response.json(message.ERROR_INVALID_CONTENT_TYPE)
@@ -213,8 +229,6 @@ app.put('/usuario/atualizar_senha', cors(), bodyParserJSON, async (request, resp
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
         response.json(message.ERROR_INVALID_CONTENT_TYPE)
     }
-
-
 })
 
 /* Personalização de perfil */
@@ -237,6 +251,22 @@ app.put('/usuario/personalizar_perfil', cors(), bodyParserJSON, async (request, 
     } else {
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
         response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+})
+
+/* Perfil de Usuário */
+app.get('/usuario/meu_perfil/:id', verifyJWT ,cors(), bodyParserJSON, async (request, response) => {
+
+    let usuarioId = request.params.id
+
+    let resultDadosPerfilUsuario = await usuarioController.selectProfileById(usuarioId)
+    // console.log(resultDadosPerfilUsuario);
+    if (resultDadosPerfilUsuario) {
+        response.status(resultDadosPerfilUsuario.status)
+        response.json(resultDadosPerfilUsuario)
+    } else {
+        response.status(resultDadosPerfilUsuario.status)
+        response.json(resultDadosPerfilUsuario)
     }
 })
 
