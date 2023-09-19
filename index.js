@@ -24,6 +24,7 @@ const bodyParser = require('body-parser')
 
 /* Imports Controllers */
 const usuarioController = require('./controller/usuarioController.js')
+const localizacaoController = require('./controller/localizacaoController.js')
 
 //Cria um objeto com as características do expresponses
 const app = express()
@@ -256,7 +257,7 @@ app.put('/usuario/personalizar_perfil', cors(), bodyParserJSON, async (request, 
 
 /* Perfil de Usuário */
 app.get('/usuario/meu_perfil/:id', verifyJWT ,cors(), bodyParserJSON, async (request, response) => {
-
+    
     let usuarioId = request.params.id
 
     let resultDadosPerfilUsuario = await usuarioController.selectProfileById(usuarioId)
@@ -268,6 +269,46 @@ app.get('/usuario/meu_perfil/:id', verifyJWT ,cors(), bodyParserJSON, async (req
         response.status(resultDadosPerfilUsuario.status)
         response.json(resultDadosPerfilUsuario)
     }
+})
+
+app.get('/localizacao/estados/', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+
+    let dadosEstados = await localizacaoController.selectAllStates()
+
+    if (dadosEstados) {
+        response.status(dadosEstados.status)
+        response.json(dadosEstados)
+    } else {
+        response.status(dadosEstados.status)
+        response.json(dadosEstados)
+    }
+})
+
+app.get('/localizacao/cidades/', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+
+    let dadosCidades = localizacaoController.selectAllCitiesByState()
+})
+
+app.put('/usuario/editar_perfil', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let dadosBody = request.body
+
+        let dadosUpdatePerfil = await usuarioController.updateProfileTagLocality(dadosBody)
+
+        if (dadosUpdatePerfil){
+            response.status(dadosUpdatePerfil.status)
+            response.json(dadosUpdatePerfil)
+        } else {
+            response.status(dadosUpdatePerfil.status)
+            response.json(dadosUpdatePerfil)
+        }
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }    
 })
 
 app.listen(3000, () => console.log('Servidor rodando na porta 3000'))

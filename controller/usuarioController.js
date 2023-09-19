@@ -237,16 +237,43 @@ const selectUserByEmailTagName = async (dadosBody) => {
 const selectProfileById = async (id) => {
 
   let dadosUsuarioJson = {}
+  let dadosNovoUsuarioJson = {}
+
+  let tagArray = []
+
   if (id== '' || id == undefined || isNaN(id)) {
     return message.ERROR_INVALID_ID
   } else {
     let dadosPerfilUsuario = await usuarioModel.selectProfileByIdModel(id)
 
+    dadosPerfilUsuario.forEach((usuario) => {
+      let dadosTagJson = {}
+
+      dadosTagJson.id_tag = usuario.id_tag
+      dadosTagJson.nome_tag = usuario.nome_tag
+      dadosTagJson.imagem_tag = usuario.imagem_tag
+      dadosTagJson.id_categoria = usuario.id_categoria
+      dadosTagJson.nome_categoria = usuario.nome_categoria
+
+      tagArray.push(dadosTagJson)
+    })
+
+    dadosPerfilUsuario.forEach((usuario) => {
+      dadosNovoUsuarioJson.id_usuario = usuario.id_usuario
+      dadosNovoUsuarioJson.nome = usuario.nome
+      dadosNovoUsuarioJson.descricao = usuario.descricao
+      dadosNovoUsuarioJson.nome_de_usuario = usuario.nome_de_usuario
+      dadosNovoUsuarioJson.cidade = usuario.cidade
+      dadosNovoUsuarioJson.estado = usuario.estado
+    })
+
+    dadosNovoUsuarioJson.tags = tagArray
+
     if(dadosPerfilUsuario) {
 
-      dadosUsuarioJson.usuario = dadosPerfilUsuario[0]
+      dadosUsuarioJson.usuario = dadosNovoUsuarioJson
       dadosUsuarioJson.status = 200
-      dadosPerfilUsuario.message = 'Usuário encontrado com sucesso'
+      dadosUsuarioJson.message = 'Usuário encontrado com sucesso'
 
       return dadosUsuarioJson
     } else {
@@ -258,6 +285,32 @@ const selectProfileById = async (id) => {
   }
 }
 
+const updateProfileTagLocality = async (dadosBody) => {
+  let dadosPerfilUsuarioJson = {}
+  let tagsAtualizadas = []
+
+  if(dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario) ||
+    dadosBody.id_endereco == '' || dadosBody.id_endereco == undefined || isNaN(dadosBody.id_endereco) ||
+    dadosBody.bairro == '' || dadosBody.bairro == undefined || !isNaN(dadosBody.bairro) || dadosBody.bairro.length > 255 ||
+    dadosBody.cidade == '' || dadosBody.cidade == undefined || !isNaN(dadosBody.cidade) || dadosBody.bairro.length > 255 ||
+    dadosBody.estado == '' || dadosBody.estado == undefined || !isNaN(dadosBody.estado) || dadosBody.estado.length > 255 ||
+    dadosBody.nome == '' || dadosBody.nome == undefined || !isNaN(dadosBody.nome) || dadosBody.nome.length > 100 ||
+    dadosBody.descricao == '' || dadosBody.descricao == undefined || !isNaN(dadosBody.descricao) || dadosBody.descricao.length > 255 ||
+    dadosBody.foto == '' || dadosBody.foto == undefined || !isNaN(dadosBody.foto) ||
+    dadosBody.nome_de_usuario == '' || dadosBody.nome_de_usuario == undefined || !isNaN(dadosBody.nome_de_usuario) || dadosBody.nome_de_usuario.length > 100
+    ){
+      return message.ERROR_MISTAKE_IN_THE_FILDS
+    } else {
+      await tagModel.deleteAllTagsWithUserIdModel(id_usuario)
+
+      dadosBody.tags.forEach((tag) => {
+        tagsAtualizadas.push(tag)
+      })
+
+      dadosPerfilUsuarioJson.tags_atualizadas = tagsAtualizadas
+    }
+}
+
 module.exports = {
   insertUsuario,
   selectUserByLogin,
@@ -267,5 +320,6 @@ module.exports = {
   updateUserPassword,
   updateUserProfile,
   selectUserByEmailTagName,
-  selectProfileById
+  selectProfileById,
+  updateProfileTagLocality
 };
