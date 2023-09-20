@@ -193,6 +193,32 @@ where id_usuario = ${id};`
     }
 }
 
+const updateProfileTagLocalityModel = async (dadosBody) => {
+    // console.log(dadosBody);
+
+    //Script sql para atualizar os dados no BD
+    let sql = `CALL sp_update_endereco_usuario_tag(
+        ${dadosBody.id_usuario},        -- Substitua pelo ID do usuário
+        ${dadosBody.id_localizacao},        -- Substitua pelo ID do endereço
+        '${dadosBody.bairro}',      -- Substitua pelo novo valor do bairro
+        '${dadosBody.cidade}',      -- Substitua pelo novo valor da cidade
+        '${dadosBody.estado}',      -- Substitua pelo novo valor do estado
+        '${dadosBody.nome}',        -- Substitua pelo novo valor do nome
+        '${dadosBody.descricao}',   -- Substitua pela nova descrição
+        '${dadosBody.foto}',        -- Substitua pela nova URL da foto
+        '${dadosBody.nome_de_usuario}' -- Substitua pelo novo nome de usuário
+    );`
+
+    //Executa o script no BD
+    let resultStatus = await prisma.$executeRawUnsafe(sql)
+
+    if (resultStatus) {
+        return resultStatus
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     insertUsuarioModel,
     selectLastIDModel,
@@ -204,5 +230,6 @@ module.exports = {
     updateUserPasswordModel,
     dadosUpdatePersonalizarPerfilModel,
     selectUserByEmailTagNameModel,
-    selectProfileByIdModel
+    selectProfileByIdModel,
+    updateProfileTagLocalityModel
 }

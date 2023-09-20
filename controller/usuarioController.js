@@ -13,6 +13,8 @@ const jwt = require("../middleware/middlewareJWT.js");
 
 /* Imports Models */
 const usuarioModel = require("../model/usuarioModel.js");
+const tagModel = require("../model/tagModel.js");
+const tagUsuarioModel = require("../model/tagUsuarioModel.js");
 
 const insertUsuario = async (dadosUsuario) => {
   if (
@@ -125,7 +127,7 @@ const updateUserTokenAndExpires = async (id, token, tempo_expiracao) => {
 
 const selectTokenById = async (dadosBody) => {
   if (dadosBody.id == '' || dadosBody.id == undefined || isNaN(dadosBody.id) ||
-      dadosBody.token == '' || dadosBody.token == undefined || isNaN(dadosBody.token) || dadosBody.token.length > 10) {
+    dadosBody.token == '' || dadosBody.token == undefined || isNaN(dadosBody.token) || dadosBody.token.length > 10) {
     return message.ERROR_MISTAKE_IN_THE_FILDS
   } else {
 
@@ -214,8 +216,8 @@ const updateUserProfile = async (dadosBody) => {
 const selectUserByEmailTagName = async (dadosBody) => {
   let dadosJson = {}
   if (dadosBody.nome_de_usuario == '' || dadosBody.nome_de_usuario == undefined || !isNaN(dadosBody.nome_de_usuario) ||
-      dadosBody.email == '' || dadosBody.email == undefined || !isNaN(dadosBody.email) ||
-      dadosBody.senha == '' || dadosBody.senha == undefined || !isNaN(dadosBody.senha)) {
+    dadosBody.email == '' || dadosBody.email == undefined || !isNaN(dadosBody.email) ||
+    dadosBody.senha == '' || dadosBody.senha == undefined || !isNaN(dadosBody.senha)) {
     return message.ERROR_REQUIRED_FIELDS
   } else {
     let resultUserEmailTagName = await usuarioModel.selectUserByEmailTagNameModel(dadosBody)
@@ -241,7 +243,7 @@ const selectProfileById = async (id) => {
 
   let tagArray = []
 
-  if (id== '' || id == undefined || isNaN(id)) {
+  if (id == '' || id == undefined || isNaN(id)) {
     return message.ERROR_INVALID_ID
   } else {
     let dadosPerfilUsuario = await usuarioModel.selectProfileByIdModel(id)
@@ -269,7 +271,7 @@ const selectProfileById = async (id) => {
 
     dadosNovoUsuarioJson.tags = tagArray
 
-    if(dadosPerfilUsuario) {
+    if (dadosPerfilUsuario) {
 
       dadosUsuarioJson.usuario = dadosNovoUsuarioJson
       dadosUsuarioJson.status = 200
@@ -287,10 +289,13 @@ const selectProfileById = async (id) => {
 
 const updateProfileTagLocality = async (dadosBody) => {
   let dadosPerfilUsuarioJson = {}
-  let tagsAtualizadas = []
 
-  if(dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario) ||
-    dadosBody.id_endereco == '' || dadosBody.id_endereco == undefined || isNaN(dadosBody.id_endereco) ||
+  let resultDadosParaDeletar = await tagUsuarioModel.selectAllTagsWithUserIdModel(dadosBody.id_usuario)
+
+  // console.log(resultDadosParaDeletar);
+
+  if (dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario) ||
+    dadosBody.id_localizacao == '' || dadosBody.id_localizacao == undefined || isNaN(dadosBody.id_localizacao) ||
     dadosBody.bairro == '' || dadosBody.bairro == undefined || !isNaN(dadosBody.bairro) || dadosBody.bairro.length > 255 ||
     dadosBody.cidade == '' || dadosBody.cidade == undefined || !isNaN(dadosBody.cidade) || dadosBody.bairro.length > 255 ||
     dadosBody.estado == '' || dadosBody.estado == undefined || !isNaN(dadosBody.estado) || dadosBody.estado.length > 255 ||
@@ -298,17 +303,75 @@ const updateProfileTagLocality = async (dadosBody) => {
     dadosBody.descricao == '' || dadosBody.descricao == undefined || !isNaN(dadosBody.descricao) || dadosBody.descricao.length > 255 ||
     dadosBody.foto == '' || dadosBody.foto == undefined || !isNaN(dadosBody.foto) ||
     dadosBody.nome_de_usuario == '' || dadosBody.nome_de_usuario == undefined || !isNaN(dadosBody.nome_de_usuario) || dadosBody.nome_de_usuario.length > 100
-    ){
-      return message.ERROR_MISTAKE_IN_THE_FILDS
+  ) {
+
+    return message.ERROR_MISTAKE_IN_THE_FILDS
+
+  } else if (dadosBody.tags.length == 0) {
+
+    let resultDadosDeletado = await tagUsuarioModel.deleteAllTagsWithUserIdModel(dadosBody.id_usuario)
+
+    if (resultDadosDeletado) {
+      return message.SUCCESS_UPDATED_ITEM
     } else {
-      await tagModel.deleteAllTagsWithUserIdModel(id_usuario)
-
-      dadosBody.tags.forEach((tag) => {
-        tagsAtualizadas.push(tag)
-      })
-
-      dadosPerfilUsuarioJson.tags_atualizadas = tagsAtualizadas
+      return message.ERROR_INTERNAL_SERVER
     }
+
+  } else if (resultDadosParaDeletar) {
+    let resultDadosDeletado = await tagUsuarioModel.deleteAllTagsWithUserIdModel(dadosBody.id_usuario)
+
+    if (resultDadosDeletado) {
+      const usuarioAtualizado = await updateTag(dadosBody)
+
+      if (usuarioAtualizado) {
+        dadosPerfilUsuarioJson.usuario_atualizado = usuarioAtualizado
+        dadosPerfilUsuarioJson.message = message.SUCCESS_UPDATED_ITEM.message
+        dadosPerfilUsuarioJson.status = message.SUCCESS_UPDATED_ITEM.status
+        return dadosPerfilUsuarioJson
+      } else {
+        return message.ERROR_UNABLE_TO_UPDATE
+      }
+    } else {
+      return message.ERROR_INTERNAL_SERVER
+    }
+  } else {
+    const usuarioAtualizado = await updateTag(dadosBody)
+
+    if (usuarioAtualizado) {
+      dadosPerfilUsuarioJson.usuario_atualizado = usuarioAtualizado
+      dadosPerfilUsuarioJson.message = message.SUCCESS_UPDATED_ITEM.message
+      dadosPerfilUsuarioJson.status = message.SUCCESS_UPDATED_ITEM.status
+      return dadosPerfilUsuarioJson
+    } else {
+      return message.ERROR_UNABLE_TO_UPDATE
+    }
+  }
+}
+
+const updateTag = async (dadosBody) => {
+  let dadosPerfilUsuarioJson = {}
+  let tagsAtualizadas = []
+  for (let i = 0; i < dadosBody.tags.length; i++) {
+    let tag = dadosBody.tags[i]
+
+    await tagUsuarioModel.insertTagUsuario(tag.id_tag, dadosBody.id_usuario)
+
+    let tagUsuarioAtualizada = await tagUsuarioModel.selectTagUsuarioLastId()
+
+    let tagAtualizada = await tagModel.selectTagByIdModel(tagUsuarioAtualizada[0].id_tag)
+
+    tagsAtualizadas.push(tagAtualizada[0])
+  }
+
+  dadosPerfilUsuarioJson.tags_atualizadas = tagsAtualizadas
+
+  await usuarioModel.updateProfileTagLocalityModel(dadosBody)
+
+  let usuarioAtualizado = await usuarioModel.selectProfileByIdModel(dadosBody.id_usuario)
+
+  dadosPerfilUsuarioJson.usuario = usuarioAtualizado[0]
+
+  return dadosPerfilUsuarioJson
 }
 
 module.exports = {

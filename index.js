@@ -297,6 +297,7 @@ app.put('/usuario/editar_perfil', verifyJWT, cors(), bodyParserJSON, async (requ
         let dadosBody = request.body
 
         let dadosUpdatePerfil = await usuarioController.updateProfileTagLocality(dadosBody)
+        // console.log(dadosUpdatePerfil);
 
         if (dadosUpdatePerfil){
             response.status(dadosUpdatePerfil.status)
