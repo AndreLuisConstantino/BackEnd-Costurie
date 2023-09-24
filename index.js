@@ -54,7 +54,6 @@ const verifyJWT = async (request, response, next) => {
     const jwt = require('./middleware/middlewareJWT.js')
 
     let token = request.headers['x-access-token']
-    console.log(token);
 
     const autenticidadeToken = await jwt.validateJWT(token)
 
@@ -310,6 +309,31 @@ app.put('/usuario/editar_perfil', verifyJWT, cors(), bodyParserJSON, async (requ
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
         response.json(message.ERROR_INVALID_CONTENT_TYPE)
     }    
+})
+
+app.post('/usuario/inserir_localizacao', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let dadosBody = request.body
+
+        let dadosInsertLocalizacao = await localizacaoController.insertLocalizacao(dadosBody)
+        console.log(dadosInsertLocalizacao);
+
+        if (dadosInsertLocalizacao) {
+            response.status(dadosInsertLocalizacao.status)
+            response.json(dadosInsertLocalizacao)
+        } else {
+            response.status(dadosInsertLocalizacao.status)
+            response.json(dadosInsertLocalizacao)
+        }
+        
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    } 
+
 })
 
 app.listen(3000, () => console.log('Servidor rodando na porta 3000'))

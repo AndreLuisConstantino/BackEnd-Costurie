@@ -23,6 +23,39 @@ const selectAllStatesModel = async () => {
     }
 }
 
+const insertLocalizacaoModel = async (dadosLocalizacao) => {
+    let sql = `CALL sp_insert_localizacao_usuario(
+        ${dadosLocalizacao.id_usuario},  -- Substitua pelo ID do usuário desejado
+        '${dadosLocalizacao.bairro}',  -- Substitua pelo nome do bairro desejado
+        '${dadosLocalizacao.cidade}',  -- Substitua pelo nome da cidade desejada
+        '${dadosLocalizacao.estado}'   -- Substitua pelo nome do estado desejado
+    );`
+
+
+    let resultStatus = await prisma.$executeRawUnsafe(sql)
+
+    if (resultStatus) {
+        return true
+    } else {
+        return false
+    }
+}
+
+const selectLastId = async () => {
+    let sql = `select * from tbl_localizacao order by id desc limit 1;`
+
+    let response = await prisma.$queryRawUnsafe(sql)
+
+
+    if (response.length > 0) {
+        return response
+    } else {
+        return false
+    }
+}
+
 module.exports = {
-    selectAllStatesModel
+    selectAllStatesModel,
+    insertLocalizacaoModel,
+    selectLastId
 }
