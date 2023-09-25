@@ -25,6 +25,7 @@ const bodyParser = require('body-parser')
 /* Imports Controllers */
 const usuarioController = require('./controller/usuarioController.js')
 const localizacaoController = require('./controller/localizacaoController.js')
+const tagController = require('./controller/tagController.js')
 
 //Cria um objeto com as características do expresponses
 const app = express()
@@ -194,14 +195,14 @@ app.post('/usuario/validar_token', cors(), bodyParserJSON, async (request, respo
     let dadosBody = request.body
 
     if (String(contentType).toLowerCase() == 'application/json') {
-        let resultToken = await usuarioController.selectTokenById(dadosBody)
+        let resultTag = await usuarioController.selectTokenById(dadosBody)
 
-        if (resultToken) {
-            response.status(resultToken.status)
-            response.json(resultToken)
+        if (resultTag) {
+            response.status(resultTag.status)
+            response.json(resultTag)
         } else {
-            response.status(resultToken.status)
-            response.json(resultToken)
+            response.status(resultTag.status)
+            response.json(resultTag)
         }
     } else {
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
@@ -319,7 +320,7 @@ app.post('/usuario/inserir_localizacao', verifyJWT, cors(), bodyParserJSON, asyn
         let dadosBody = request.body
 
         let dadosInsertLocalizacao = await localizacaoController.insertLocalizacao(dadosBody)
-        console.log(dadosInsertLocalizacao);
+        // console.log(dadosInsertLocalizacao);
 
         if (dadosInsertLocalizacao) {
             response.status(dadosInsertLocalizacao.status)
@@ -334,6 +335,31 @@ app.post('/usuario/inserir_localizacao', verifyJWT, cors(), bodyParserJSON, asyn
         response.json(message.ERROR_INVALID_CONTENT_TYPE)
     } 
 
+})
+
+app.post('/tag/tag_by_categoria', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+    let contentType = request.headers['content-type']
+
+    let dadosBody = request.body
+
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let resultTag = await tagController.selectAllTagsByCategoria(dadosBody)
+
+        if (resultTag) {
+            response.status(resultTag.status)
+            response.json(resultTag)
+        } else {
+            response.status(resultTag.status)
+            response.json(resultTag)
+        }
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+})
+
+app.post('/tag/inserir_tags', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+    
 })
 
 app.listen(3000, () => console.log('Servidor rodando na porta 3000'))

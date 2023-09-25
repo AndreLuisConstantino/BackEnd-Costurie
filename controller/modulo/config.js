@@ -32,6 +32,8 @@ const ERROR_UNABLE_TO_UPDATE = {status: 401, message: 'O token encaminhado na re
 
 const ERROR_INVALID_TOKEN = {status: 401, message: 'O token encaminhado na requisicão não está valido'}
 
+const ERROR_CATEGORY_NOT_FOUND = {status: 404, message: 'A categoria não foi encontrada no nosso sistema'}
+
 /******************************** MENSAGENS DE SUCESSO **********************************************/
 const SUCCESS_CREATED_ITEM = {status: 201, message: 'Item criado com sucesso.'}
 
@@ -42,6 +44,8 @@ const SUCCESS_DELETED_ITEM = {status: 200, message: 'Item excluido com sucesso.'
 const SUCCES_REQUEST = {status: 200, message: 'Requisição bem secedida'}
 
 const SUCCESS_EMAIL_FOUND = {status: 200, message: 'Email encontrado com sucesso.'}
+
+const SUCCESS_CATEGORY_FOUND = {status: 200, message: 'Tags encontradas com sucesso'}
 
 
 
@@ -63,5 +67,7 @@ module.exports = {
     ERROR_EMAIL_NOT_FOUND,
     ERROR_UNABLE_TO_UPDATE,
     ERROR_INVALID_TOKEN,
-    ERROR_USER_NOT_FOUND
+    ERROR_USER_NOT_FOUND,
+    ERROR_CATEGORY_NOT_FOUND,
+    SUCCESS_CATEGORY_FOUND
 }
