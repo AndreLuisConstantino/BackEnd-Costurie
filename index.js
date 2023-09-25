@@ -359,7 +359,24 @@ app.post('/tag/tag_by_categoria', verifyJWT, cors(), bodyParserJSON, async (requ
 })
 
 app.post('/tag/inserir_tags', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
-    
+    let contentType = request.headers['content-type']
+
+    let dadosBody = request.body
+
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let resultTag = await tagController.insertTags(dadosBody)
+
+        if (resultTag) {
+            response.status(resultTag.status)
+            response.json(resultTag)
+        } else {
+            response.status(resultTag.status)
+            response.json(resultTag)
+        }
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
 })
 
 app.listen(3000, () => console.log('Servidor rodando na porta 3000'))

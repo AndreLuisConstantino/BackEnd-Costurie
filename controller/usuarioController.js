@@ -351,7 +351,7 @@ const updateProfileTagLocality = async (dadosBody) => {
 const updateTag = async (dadosBody) => {
   let dadosPerfilUsuarioJson = {}
   let tagsAtualizadas = []
-  
+
   for (let i = 0; i < dadosBody.tags.length; i++) {
     let tag = dadosBody.tags[i]
 
