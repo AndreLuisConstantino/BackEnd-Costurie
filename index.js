@@ -261,7 +261,7 @@ app.get('/usuario/meu_perfil/:id', verifyJWT ,cors(), bodyParserJSON, async (req
     let usuarioId = request.params.id
 
     let resultDadosPerfilUsuario = await usuarioController.selectProfileById(usuarioId)
-    // console.log(resultDadosPerfilUsuario);
+    console.log(resultDadosPerfilUsuario.tags);
     if (resultDadosPerfilUsuario) {
         response.status(resultDadosPerfilUsuario.status)
         response.json(resultDadosPerfilUsuario)
@@ -295,6 +295,8 @@ app.put('/usuario/editar_perfil', verifyJWT, cors(), bodyParserJSON, async (requ
 
     if (String(contentType).toLowerCase() == 'application/json') {
         let dadosBody = request.body
+
+        
 
         let dadosUpdatePerfil = await usuarioController.updateProfileTagLocality(dadosBody)
         // console.log(dadosUpdatePerfil);
@@ -376,6 +378,19 @@ app.post('/tag/inserir_tags', verifyJWT, cors(), bodyParserJSON, async (request,
     } else {
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
         response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+})
+
+app.get('/usuario/select_all', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+
+    let dadosUsuario = await usuarioController.selectAllUsers()
+
+    if (dadosUsuario) {
+        response.status(dadosUsuario.status)
+        response.json(dadosUsuario)
+    } else {
+        response.status(dadosUsuario.status)
+        response.json(dadosUsuario)
     }
 })
 

@@ -225,6 +225,18 @@ const updateProfileTagLocalityModel = async (dadosBody) => {
     }
 }
 
+const selectAllUsersModel = async () => {
+    let sql = `select * from tbl_usuario`
+
+    let response = await prisma.$queryRawUnsafe(sql)
+
+    if (response.length > 0) {
+        return response
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     insertUsuarioModel,
     selectLastIDModel,
@@ -237,5 +249,6 @@ module.exports = {
     dadosUpdatePersonalizarPerfilModel,
     selectUserByEmailTagNameModel,
     selectProfileByIdModel,
-    updateProfileTagLocalityModel
+    updateProfileTagLocalityModel,
+    selectAllUsersModel
 }

@@ -265,8 +265,11 @@ const selectProfileById = async (id) => {
       dadosNovoUsuarioJson.nome = usuario.nome
       dadosNovoUsuarioJson.descricao = usuario.descricao
       dadosNovoUsuarioJson.nome_de_usuario = usuario.nome_de_usuario
+      dadosNovoUsuarioJson.foto = usuario.foto
       dadosNovoUsuarioJson.cidade = usuario.cidade
       dadosNovoUsuarioJson.estado = usuario.estado
+      dadosNovoUsuarioJson.bairro = usuario.bairro
+      dadosNovoUsuarioJson.id_localizacao = usuario.id_localizacao
     })
 
     dadosNovoUsuarioJson.tags = tagArray
@@ -337,6 +340,8 @@ const updateProfileTagLocality = async (dadosBody) => {
   } else {
     const usuarioAtualizado = await updateTag(dadosBody)
 
+    console.log(usuarioAtualizado);
+
     if (usuarioAtualizado) {
       dadosPerfilUsuarioJson.usuario_atualizado = usuarioAtualizado
       dadosPerfilUsuarioJson.message = message.SUCCESS_UPDATED_ITEM.message
@@ -375,6 +380,23 @@ const updateTag = async (dadosBody) => {
   return dadosPerfilUsuarioJson
 }
 
+const selectAllUsers = async () => {
+
+  let dadosUsuario = await usuarioModel.selectAllUsersModel()
+
+  if (dadosUsuario) {
+    let dadosUsuarioJson = {}
+
+    dadosUsuarioJson.usuarios = dadosUsuario
+    dadosUsuarioJson.status = 200
+    dadosUsuarioJson.message = 'Usuários encontrados com sucesso!'
+
+    return dadosUsuarioJson
+  } else {
+    return message.ERROR_INTERNAL_SERVER
+  }
+}
+
 module.exports = {
   insertUsuario,
   selectUserByLogin,
@@ -385,5 +407,6 @@ module.exports = {
   updateUserProfile,
   selectUserByEmailTagName,
   selectProfileById,
-  updateProfileTagLocality
+  updateProfileTagLocality,
+  selectAllUsers
 };
