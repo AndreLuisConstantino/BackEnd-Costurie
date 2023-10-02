@@ -49,6 +49,8 @@ const SUCCESS_EMAIL_FOUND = {status: 200, message: 'Email encontrado com sucesso
 
 const SUCCESS_CATEGORY_FOUND = {status: 200, message: 'Tags encontradas com sucesso'}
 
+const SUCCESS_CATEGORIES_FOUND = {status: 200, message: 'Categorias encontradas com sucesso.'}
+
 
 
 module.exports = {
@@ -72,5 +74,6 @@ module.exports = {
     ERROR_USER_NOT_FOUND,
     ERROR_CATEGORY_NOT_FOUND,
     SUCCESS_CATEGORY_FOUND,
-    ERROR_NOT_POSSIBLE_INSERT_TAGS
+    ERROR_NOT_POSSIBLE_INSERT_TAGS,
+    SUCCESS_CATEGORIES_FOUND
 }

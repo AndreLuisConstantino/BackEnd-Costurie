@@ -6,6 +6,11 @@
  *****************************************************************************/
 
 /* 
+    Para rodar o servidor, basta digitar no terminal : npm run dev
+    
+*/
+
+/* 
     Padronizacão de commit -> "DATA [Feature implementada]"
 */
 
@@ -26,6 +31,9 @@ const bodyParser = require('body-parser')
 const usuarioController = require('./controller/usuarioController.js')
 const localizacaoController = require('./controller/localizacaoController.js')
 const tagController = require('./controller/tagController.js')
+const categoriaController = require('./controller/categoriaController.js')
+const e = require('express')
+
 
 //Cria um objeto com as características do expresponses
 const app = express()
@@ -261,7 +269,9 @@ app.get('/usuario/meu_perfil/:id', verifyJWT ,cors(), bodyParserJSON, async (req
     let usuarioId = request.params.id
 
     let resultDadosPerfilUsuario = await usuarioController.selectProfileById(usuarioId)
-    console.log(resultDadosPerfilUsuario.tags);
+    console.log(resultDadosPerfilUsuario);
+    console.log(resultDadosPerfilUsuario.usuario.tags);
+
     if (resultDadosPerfilUsuario) {
         response.status(resultDadosPerfilUsuario.status)
         response.json(resultDadosPerfilUsuario)
@@ -296,10 +306,7 @@ app.put('/usuario/editar_perfil', verifyJWT, cors(), bodyParserJSON, async (requ
     if (String(contentType).toLowerCase() == 'application/json') {
         let dadosBody = request.body
 
-        
-
         let dadosUpdatePerfil = await usuarioController.updateProfileTagLocality(dadosBody)
-        // console.log(dadosUpdatePerfil);
 
         if (dadosUpdatePerfil){
             response.status(dadosUpdatePerfil.status)
@@ -391,6 +398,35 @@ app.get('/usuario/select_all', verifyJWT, cors(), bodyParserJSON, async (request
     } else {
         response.status(dadosUsuario.status)
         response.json(dadosUsuario)
+    }
+})
+
+/* Serviços */
+app.get('/categoria/select_all', verifyJWT, cors(), async (request, response) => {
+
+    let dadosCategorias = await categoriaController.selectAllCategories()
+
+    if (dadosCategorias) {
+        response.status(dadosCategorias.status)
+        response.json(dadosCategorias)
+    } else {
+        response.status(dadosCategorias.status)
+        response.json(dadosCategorias)
+    }
+})
+
+app.get('/usuario/:tag', verifyJWT, cors(), async (request, response) => {
+
+    let tag = request.params.tag
+
+    let dadosUsuariosByTag = await usuarioController.selectAllUsuariosByTag(tag)
+
+    if (dadosUsuariosByTag) {
+        response.status(dadosUsuariosByTag.status)
+        response.json(dadosUsuariosByTag)
+    } else {
+        response.status(dadosUsuariosByTag.status)
+        response.json(dadosUsuariosByTag)
     }
 })
 

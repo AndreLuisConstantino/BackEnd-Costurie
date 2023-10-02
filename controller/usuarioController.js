@@ -139,8 +139,6 @@ const selectTokenById = async (dadosBody) => {
 
       let resultToken = await usuarioModel.selectTokenAndIdModel(dadosBody)
 
-      console.log(resultToken);
-
       let dataToken = resultToken[0].tempo_expiracao
 
       let dataArray = String(dataToken).split('T')
@@ -269,6 +267,9 @@ const selectProfileById = async (id) => {
       dadosNovoUsuarioJson.cidade = usuario.cidade
       dadosNovoUsuarioJson.estado = usuario.estado
       dadosNovoUsuarioJson.bairro = usuario.bairro
+      dadosNovoUsuarioJson.email = usuario.email
+      dadosNovoUsuarioJson.senha = usuario.senha
+
       dadosNovoUsuarioJson.id_localizacao = usuario.id_localizacao
     })
 
@@ -340,8 +341,6 @@ const updateProfileTagLocality = async (dadosBody) => {
   } else {
     const usuarioAtualizado = await updateTag(dadosBody)
 
-    console.log(usuarioAtualizado);
-
     if (usuarioAtualizado) {
       dadosPerfilUsuarioJson.usuario_atualizado = usuarioAtualizado
       dadosPerfilUsuarioJson.message = message.SUCCESS_UPDATED_ITEM.message
@@ -397,6 +396,15 @@ const selectAllUsers = async () => {
   }
 }
 
+const selectAllUsuariosByTag = async (tag) => {
+
+  if (tag == '' || tag == undefined || !isNaN(tag) || tag.length > 255) {
+    return message.ERROR_REQUIRED_FIELDS
+  } else {
+    
+  }
+}
+
 module.exports = {
   insertUsuario,
   selectUserByLogin,
@@ -408,5 +416,6 @@ module.exports = {
   selectUserByEmailTagName,
   selectProfileById,
   updateProfileTagLocality,
-  selectAllUsers
+  selectAllUsers,
+  selectAllUsuariosByTag
 };
