@@ -192,7 +192,7 @@ where id_usuario = ${id}`
     // console.log(sql);
 
     let response = await prisma.$queryRawUnsafe(sql)
-    console.log(response);
+    // console.log(response);
 
     if (response.length > 0) {
         return response

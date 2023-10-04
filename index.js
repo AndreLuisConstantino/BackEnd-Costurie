@@ -218,6 +218,7 @@ const verifyJWT = async (request, response, next) => {
         }
     })
 
+    //Endpoint para a atualização de senha
     app.put('/usuario/atualizar_senha', cors(), bodyParserJSON, async (request, response) => {
         //Recebe o content-type da requisição
         let contentType = request.headers['content-type']
@@ -240,6 +241,7 @@ const verifyJWT = async (request, response, next) => {
         }
     })
 
+    //Endpoint que atualiza nome, foto e descrição
     app.put('/usuario/personalizar_perfil', cors(), bodyParserJSON, async (request, response) => {
         //Recebe o content-type da requisição
         let contentType = request.headers['content-type']
@@ -262,6 +264,7 @@ const verifyJWT = async (request, response, next) => {
         }
     })
 
+    //Endpoint que pega as informações da tela de perfil
     app.get('/usuario/meu_perfil/:id', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
 
         let usuarioId = request.params.id
@@ -279,6 +282,7 @@ const verifyJWT = async (request, response, next) => {
         }
     })
 
+    //Endpoint que atualiza a tela de perfil
     app.put('/usuario/editar_perfil', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
         //Recebe o content-type da requisição
         let contentType = request.headers['content-type']
@@ -301,6 +305,7 @@ const verifyJWT = async (request, response, next) => {
         }
     })
 
+    //Endpoint para inserir a tela de localização
     app.post('/usuario/inserir_localizacao', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
         //Recebe o content-type da requisição
         let contentType = request.headers['content-type']
@@ -326,6 +331,7 @@ const verifyJWT = async (request, response, next) => {
     
     })
 
+    //Endpoint para selecionar os usuarios pela tag
     app.post('/usuario/select_by_tag', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
         //Recebe o content-type da requisição
         let contentType = request.headers['content-type']
@@ -349,6 +355,7 @@ const verifyJWT = async (request, response, next) => {
         }
     })
 
+    //Endpoint para selecionar todos os usuários
     app.get('/usuario/select_all', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
 
         let dadosUsuario = await usuarioController.selectAllUsers()
@@ -362,6 +369,7 @@ const verifyJWT = async (request, response, next) => {
         }
     })
 
+    //Endpoint para deletar um usuário pelo id
     app.delete('/usuario/:id', verifyJWT, cors(), async (request, response) => {
         let idUsuario = request.params.id
 
@@ -377,7 +385,7 @@ const verifyJWT = async (request, response, next) => {
     })
     
     /* Localizacao*/
-
+    //Endpoint para pegar todos os estados
     app.get('/localizacao/estados/', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
 
         let dadosEstados = await localizacaoController.selectAllStates()
@@ -390,12 +398,15 @@ const verifyJWT = async (request, response, next) => {
             response.json(dadosEstados)
         }
     })
+
+    //Endpoint para pegar todas as cidades
     app.get('/localizacao/cidades/', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
 
         let dadosCidades = localizacaoController.selectAllCitiesByState()
     })
 
     /* Tag */
+    //Endpoint para pegar todas as tags pela categoria
     app.post('/tag/tag_by_categoria', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
         let contentType = request.headers['content-type']
 
@@ -417,6 +428,21 @@ const verifyJWT = async (request, response, next) => {
         }
     })
 
+    app.get('/tag/:id', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+        let idTag = request.params.id
+
+        let dadosTag = await tagController.selectTagById(idTag)
+
+        if (dadosTag) {
+            response.status(dadosTag.status)
+            response.json(dadosTag)
+        } else {
+            response.status(dadosTag.status)
+            response.json(dadosTag)
+        }
+    })
+
+    //Endpoint para inserir as tags do usuário
     app.post('/tag/inserir_tags', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
         let contentType = request.headers['content-type']
 
@@ -439,6 +465,7 @@ const verifyJWT = async (request, response, next) => {
     })
 
     /* Categoria */
+    //Selecionar todas as categorias
     app.get('/categoria/select_all', verifyJWT, cors(), async (request, response) => {
 
         let dadosCategorias = await categoriaController.selectAllCategories()
@@ -452,11 +479,11 @@ const verifyJWT = async (request, response, next) => {
         }
     })
 
+    //Endpoint para selecionar todas as categorias pelo id
     app.get('/categoria/:id', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
         let idCategoria = request.params.id
 
         let dadosCategorias = await categoriaController.selectCategoriaById(idCategoria)
-        console.log(dadosCategorias);
 
         if (dadosCategorias) {
             response.status(dadosCategorias.status)

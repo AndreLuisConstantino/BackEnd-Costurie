@@ -104,7 +104,29 @@ const insertTags = async (dadosBody) => {
     }
 }
 
+const selectTagById = async (id) => {
+
+    if (id == '' || id == undefined || isNaN(id)) {
+        return message.ERROR_INVALID_ID
+    } else {
+        let dadosTag = await tagModel.selectTagByIdModel(id)
+
+        if (dadosTag) {
+            let dadosTagJson = {}
+
+            dadosTagJson.tag = dadosTag[0]
+            dadosTagJson.message = 'Tag encontrada com sucesso!'
+            dadosTagJson.status = 200
+
+            return dadosTagJson
+        } else {
+            return message.ERROR_ITEM_NOT_FOUND
+        }
+    }
+}
+
 module.exports = {
     selectAllTagsByCategoria,
-    insertTags
+    insertTags,
+    selectTagById
 }
