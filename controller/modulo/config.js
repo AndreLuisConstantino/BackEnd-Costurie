@@ -51,6 +51,8 @@ const SUCCESS_CATEGORY_FOUND = {status: 200, message: 'Tags encontradas com suce
 
 const SUCCESS_CATEGORIES_FOUND = {status: 200, message: 'Categorias encontradas com sucesso.'}
 
+const SUCCESS_USER_FOUND = {status: 200, message: 'Requisição bem secedida'}
+
 
 
 module.exports = {
@@ -75,5 +77,6 @@ module.exports = {
     ERROR_CATEGORY_NOT_FOUND,
     SUCCESS_CATEGORY_FOUND,
     ERROR_NOT_POSSIBLE_INSERT_TAGS,
-    SUCCESS_CATEGORIES_FOUND
+    SUCCESS_CATEGORIES_FOUND,
+    SUCCESS_USER_FOUND
 }

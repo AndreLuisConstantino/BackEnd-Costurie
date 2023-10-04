@@ -61,9 +61,23 @@ const selectAllTagsWithUserIdModel = async (id_usuario) => {
   }
 }
 
+const selectAllUsuariosByTag = async (tag) => {
+  let sql = `select * from tbl_tag_usuario where tbl_tag_usuario.id_tag = ${tag.id_tag};`;
+  
+  let response = await prisma.$queryRawUnsafe(sql);
+
+  // console.log(rsUsuario);
+  if (response.length > 0) {
+    return response;
+  } else {
+    return false;
+  }
+}
+
 module.exports = {
   deleteAllTagsWithUserIdModel,
   selectTagUsuarioLastId,
   insertTagUsuario,
-  selectAllTagsWithUserIdModel 
+  selectAllTagsWithUserIdModel,
+  selectAllUsuariosByTag
 };

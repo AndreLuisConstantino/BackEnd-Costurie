@@ -27,6 +27,29 @@ const selectAllCategories = async () => {
     }
 }
 
+const selectCategoriaById = async (id) => {
+
+    if (id == '' || id == undefined || isNaN(id)) {
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let dadosCategoria = await categoriaModel.selectCategoriasByIdModel(id)
+
+        if (dadosCategoria) {
+            let dadosCategoriaJson = {}
+
+            dadosCategoriaJson.categoria = dadosCategoria[0]
+            dadosCategoriaJson.message = 'Categoria achada com sucesso'
+            dadosCategoriaJson.status = 200
+
+            return dadosCategoriaJson
+        } else {
+            return message.ERROR_CATEGORY_NOT_FOUND
+        }
+    }
+}
+
 module.exports = {
-    selectAllCategories
+    selectAllCategories,
+    selectCategoriaById
 }

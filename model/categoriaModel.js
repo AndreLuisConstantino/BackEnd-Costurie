@@ -11,7 +11,7 @@ var { PrismaClient } = require("@prisma/client");
 var prisma = new PrismaClient();
 
 const selectAllCategorias = async () => {
-        let sql = `select * from tbl_categoria`
+    let sql = `select * from tbl_categoria`
 
     // console.log(sql);
 
@@ -27,6 +27,19 @@ const selectAllCategorias = async () => {
     }
 }
 
+const selectCategoriasByIdModel = async (id) => {
+    let sql = `select * from tbl_categoria where id = ${id}`
+
+    let response = await prisma.$queryRawUnsafe(sql);
+
+    if (response.length > 0) {
+        return response;
+    } else {
+        return false;
+    }
+}
+
 module.exports = {
-    selectAllCategorias
+    selectAllCategorias,
+    selectCategoriasByIdModel
 }

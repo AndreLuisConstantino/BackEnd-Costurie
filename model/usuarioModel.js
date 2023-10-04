@@ -188,9 +188,11 @@ from tbl_usuario
 		on tbl_tag.id = tbl_tag_usuario.id_tag
 	inner join tbl_categoria
 		on tbl_categoria.id= tbl_tag.id_categoria
-where id_usuario = ${id};`
+where id_usuario = ${id}`
+    // console.log(sql);
 
     let response = await prisma.$queryRawUnsafe(sql)
+    console.log(response);
 
     if (response.length > 0) {
         return response
@@ -237,6 +239,45 @@ const selectAllUsersModel = async () => {
     }
 }
 
+const deleteUserByIdModel = async (id) => {
+    let sql = `delete from tbl_usuario where id = ${id}`
+
+    let response = await prisma.$executeRawUnsafe(sql)
+
+    if (response) {
+        return true
+    } else {
+        return false
+
+    }
+}
+
+const selectUserAndLocalityById = async (id) => {
+    let sql = `select  tbl_usuario.id as id_usuario,
+                    tbl_usuario.nome as nome,
+                    tbl_usuario.descricao as descricao,
+                    tbl_usuario.foto as foto,
+                    tbl_usuario.nome_de_usuario as nome_de_usuario,
+                    tbl_usuario.email as email,
+                    tbl_usuario.senha as senha, 
+                    tbl_usuario.id_localizacao as id_localizacao,
+                    tbl_localizacao.bairro as bairro,
+                    tbl_localizacao.cidade as cidade,
+                    tbl_localizacao.estado as estado
+                from tbl_usuario
+                inner join tbl_localizacao
+                    on tbl_localizacao.id = tbl_usuario.id_localizacao
+                where tbl_usuario.id = ${id}`
+
+    let response = await prisma.$queryRawUnsafe(sql)
+
+    if (response.length > 0) {
+        return response
+    } else {
+        return false
+    }
+} 
+
 module.exports = {
     insertUsuarioModel,
     selectLastIDModel,
@@ -250,5 +291,7 @@ module.exports = {
     selectUserByEmailTagNameModel,
     selectProfileByIdModel,
     updateProfileTagLocalityModel,
-    selectAllUsersModel
+    selectAllUsersModel,
+    deleteUserByIdModel,
+    selectUserAndLocalityById
 }

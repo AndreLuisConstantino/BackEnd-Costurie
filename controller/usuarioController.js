@@ -244,50 +244,74 @@ const selectProfileById = async (id) => {
   if (id == '' || id == undefined || isNaN(id)) {
     return message.ERROR_INVALID_ID
   } else {
-    let dadosPerfilUsuario = await usuarioModel.selectProfileByIdModel(id)
 
-    dadosPerfilUsuario.forEach((usuario) => {
-      let dadosTagJson = {}
+    let usuarioPossuiTag = await tagUsuarioModel.selectAllTagsWithUserIdModel(id)
 
-      dadosTagJson.id_tag = usuario.id_tag
-      dadosTagJson.nome_tag = usuario.nome_tag
-      dadosTagJson.imagem_tag = usuario.imagem_tag
-      dadosTagJson.id_categoria = usuario.id_categoria
-      dadosTagJson.nome_categoria = usuario.nome_categoria
+    if (usuarioPossuiTag) {
+      let dadosPerfilUsuario = await usuarioModel.selectProfileByIdModel(id)
 
-      tagArray.push(dadosTagJson)
-    })
+      if (dadosPerfilUsuario) {
+        dadosPerfilUsuario.forEach((usuario) => {
+          let dadosTagJson = {}
 
-    dadosPerfilUsuario.forEach((usuario) => {
-      dadosNovoUsuarioJson.id_usuario = usuario.id_usuario
-      dadosNovoUsuarioJson.nome = usuario.nome
-      dadosNovoUsuarioJson.descricao = usuario.descricao
-      dadosNovoUsuarioJson.nome_de_usuario = usuario.nome_de_usuario
-      dadosNovoUsuarioJson.foto = usuario.foto
-      dadosNovoUsuarioJson.cidade = usuario.cidade
-      dadosNovoUsuarioJson.estado = usuario.estado
-      dadosNovoUsuarioJson.bairro = usuario.bairro
-      dadosNovoUsuarioJson.email = usuario.email
-      dadosNovoUsuarioJson.senha = usuario.senha
+          dadosTagJson.id_tag = usuario.id_tag
+          dadosTagJson.nome_tag = usuario.nome_tag
+          dadosTagJson.imagem_tag = usuario.imagem_tag
+          dadosTagJson.id_categoria = usuario.id_categoria
+          dadosTagJson.nome_categoria = usuario.nome_categoria
 
-      dadosNovoUsuarioJson.id_localizacao = usuario.id_localizacao
-    })
+          tagArray.push(dadosTagJson)
+        })
 
-    dadosNovoUsuarioJson.tags = tagArray
+        dadosPerfilUsuario.forEach((usuario) => {
+          dadosNovoUsuarioJson.id_usuario = usuario.id_usuario
+          dadosNovoUsuarioJson.nome = usuario.nome
+          dadosNovoUsuarioJson.descricao = usuario.descricao
+          dadosNovoUsuarioJson.nome_de_usuario = usuario.nome_de_usuario
+          dadosNovoUsuarioJson.foto = usuario.foto
+          dadosNovoUsuarioJson.cidade = usuario.cidade
+          dadosNovoUsuarioJson.estado = usuario.estado
+          dadosNovoUsuarioJson.bairro = usuario.bairro
+          dadosNovoUsuarioJson.email = usuario.email
+          dadosNovoUsuarioJson.senha = usuario.senha
 
-    if (dadosPerfilUsuario) {
+          dadosNovoUsuarioJson.id_localizacao = usuario.id_localizacao
+        })
 
-      dadosUsuarioJson.usuario = dadosNovoUsuarioJson
-      dadosUsuarioJson.status = 200
-      dadosUsuarioJson.message = 'Usuário encontrado com sucesso'
+        dadosNovoUsuarioJson.tags = tagArray
 
-      return dadosUsuarioJson
+        dadosUsuarioJson.usuario = dadosNovoUsuarioJson
+
+        if (dadosPerfilUsuario) {
+          dadosUsuarioJson.status = 200
+          dadosUsuarioJson.message = 'Usuário encontrado com sucesso'
+
+          return dadosUsuarioJson
+        } else {
+          dadosUsuarioJson.message = 'Usuário não encontrado em nosso sistema'
+          dadosUsuarioJson.status = 404
+
+          return dadosUsuarioJson
+        }
+      }
     } else {
-      dadosUsuarioJson.message = 'Usuário não encontrado em nosso sistema'
-      dadosUsuarioJson.status = 404
+      let dadosUsuario = await usuarioModel.selectUserAndLocalityById(id)
 
-      return dadosUsuarioJson
+      dadosUsuarioJson.usuario = dadosUsuario[0]
+      if (dadosUsuario) {
+
+        dadosUsuarioJson.status = 200
+        dadosUsuarioJson.message = 'Usuário encontrado com sucesso'
+
+        return dadosUsuarioJson
+      } else {
+        dadosUsuarioJson.message = 'Usuário não encontrado em nosso sistema'
+        dadosUsuarioJson.status = 404
+
+        return dadosUsuarioJson
+      }
     }
+
   }
 }
 
@@ -397,11 +421,59 @@ const selectAllUsers = async () => {
 }
 
 const selectAllUsuariosByTag = async (tag) => {
+  let dadosUsuariosJson = {}
+  let usuariosArray = []
 
-  if (tag == '' || tag == undefined || !isNaN(tag) || tag.length > 255) {
-    return message.ERROR_REQUIRED_FIELDS
+  if (tag.id_tag == '' || tag.id_tag == undefined || isNaN(tag.id_tag)) {
+    return message.ERROR_INVALID_ID
+  } else if (tag.nome_tag == '' || tag.nome_tag == undefined || !isNaN(tag.nome_tag) || tag.nome_tag.length > 255) {
+    return message.ERROR_MISTAKE_IN_THE_FILDS
   } else {
-    
+
+    let dadosUsuarios = await tagUsuarioModel.selectAllUsuariosByTag(tag)
+
+    if (dadosUsuarios) {
+
+      for (let i = 0; i < dadosUsuarios.length; i++) {
+        let usuarioIndex = dadosUsuarios[i]
+
+        let usuario = await usuarioModel.selectUserByIdModel(usuarioIndex.id_usuario)
+
+        usuariosArray.push(usuario)
+      }
+
+      dadosUsuariosJson.usuarios = usuariosArray
+      dadosUsuariosJson.message = message.SUCCESS_USER_FOUND.message
+      dadosUsuariosJson.status = message.SUCCESS_USER_FOUND.status
+
+      return dadosUsuariosJson
+    } else {
+      return message.ERROR_INTERNAL_SERVER
+    }
+  }
+}
+
+const deleteUserById = async (id) => {
+
+  if (id == '' || id == undefined || isNaN(id)) {
+    return message.ERROR_INVALID_ID
+  } else {
+
+    let usuarioDeletado = await usuarioModel.selectUserByIdModel(id)
+
+    let deleteUsuario = usuarioModel.deleteUserByIdModel(id)
+
+    if (deleteUsuario) {
+      let dadosUsuarioJson = {}
+
+      dadosUsuarioJson.usuario_deletado = usuarioDeletado
+      dadosUsuarioJson.message = message.SUCCESS_DELETED_ITEM
+      dadosUsuarioJson.status = message.SUCCESS_DELETED_ITEM.status
+
+      return dadosUsuarioJson
+    } else {
+      return message.ERROR_INTERNAL_SERVER
+    }
   }
 }
 
@@ -417,5 +489,6 @@ module.exports = {
   selectProfileById,
   updateProfileTagLocality,
   selectAllUsers,
-  selectAllUsuariosByTag
+  selectAllUsuariosByTag,
+  deleteUserById
 };
