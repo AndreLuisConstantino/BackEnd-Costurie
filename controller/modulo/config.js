@@ -38,6 +38,9 @@ const ERROR_CATEGORIES_NOT_FOUND = {status: 404, message: 'Nenhuma categoria foi
 
 const ERROR_NOT_POSSIBLE_INSERT_TAGS = {status: 400, message: 'Não foi possível inserir as tags no sistema'}
 
+const ERROR_DELETED_USER = {status: 404, message: 'Por um erro interno esse usuário não pode ser excluido em nosso banco, ou ele não existe'}
+
+
 /******************************** MENSAGENS DE SUCESSO **********************************************/
 const SUCCESS_CREATED_ITEM = {status: 201, message: 'Item criado com sucesso.'}
 
@@ -81,5 +84,6 @@ module.exports = {
     ERROR_NOT_POSSIBLE_INSERT_TAGS,
     SUCCESS_CATEGORIES_FOUND,
     SUCCESS_USER_FOUND,
-    ERROR_CATEGORIES_NOT_FOUND
+    ERROR_CATEGORIES_NOT_FOUND,
+    ERROR_DELETED_USER
 }

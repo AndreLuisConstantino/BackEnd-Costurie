@@ -32,7 +32,7 @@ const insertUsuarioModel = async (dadosUsuario) => {
 }
 
 //Retorna o ultimo id inserido pelo banco de dados
-const selectLastIDModel = async () => {
+const selectLastIDUsuarioModel = async () => {
 
     let sql = `select 
                     tbl_usuario.id as id_usuario, 
@@ -75,7 +75,7 @@ const selectUserByEmailModel = async (email) => {
 }
 
 const selectUserByIdModel = async (id) => {
-    console.log(id);
+    // console.log(id);
     let sql = `select * from tbl_usuario where id = ${id}`
 
     let response = await prisma.$queryRawUnsafe(sql)
@@ -283,7 +283,8 @@ const selectUserAndLocalityById = async (id) => {
 
 module.exports = {
     insertUsuarioModel,
-    selectLastIDModel,
+    selectLastIDUsuarioModel
+    ,
     selectUserByLoginModel,
     selectUserByEmailModel,
     selectUserByIdModel,
@@ -296,5 +297,5 @@ module.exports = {
     updateProfileTagLocalityModel,
     selectAllUsersModel,
     deleteUserByIdModel,
-    selectUserAndLocalityById
+    selectUserAndLocalityById,
 }

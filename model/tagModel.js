@@ -90,9 +90,45 @@ const selectAllTagsModel = async () => {
     }
 }
 
+const insertTagModel = async (dadosBody) => {
+    //ScriptSQL para inserir dados
+    let sql = `insert into tbl_tag(
+                                    nome, 
+                                    imagem, 
+                                    id_categoria
+                                    ) values (
+                                    '${dadosBody.nome}',
+                                    '${dadosBody.imagem}',
+                                    ${dadosBody.id_categoria}
+                                    );`;
+
+    //Executa o script sql no banco de dados
+    let resultStatus = await prisma.$executeRawUnsafe(sql);
+
+    if (resultStatus) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+const selectTagLastID = async () => {
+    let sql = `select * from tbl_tag order by id desc limit 1;`;
+
+    let rsUsuario = await prisma.$queryRawUnsafe(sql);
+
+    if (rsUsuario.length > 0) {
+        return rsUsuario;
+    } else {
+        return false;
+    }
+}
+
 module.exports = {
     selectTagByIdModel,
     selectAllTagsByCategoriaModel,
     selectAllTagsModel,
-    selectAllTagsByCategoriaIdModel
+    selectAllTagsByCategoriaIdModel,
+    insertTagModel,
+    selectTagLastID
 }

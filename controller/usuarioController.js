@@ -44,7 +44,7 @@ const insertUsuario = async (dadosUsuario) => {
       //Valida se o BD inseriu corretamente os dados
       if (resultDadosUsuario) {
         //Chama a função que vai encontrar o ID gerado após o inser
-        let novoUsuario = await usuarioModel.selectLastIDModel();
+        let novoUsuario = await usuarioModel.selectLastIDUsuarioModel();
 
         //Gera o token pelo jwt
         let tokenUser = await jwt.createJWT(novoUsuario[0].id);
@@ -241,7 +241,7 @@ const selectProfileById = async (id) => {
   let dadosUsuarioJson = {}
   let dadosNovoUsuarioJson = {}
 
-  
+
 
   let tagArray = []
 
@@ -465,16 +465,18 @@ const deleteUserById = async (id) => {
 
     let usuarioDeletado = await usuarioModel.selectUserByIdModel(id)
 
-    let deleteUsuario = usuarioModel.deleteUserByIdModel(id)
+    let deleteUsuario = await usuarioModel.deleteUserByIdModel(id)
 
-    if (deleteUsuario) {
-      let dadosUsuarioJson = {}
+    if (usuarioDeletado == false) {
+      return message.ERROR_DELETED_USER
+    } else if (deleteUsuario) {
+        let dadosUsuarioJson = {}
 
-      dadosUsuarioJson.usuario_deletado = usuarioDeletado
-      dadosUsuarioJson.message = message.SUCCESS_DELETED_ITEM
-      dadosUsuarioJson.status = message.SUCCESS_DELETED_ITEM.status
+        dadosUsuarioJson.usuario_deletado = usuarioDeletado
+        dadosUsuarioJson.message = message.SUCCESS_DELETED_ITEM.message
+        dadosUsuarioJson.status = message.SUCCESS_DELETED_ITEM.status
 
-      return dadosUsuarioJson
+        return dadosUsuarioJson
     } else {
       return message.ERROR_INTERNAL_SERVER
     }

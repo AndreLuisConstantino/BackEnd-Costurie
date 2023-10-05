@@ -69,6 +69,18 @@ const insertLocalizacao = async (dadosLocalizacao) => {
     }
 }
 
+const deleteLocalizacao = async (id) => {
+
+    if (id == '' || id == undefined || isNaN(id)) {
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let dadosLocalizacaoDeletada = await localizacaoModel.selectLocalizacaoById(id)
+
+
+    }
+}
+
 module.exports = {
     selectAllStates,
     insertLocalizacao

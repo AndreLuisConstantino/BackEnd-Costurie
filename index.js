@@ -32,6 +32,7 @@ const usuarioController = require('./controller/usuarioController.js')
 const localizacaoController = require('./controller/localizacaoController.js')
 const tagController = require('./controller/tagController.js')
 const categoriaController = require('./controller/categoriaController.js')
+const tagUsuarioController = require('./controller/tagUsuarioController.js')
 
 //Cria um objeto com as características do expresponses
 const app = express()
@@ -413,7 +414,15 @@ const verifyJWT = async (request, response, next) => {
     app.delete('/localizacao/:id', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
         let idLocalizacao = request.params.id
 
-        
+        let dadosLocalizacao = await localizacaoController.deleteLocalizacao(idLocalizacao)
+
+        if (dadosLocalizacao) {
+            response.status(dadosLocalizacao.status)
+            response.json(dadosLocalizacao)
+        } else {
+            response.status(dadosLocalizacao.status)
+            response.json(dadosLocalizacao)
+        }
     })
 
     /* Tag */
@@ -468,14 +477,13 @@ const verifyJWT = async (request, response, next) => {
         }
     })
 
-    //Endpoint para inserir as tags do usuário
-    app.post('/tag/inserir_tags', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+    app.post('/tag/inserir', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
         let contentType = request.headers['content-type']
 
         let dadosBody = request.body
 
         if (String(contentType).toLowerCase() == 'application/json') {
-            let resultTag = await tagController.insertTags(dadosBody)
+            let resultTag = await tagController.insertTag(dadosBody)
 
             if (resultTag) {
                 response.status(resultTag.status)
@@ -490,7 +498,35 @@ const verifyJWT = async (request, response, next) => {
         }
     })
 
+   
+
+    /* Tag Usuário */
+
+    //Endpoint para inserir as tags do usuário
+    app.post('/tag/inserir_tags', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+        let contentType = request.headers['content-type']
+
+        let dadosBody = request.body
+
+        if (String(contentType).toLowerCase() == 'application/json') {
+            let resultTag = await tagUsuarioController.insertTagsUsuario(dadosBody)
+
+            if (resultTag) {
+                response.status(resultTag.status)
+                response.json(resultTag)
+            } else {
+                response.status(resultTag.status)
+                response.json(resultTag)
+            }
+        } else {
+            response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+            response.json(message.ERROR_INVALID_CONTENT_TYPE)
+        }
+    })
+
+
     /* Categoria */
+
     //Selecionar todas as categorias
     app.get('/categoria/select_all', verifyJWT, cors(), async (request, response) => {
 
@@ -520,10 +556,10 @@ const verifyJWT = async (request, response, next) => {
         }
     })
 
-module.exports = {
-    verifyJWT,
-    cors,
-    bodyParserJSON
-}
+// module.exports = {
+//     verifyJWT,
+//     cors,
+//     bodyParserJSON
+// }
 
 app.listen(3000, () => console.log('Servidor rodando na porta 3000'))
