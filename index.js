@@ -32,8 +32,6 @@ const usuarioController = require('./controller/usuarioController.js')
 const localizacaoController = require('./controller/localizacaoController.js')
 const tagController = require('./controller/tagController.js')
 const categoriaController = require('./controller/categoriaController.js')
-const e = require('express')
-
 
 //Cria um objeto com as características do expresponses
 const app = express()
@@ -72,6 +70,10 @@ const verifyJWT = async (request, response, next) => {
         return response.status(401).end()
     }
 }
+
+// const userRouter = require('./routes/userRoutes.js')
+
+// app.use('/api', userRouter)
 
     /* Usuário */
     //Endpoint para cadastrar um Usuário 
@@ -251,6 +253,8 @@ const verifyJWT = async (request, response, next) => {
 
             let dadosUpdatePersonalizarPerfil = await usuarioController.updateUserProfile(dadosBody)
 
+            // console.log(dadosUpdatePersonalizarPerfil);
+
             if (dadosUpdatePersonalizarPerfil) {
                 response.status(dadosUpdatePersonalizarPerfil.status)
                 response.json(dadosUpdatePersonalizarPerfil)
@@ -355,7 +359,7 @@ const verifyJWT = async (request, response, next) => {
         }
     })
 
-    //Endpoint para selecionar todos os usuários
+    // Endpoint para selecionar todos os usuários
     app.get('/usuario/select_all', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
 
         let dadosUsuario = await usuarioController.selectAllUsers()
@@ -385,6 +389,7 @@ const verifyJWT = async (request, response, next) => {
     })
     
     /* Localizacao*/
+    
     //Endpoint para pegar todos os estados
     app.get('/localizacao/estados/', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
 
@@ -405,7 +410,14 @@ const verifyJWT = async (request, response, next) => {
         let dadosCidades = localizacaoController.selectAllCitiesByState()
     })
 
+    app.delete('/localizacao/:id', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+        let idLocalizacao = request.params.id
+
+        
+    })
+
     /* Tag */
+
     //Endpoint para pegar todas as tags pela categoria
     app.post('/tag/tag_by_categoria', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
         let contentType = request.headers['content-type']
@@ -428,10 +440,24 @@ const verifyJWT = async (request, response, next) => {
         }
     })
 
+    //Endpoint que pega a tag pelo id
     app.get('/tag/:id', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
         let idTag = request.params.id
 
         let dadosTag = await tagController.selectTagById(idTag)
+
+        if (dadosTag) {
+            response.status(dadosTag.status)
+            response.json(dadosTag)
+        } else {
+            response.status(dadosTag.status)
+            response.json(dadosTag)
+        }
+    })
+
+    app.get('/tag', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+ 
+        let dadosTag = await tagController.selectTagsByCategoria()
 
         if (dadosTag) {
             response.status(dadosTag.status)
@@ -494,6 +520,10 @@ const verifyJWT = async (request, response, next) => {
         }
     })
 
-
+module.exports = {
+    verifyJWT,
+    cors,
+    bodyParserJSON
+}
 
 app.listen(3000, () => console.log('Servidor rodando na porta 3000'))

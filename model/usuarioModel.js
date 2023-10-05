@@ -75,6 +75,7 @@ const selectUserByEmailModel = async (email) => {
 }
 
 const selectUserByIdModel = async (id) => {
+    console.log(id);
     let sql = `select * from tbl_usuario where id = ${id}`
 
     let response = await prisma.$queryRawUnsafe(sql)
@@ -117,7 +118,7 @@ const selectTokenAndIdModel = async (dadosBody) => {
     } else {
         return false
     }
-}
+} 
 
 const updateUserPasswordModel = async (dadosBody) => {
     //Script sql para atualizar os dados no BD
@@ -136,6 +137,8 @@ const updateUserPasswordModel = async (dadosBody) => {
 const dadosUpdatePersonalizarPerfilModel = async (dadosBody) => {
     //Script sql para atualizar os dados no BD
     let sql = `update tbl_usuario set nome = '${dadosBody.nome}', descricao = '${dadosBody.descricao}', foto = '${dadosBody.foto}' where id = ${dadosBody.id};`
+
+    // console.log(sql);
 
     //Executa o script no BD
     let resultStatus = await prisma.$executeRawUnsafe(sql)

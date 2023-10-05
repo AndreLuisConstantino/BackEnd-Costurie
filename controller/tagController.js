@@ -12,7 +12,8 @@ var message = require('./modulo/config.js')
 var categoriaModel = require('../model/categoriaModel.js')
 var tagModel = require('../model/tagModel.js')
 var tagUsuarioModel = require('../model/tagUsuarioModel.js')
-var usuarioModel = require('../model/usuarioModel.js')
+const e = require('express')
+// var usuarioModel = require('../model/usuarioModel.js')
 
 
 const selectAllTagsByCategoria = async (dadosBody) => {
@@ -125,8 +126,44 @@ const selectTagById = async (id) => {
     }
 }
 
+const selectTagsByCategoria = async () => {
+    let dadosTagsArray = []
+
+    let dadosCategoria = await categoriaModel.selectAllCategorias()
+
+    // console.log(dadosCategoria);
+
+    if (dadosCategoria.length) {
+
+        for (let i = 0; i < dadosCategoria.length; i++) {
+            let categoriaIndex = dadosCategoria[i]
+
+            let dadosTagsByCategoria = await tagModel.selectAllTagsByCategoriaIdModel(categoriaIndex.id)
+
+            // categoriaIndex.tags = dadosTagsByCategoria
+
+            dadosTagsArray.push(dadosTagsByCategoria)
+        }
+
+        if (dadosTagsArray) {
+            let dadosTagsJson = {}
+
+            dadosTagsJson.categorias_e_tags = dadosTagsArray
+            dadosTagsJson.message = message.SUCCESS_CATEGORY_FOUND.message
+            dadosTagsJson.status = message.SUCCESS_CATEGORY_FOUND.status
+
+            return dadosTagsJson
+        } else {
+            return message.ERROR_INTERNAL_SERVER
+        }
+    } else {
+        return message.ERROR_CATEGORIES_NOT_FOUND
+    }
+}
+
 module.exports = {
     selectAllTagsByCategoria,
     insertTags,
-    selectTagById
+    selectTagById,
+    selectTagsByCategoria
 }

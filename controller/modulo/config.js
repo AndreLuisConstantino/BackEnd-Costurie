@@ -34,6 +34,8 @@ const ERROR_INVALID_TOKEN = {status: 401, message: 'O token encaminhado na requi
 
 const ERROR_CATEGORY_NOT_FOUND = {status: 404, message: 'A categoria não foi encontrada no nosso sistema'}
 
+const ERROR_CATEGORIES_NOT_FOUND = {status: 404, message: 'Nenhuma categoria foi encontrada em nosso sistema'}
+
 const ERROR_NOT_POSSIBLE_INSERT_TAGS = {status: 400, message: 'Não foi possível inserir as tags no sistema'}
 
 /******************************** MENSAGENS DE SUCESSO **********************************************/
@@ -78,5 +80,6 @@ module.exports = {
     SUCCESS_CATEGORY_FOUND,
     ERROR_NOT_POSSIBLE_INSERT_TAGS,
     SUCCESS_CATEGORIES_FOUND,
-    SUCCESS_USER_FOUND
+    SUCCESS_USER_FOUND,
+    ERROR_CATEGORIES_NOT_FOUND
 }

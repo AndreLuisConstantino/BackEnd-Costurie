@@ -192,7 +192,9 @@ const updateUserPassword = async (dadosBody) => {
 }
 
 const updateUserProfile = async (dadosBody) => {
+  // console.log(dadosBody);
   if (dadosBody.id == '' || dadosBody.id == undefined || isNaN(dadosBody.id)) {
+    // console.log('teste zika');
     return message.ERROR_INVALID_ID
   } else {
     let dadosUpdatePersonalizarPerfil = usuarioModel.dadosUpdatePersonalizarPerfilModel(dadosBody)
@@ -238,6 +240,8 @@ const selectProfileById = async (id) => {
 
   let dadosUsuarioJson = {}
   let dadosNovoUsuarioJson = {}
+
+  
 
   let tagArray = []
 
