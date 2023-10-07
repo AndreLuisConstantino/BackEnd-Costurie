@@ -168,7 +168,7 @@ const selectTokenById = async (dadosBody) => {
 
 const updateUserPassword = async (dadosBody) => {
 
-  if (dadosBody.senha == '' || dadosBody.senha == undefined || dadosBody.senha.length > 515 || !isNaN(dadosBody.senha)) {
+  if (dadosBody.senha == '' || dadosBody.senha == undefined || dadosBody.senha.length > 515 || isNaN(dadosBody.senha)) {
     return message.ERROR_MISTAKE_IN_THE_FILDS
   } else if (dadosBody.id == '' || dadosBody.id == undefined || isNaN(dadosBody.id)) {
     return message.ERROR_INVALID_ID
