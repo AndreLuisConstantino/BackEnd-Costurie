@@ -54,8 +54,29 @@ const selectLastId = async () => {
     }
 }
 
+const selectAllLocationsModel = async () => {
+    let sql = `
+    select tbl_localizacao.id as id_localizacao, 
+    tbl_localizacao.cidade, 
+    tbl_localizacao.estado, tbl_localizacao.bairro,
+    tbl_usuario.id as id_usuario,
+    tbl_usuario.nome_de_usuario,
+        from tbl_localizacao
+            inner join tbl_usuario
+                tbl_usuario.id_localizacao = tbl_localizacao.id`
+
+    let response = await prisma.$queryRawUnsafe(sql)
+
+    if (response.length > 0) {
+        return response
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     selectAllStatesModel,
     insertLocalizacaoModel,
-    selectLastId
+    selectLastId,
+    selectAllLocationsModel
 }

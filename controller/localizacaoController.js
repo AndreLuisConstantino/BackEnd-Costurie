@@ -81,7 +81,26 @@ const deleteLocalizacao = async (id) => {
     }
 }
 
+const selectAllLocations = async () => {
+
+    let dadosLocalizacao = await localizacaoModel.selectAllLocationsModel()
+
+    if (dadosLocalizacao) {
+        let dadosLocalizacaoJson = {}
+
+        dadosLocalizacaoJson.localizacoes = dadosLocalizacao
+        dadosLocalizacaoJson.message = 'Localizações achadas com sucesso'
+        dadosLocalizacaoJson.status = 200
+
+        return dadosLocalizacaoJson
+    } else {
+        return message.ERROR_INTERNAL_SERVER
+    }
+}
+
 module.exports = {
     selectAllStates,
-    insertLocalizacao
+    insertLocalizacao,
+    selectAllLocations,
+    deleteLocalizacao
 }
