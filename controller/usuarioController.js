@@ -30,11 +30,9 @@ const insertUsuario = async (dadosUsuario) => {
   ) {
     return message.ERROR_REQUIRED_FIELDS;
   } else {
-    let resultEmail = await usuarioModel.selectUserByEmailModel(
-      dadosUsuario.email
-    );
+    let resultEmail = await usuarioModel.selectUserByEmailModel(dadosUsuario.email);
 
-    if (resultEmail) {
+    if (resultEmail.length) {
       return message.ERROR_EMAIL_ALREADY_EXISTS;
     } else {
       let resultDadosUsuario = await usuarioModel.insertUsuarioModel(
@@ -237,12 +235,10 @@ const selectUserByEmailTagName = async (dadosBody) => {
 }
 
 const selectProfileById = async (id) => {
+  // console.log(id);
 
   let dadosUsuarioJson = {}
   let dadosNovoUsuarioJson = {}
-
-
-
   let tagArray = []
 
   if (id == '' || id == undefined || isNaN(id)) {
@@ -253,6 +249,8 @@ const selectProfileById = async (id) => {
 
     if (usuarioPossuiTag) {
       let dadosPerfilUsuario = await usuarioModel.selectProfileByIdModel(id)
+
+      // console.log(dadosPerfilUsuario);
 
       if (dadosPerfilUsuario) {
         dadosPerfilUsuario.forEach((usuario) => {
@@ -297,6 +295,8 @@ const selectProfileById = async (id) => {
 
           return dadosUsuarioJson
         }
+      } else {
+        return message.ERROR_INTERNAL_SERVER
       }
     } else {
       let dadosUsuario = await usuarioModel.selectUserAndLocalityById(id)
@@ -470,13 +470,13 @@ const deleteUserById = async (id) => {
     if (usuarioDeletado == false) {
       return message.ERROR_DELETED_USER
     } else if (deleteUsuario) {
-        let dadosUsuarioJson = {}
+      let dadosUsuarioJson = {}
 
-        dadosUsuarioJson.usuario_deletado = usuarioDeletado
-        dadosUsuarioJson.message = message.SUCCESS_DELETED_ITEM.message
-        dadosUsuarioJson.status = message.SUCCESS_DELETED_ITEM.status
+      dadosUsuarioJson.usuario_deletado = usuarioDeletado
+      dadosUsuarioJson.message = message.SUCCESS_DELETED_ITEM.message
+      dadosUsuarioJson.status = message.SUCCESS_DELETED_ITEM.status
 
-        return dadosUsuarioJson
+      return dadosUsuarioJson
     } else {
       return message.ERROR_INTERNAL_SERVER
     }

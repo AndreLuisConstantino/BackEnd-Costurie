@@ -8,6 +8,7 @@
 const express = require('express')
 const router = express.Router();
 const usuarioController = require('../controller/usuarioController.js')
+const localizacaoController = require('../controller/localizacaoController.js')
 
 //Permissões do cors
 router.use((request, response, next) => {
@@ -244,7 +245,7 @@ router.get('/usuario/meu_perfil/:id', verifyJWT, cors(), bodyParserJSON, async (
     let usuarioId = request.params.id
 
     let resultDadosPerfilUsuario = await usuarioController.selectProfileById(usuarioId)
-    // console.log(resultDadosPerfilUsuario);
+    console.log(resultDadosPerfilUsuario);
     // console.log(resultDadosPerfilUsuario.usuario.tags);
 
     if (resultDadosPerfilUsuario) {
@@ -288,7 +289,7 @@ router.post('/usuario/inserir_localizacao', verifyJWT, cors(), bodyParserJSON, a
         let dadosBody = request.body
 
         let dadosInsertLocalizacao = await localizacaoController.insertLocalizacao(dadosBody)
-        // console.log(dadosInsertLocalizacao);
+        console.log(dadosInsertLocalizacao);
 
         if (dadosInsertLocalizacao) {
             response.status(dadosInsertLocalizacao.status)
