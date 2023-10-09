@@ -10,6 +10,19 @@ const router = express.Router();
 
 const localizacaoController = require('../controller/localizacaoController.js')
 
+//Permissões do cors
+router.use((request, response, next) => {
+    //Define quem poderá acessar a API (* = Todos)
+    response.header('Acess-Control-Allow-Origin', '*')
+    //Define quais métodos serão utilizados na API
+    response.header('Acess-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+
+    //Atribui as permissões ao Cors
+    router.use(cors())
+
+    next()
+})
+
 //Dependencia para gerenciar as permissões da API
 const cors = require('cors')
 //Dependencia para gerenciar o corpo de requisições da API
@@ -80,6 +93,27 @@ router.get('/localizacao/select_all', verifyJWT, cors(), bodyParserJSON, async (
     } else {
         response.status(dadosLocalizacao.status)
         response.json(dadosLocalizacao)
+    }
+})
+
+router.put('/localizacao/atualizar', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+    let contentType = request.headers['content-type']
+
+    let dadosBody = request.body
+
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let resultLocalizacao = await localizacaoController.updateLocalizacao(dadosBody)
+
+        if (resultLocalizacao) {
+            response.status(resultLocalizacao.status)
+            response.json(resultLocalizacao)
+        } else {
+            response.status(resultLocalizacao.status)
+            response.json(resultLocalizacao)
+        }
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
     }
 })
 

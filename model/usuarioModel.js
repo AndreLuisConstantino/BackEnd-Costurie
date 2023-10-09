@@ -223,6 +223,8 @@ const updateProfileTagLocalityModel = async (dadosBody) => {
     //Executa o script no BD
     let resultStatus = await prisma.$executeRawUnsafe(sql)
 
+    console.log(dadosBody);
+
     if (resultStatus) {
         return resultStatus
     } else {

@@ -40,6 +40,8 @@ const ERROR_NOT_POSSIBLE_INSERT_TAGS = {status: 400, message: 'Não foi possíve
 
 const ERROR_DELETED_USER = {status: 404, message: 'Por um erro interno esse usuário não pode ser excluido em nosso banco, ou ele não existe'}
 
+const ERROR_NOT_POSSIBLE_UPDATE_LOCALIZATION = {status: 400, message: 'Não foi possível fazer o updatede localização'}
+
 
 /******************************** MENSAGENS DE SUCESSO **********************************************/
 const SUCCESS_CREATED_ITEM = {status: 201, message: 'Item criado com sucesso.'}
@@ -85,5 +87,6 @@ module.exports = {
     SUCCESS_CATEGORIES_FOUND,
     SUCCESS_USER_FOUND,
     ERROR_CATEGORIES_NOT_FOUND,
-    ERROR_DELETED_USER
+    ERROR_DELETED_USER,
+    ERROR_NOT_POSSIBLE_UPDATE_LOCALIZATION
 }

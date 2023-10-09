@@ -8,6 +8,19 @@
 const express = require('express')
 const router = express.Router();
 
+//Permissões do cors
+router.use((request, response, next) => {
+    //Define quem poderá acessar a API (* = Todos)
+    response.header('Acess-Control-Allow-Origin', '*')
+    //Define quais métodos serão utilizados na API
+    response.header('Acess-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+
+    //Atribui as permissões ao Cors
+    router.use(cors())
+
+    next()
+})
+
 const tagController = require('../controller/tagController.js')
 const tagUsuarioController = require('../controller/tagUsuarioController.js')
 

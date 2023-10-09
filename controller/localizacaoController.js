@@ -98,9 +98,40 @@ const selectAllLocations = async () => {
     }
 }
 
+const updateLocalizacao = async (dadosBody) => {
+
+    if (dadosBody.id_localizacao == '' || dadosBody.id_localizacao == undefined || isNaN(dadosBody.id_localizacao)) {
+        return message.ERROR_INVALID_ID
+    } else if (dadosBody.estado == '' || dadosBody.estado == undefined || !isNaN(dadosBody.estado) || dadosBody.estado.length > 255 ||
+            dadosBody.cidade == '' || dadosBody.cidade == undefined || !isNaN(dadosBody.cidade) || dadosBody.cidade.length > 255 ||
+            dadosBody.bairro == '' || dadosBody.bairro == undefined || !isNaN(dadosBody.bairro) || dadosBody.cidade.length > 255
+            ) {
+        return message.ERROR_REQUIRED_FIELDS
+    } else {
+         
+        let dadosUpdateLocalizacao = await localizacaoModel.updateLocalizacaoModel(dadosBody)
+
+        if (dadosUpdateLocalizacao) {
+            let localizacaoAtualizada = await localizacaoModel.selectLocalizacaoByIdModel(dadosBody.id_localizacao)
+
+            let dadosLocalizacaoJson = {}
+
+            dadosLocalizacaoJson.localizacao_atualizada = localizacaoAtualizada[0]
+            dadosLocalizacaoJson.message = message.SUCCESS_UPDATED_ITEM.message
+            dadosLocalizacaoJson.status = message.SUCCESS_UPDATED_ITEM.status
+
+            return dadosLocalizacaoJson
+        } else {
+            return message.ERROR_NOT_POSSIBLE_UPDATE_LOCALIZATION
+        }
+
+    }
+}
+
 module.exports = {
     selectAllStates,
     insertLocalizacao,
     selectAllLocations,
-    deleteLocalizacao
+    deleteLocalizacao,
+    updateLocalizacao
 }

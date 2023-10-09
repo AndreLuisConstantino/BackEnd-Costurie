@@ -17,7 +17,7 @@ const selectAllCategories = async () => {
     if (dadosCategorias) {
         let dadosCategoriasJson = {}
 
-        dadosCategoriasJson.cateorias = dadosCategorias
+        dadosCategoriasJson.categorias = dadosCategorias
         dadosCategoriasJson.message = message.SUCCESS_CATEGORIES_FOUND.message
         dadosCategoriasJson.status = message.SUCCESS_CATEGORIES_FOUND.status
 
