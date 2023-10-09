@@ -86,6 +86,7 @@ router.get('/tag/:id', verifyJWT, cors(), bodyParserJSON, async (request, respon
     }
 })
 
+//Endpoint que retorna todos as tags existentes no BD
 router.get('/tag', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
 
     let dadosTag = await tagController.selectTagsByCategoria()
@@ -99,6 +100,7 @@ router.get('/tag', verifyJWT, cors(), bodyParserJSON, async (request, response) 
     }
 })
 
+//Endpoint que insere tag
 router.post('/tag/inserir', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
     let contentType = request.headers['content-type']
 

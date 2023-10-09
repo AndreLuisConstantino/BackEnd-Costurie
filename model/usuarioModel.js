@@ -253,7 +253,6 @@ const deleteUserByIdModel = async (id) => {
         return true
     } else {
         return false
-
     }
 }
 

@@ -69,19 +69,19 @@ router.get('/localizacao/cidades/', verifyJWT, cors(), bodyParserJSON, async (re
 })
 
 //Endpoint para deletar localização pelo id
-router.delete('/localizacao/:id', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
-    let idLocalizacao = request.params.id
+// router.delete('/localizacao/:id', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+//     let idLocalizacao = request.params.id
 
-    let dadosLocalizacao = await localizacaoController.deleteLocalizacao(idLocalizacao)
+//     let dadosLocalizacao = await localizacaoController.deleteLocalizacao(idLocalizacao)
 
-    if (dadosLocalizacao) {
-        response.status(dadosLocalizacao.status)
-        response.json(dadosLocalizacao)
-    } else {
-        response.status(dadosLocalizacao.status)
-        response.json(dadosLocalizacao)
-    }
-})
+//     if (dadosLocalizacao) {
+//         response.status(dadosLocalizacao.status)
+//         response.json(dadosLocalizacao)
+//     } else {
+//         response.status(dadosLocalizacao.status)
+//         response.json(dadosLocalizacao)
+//     }
+// })
 
 router.get('/localizacao/select_all', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
 
@@ -116,5 +116,6 @@ router.put('/localizacao/atualizar', verifyJWT, cors(), bodyParserJSON, async (r
         response.json(message.ERROR_INVALID_CONTENT_TYPE)
     }
 })
+
 
 module.exports = router

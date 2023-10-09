@@ -75,9 +75,21 @@ const deleteLocalizacao = async (id) => {
         return message.ERROR_INVALID_ID
     } else {
 
-        let dadosLocalizacaoDeletada = await localizacaoModel.selectLocalizacaoById(id)
+        let dadosLocalizacaoDeletada = await localizacaoModel.selectLocalizacaoByIdModel(id)
 
+        let deleteLocalizacao = await localizacaoModel.deleteLocalizacaoModel(id)
 
+        if (deleteLocalizacao) {
+            let dadosLocalizacaoJson = {}
+
+            dadosLocalizacaoJson.localizacao_deletada = dadosLocalizacaoDeletada
+            dadosLocalizacaoJson.message = message.SUCCESS_DELETED_ITEM.message
+            dadosLocalizacaoJson.status = message.SUCCESS_DELETED_ITEM.status
+
+            return dadosLocalizacaoJson
+        } else {
+            return message.ERROR_DELETED_ITEM
+        }
     }
 }
 

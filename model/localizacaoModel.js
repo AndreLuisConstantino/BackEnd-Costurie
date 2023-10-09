@@ -120,11 +120,24 @@ const selectLocalizacaoByIdModel = async (id) => {
     }
 }
 
+const deleteLocalizacaoModel = async (id) => {
+    let sql = `delete from tbl_localizacao where id = ${id}`
+
+    let response = await prisma.$executeRawUnsafe(sql)
+
+    if (response) {
+        return true
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     selectAllStatesModel,
     insertLocalizacaoModel,
     selectLastId,
     selectAllLocationsModel,
     updateLocalizacaoModel,
-    selectLocalizacaoByIdModel
+    selectLocalizacaoByIdModel,
+    deleteLocalizacaoModel
 }
