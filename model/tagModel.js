@@ -124,11 +124,32 @@ const selectTagLastID = async () => {
     }
 }
 
+const selectAllTagsInCategoriaModel = async () => {
+    let sql = `select tbl_tag.id as id_tag, tbl_tag.nome as nome, tbl_tag.imagem as imagem, tbl_categoria.id as id_categoria, tbl_categoria.nome as nome_categoria
+    from tbl_tag
+        inner join tbl_categoria
+            on tbl_tag.id_categoria = tbl_categoria.id`
+
+    // console.log(sql);
+
+    let response = await prisma.$queryRawUnsafe(sql);
+
+    // console.log(response);
+
+    // console.log(response);
+    if (response.length > 0) {
+        return response;
+    } else {
+        return false;
+    }
+}
+
 module.exports = {
     selectTagByIdModel,
     selectAllTagsByCategoriaModel,
     selectAllTagsModel,
     selectAllTagsByCategoriaIdModel,
     insertTagModel,
-    selectTagLastID
+    selectTagLastID,
+    selectAllTagsInCategoriaModel
 }

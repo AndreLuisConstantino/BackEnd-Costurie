@@ -70,7 +70,7 @@ const selectAllTagsByCategoria = async (dadosBody) => {
 }
 
 const insertTag = async (dadosBody) => {
-    
+
     if (dadosBody.nome == '' || dadosBody.nome == undefined || dadosBody.nome.length > 100 || !isNaN(dadosBody.nome) ||
         dadosBody.imagem == '' || dadosBody.imagem == undefined || !isNaN(dadosBody.imagem) ||
         dadosBody.id_categoria == '' || dadosBody.id_categoria == undefined || isNaN(dadosBody.id_categoria)
@@ -118,37 +118,18 @@ const selectTagById = async (id) => {
 }
 
 const selectTagsByCategoria = async () => {
-    let dadosTagsArray = []
+    let dadosTags = await tagModel.selectAllTagsInCategoriaModel()
 
-    let dadosCategoria = await categoriaModel.selectAllCategorias()
+    if (dadosTags) {
+        let dadosTagJson = {}
 
-    // console.log(dadosCategoria);
+        dadosTagJson.tags = dadosTags
+        dadosTagJson.message = message.SUCCESS_CATEGORY_FOUND.message
+        dadosTagJson.status = message.SUCCESS_CATEGORY_FOUND.status
 
-    if (dadosCategoria.length) {
-
-        for (let i = 0; i < dadosCategoria.length; i++) {
-            let categoriaIndex = dadosCategoria[i]
-
-            let dadosTagsByCategoria = await tagModel.selectAllTagsByCategoriaIdModel(categoriaIndex.id)
-
-            // categoriaIndex.tags = dadosTagsByCategoria
-
-            dadosTagsArray.push(dadosTagsByCategoria)
-        }
-
-        if (dadosTagsArray) {
-            let dadosTagsJson = {}
-
-            dadosTagsJson.categorias_e_tags = dadosTagsArray
-            dadosTagsJson.message = message.SUCCESS_CATEGORY_FOUND.message
-            dadosTagsJson.status = message.SUCCESS_CATEGORY_FOUND.status
-
-            return dadosTagsJson
-        } else {
-            return message.ERROR_INTERNAL_SERVER
-        }
+        return dadosTagJson
     } else {
-        return message.ERROR_CATEGORIES_NOT_FOUND
+        return message.ERROR_INTERNAL_SERVER
     }
 }
 

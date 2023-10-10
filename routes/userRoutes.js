@@ -56,24 +56,6 @@ router.post('/usuario/cadastro', cors(), bodyParserJSON, async (request, respons
             //Recebe os dados encaminhados na requisição
             let dadosBody = request.body
 
-            // let dadosEmailExistente = await usuarioController.getUserByEmail(dadosBody.email)
-
-            // if (dadosEmailExistente.message == 'O email já existe em nosso sistema') {
-            //     response.status(dadosEmailExistente.status)
-            //     response.json(dadosEmailExistente)
-            // } else {
-            //     let resultUsuarioExistente = await usuarioController.selectUserByEmailTagName(dadosBody)
-
-            //     if (resultUsuarioExistente.message == "Usuário já existe em nosso sistema") {
-            //         response.status(resultUsuarioExistente.status)
-            //         response.json(resultUsuarioExistente)
-            //     } else {
-            //         let resultDadosUsuario = await usuarioController.insertUsuario(dadosBody)
-
-            //         response.status(resultDadosUsuario.status)
-            //         response.json(resultDadosUsuario)
-            //     }
-            // }
             let resultUsuarioExistente = await usuarioController.selectUserByEmailTagName(dadosBody)
 
             if (resultUsuarioExistente.message == 'Usuário já existe em nosso sistema') {
@@ -245,7 +227,7 @@ router.get('/usuario/meu_perfil/:id', verifyJWT, cors(), bodyParserJSON, async (
     let usuarioId = request.params.id
 
     let resultDadosPerfilUsuario = await usuarioController.selectProfileById(usuarioId)
-    console.log(resultDadosPerfilUsuario);
+    // console.log(resultDadosPerfilUsuario); 
     // console.log(resultDadosPerfilUsuario.usuario.tags);
 
     if (resultDadosPerfilUsuario) {
@@ -266,6 +248,7 @@ router.put('/usuario/editar_perfil', verifyJWT, cors(), bodyParserJSON, async (r
         let dadosBody = request.body
 
         let dadosUpdatePerfil = await usuarioController.updateProfileTagLocality(dadosBody)
+        // console.log(dadosUpdatePerfil);
 
         if (dadosUpdatePerfil) {
             response.status(dadosUpdatePerfil.status)
@@ -289,7 +272,7 @@ router.post('/usuario/inserir_localizacao', verifyJWT, cors(), bodyParserJSON, a
         let dadosBody = request.body
 
         let dadosInsertLocalizacao = await localizacaoController.insertLocalizacao(dadosBody)
-        console.log(dadosInsertLocalizacao);
+        // console.log(dadosInsertLocalizacao);
 
         if (dadosInsertLocalizacao) {
             response.status(dadosInsertLocalizacao.status)

@@ -35,9 +35,7 @@ const insertUsuario = async (dadosUsuario) => {
     if (resultEmail.length) {
       return message.ERROR_EMAIL_ALREADY_EXISTS;
     } else {
-      let resultDadosUsuario = await usuarioModel.insertUsuarioModel(
-        dadosUsuario
-      );
+      let resultDadosUsuario = await usuarioModel.insertUsuarioModel(dadosUsuario);
 
       //Valida se o BD inseriu corretamente os dados
       if (resultDadosUsuario) {
@@ -247,7 +245,10 @@ const selectProfileById = async (id) => {
 
     let usuarioPossuiTag = await tagUsuarioModel.selectAllTagsWithUserIdModel(id)
 
-    if (usuarioPossuiTag) {
+    // console.log(usuarioPossuiTag); 
+
+    if (usuarioPossuiTag.length) {
+      // console.log('teste 1');
       let dadosPerfilUsuario = await usuarioModel.selectProfileByIdModel(id)
 
       // console.log(dadosPerfilUsuario);
@@ -296,9 +297,11 @@ const selectProfileById = async (id) => {
           return dadosUsuarioJson
         }
       } else {
+        // console.log('teste 2');
         return message.ERROR_INTERNAL_SERVER
       }
     } else {
+      // console.log('test3');
       let dadosUsuario = await usuarioModel.selectUserAndLocalityById(id)
 
       dadosUsuarioJson.usuario = dadosUsuario[0]
@@ -324,7 +327,7 @@ const updateProfileTagLocality = async (dadosBody) => {
 
   let resultDadosParaDeletar = await tagUsuarioModel.selectAllTagsWithUserIdModel(dadosBody.id_usuario)
 
-  // console.log(resultDadosParaDeletar);
+  // console.log(dadosBody);
 
   if (dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario) ||
     dadosBody.id_localizacao == '' || dadosBody.id_localizacao == undefined || isNaN(dadosBody.id_localizacao) ||
@@ -383,6 +386,8 @@ const updateProfileTagLocality = async (dadosBody) => {
 const updateTag = async (dadosBody) => {
   let dadosPerfilUsuarioJson = {}
   let tagsAtualizadas = []
+
+  // console.log(dadosBody);
 
   for (let i = 0; i < dadosBody.tags.length; i++) {
     let tag = dadosBody.tags[i]
