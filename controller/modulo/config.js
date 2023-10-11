@@ -40,7 +40,12 @@ const ERROR_NOT_POSSIBLE_INSERT_TAGS = {status: 400, message: 'Não foi possíve
 
 const ERROR_DELETED_USER = {status: 404, message: 'Por um erro interno esse usuário não pode ser excluido em nosso banco, ou ele não existe'}
 
-const ERROR_NOT_POSSIBLE_UPDATE_LOCALIZATION = {status: 400, message: 'Não foi possível fazer o updatede localização'}
+const ERROR_NOT_POSSIBLE_UPDATE_LOCALIZATION = {status: 400, message: 'Não foi possível fazer o update de localização'}
+
+const ERROR_TAG_NAME_ALREADY_EXISTS = {status: 400, message: 'Este nome de usuário já existe em nosso sistema'}
+
+const ERROR_INSERT_USER = {status: 400, message: 'Não foi possível atualizar o usuário'}
+
 
 
 /******************************** MENSAGENS DE SUCESSO **********************************************/
@@ -88,5 +93,7 @@ module.exports = {
     SUCCESS_USER_FOUND,
     ERROR_CATEGORIES_NOT_FOUND,
     ERROR_DELETED_USER,
-    ERROR_NOT_POSSIBLE_UPDATE_LOCALIZATION
+    ERROR_NOT_POSSIBLE_UPDATE_LOCALIZATION,
+    ERROR_TAG_NAME_ALREADY_EXISTS,
+    ERROR_INSERT_USER
 }

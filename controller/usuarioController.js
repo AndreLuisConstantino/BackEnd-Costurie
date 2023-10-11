@@ -447,8 +447,9 @@ const selectAllUsuariosByTag = async (tag) => {
         let usuarioIndex = dadosUsuarios[i]
 
         let usuario = await usuarioModel.selectUserByIdModel(usuarioIndex.id_usuario)
+        // console.log(usuario);
 
-        usuariosArray.push(usuario)
+        usuariosArray.push(usuario[0])
       }
 
       dadosUsuariosJson.usuarios = usuariosArray
@@ -488,6 +489,46 @@ const deleteUserById = async (id) => {
   }
 }
 
+const registrarUsuario = async (dadosBody) => {
+
+  let usuarioExistenteEmail = await usuarioModel.selectUserEmailModel(dadosBody.email)
+  let usuarioExistenteTag = await usuarioModel.selectUserByTagNameModel(dadosBody.nome_de_usuario)
+  // console.log(usuarioExistenteTag);
+
+
+  if (dadosBody.nome_de_usuario == '' || dadosBody.nome_de_usuario == undefined || !isNaN(dadosBody.nome_de_usuario) || dadosBody.nome_de_usuario.length > 100 ||
+    dadosBody.email == '' || dadosBody.email == undefined || !isNaN(dadosBody.email) || dadosBody.email.length > 255 ||
+    dadosBody.senha == '' || dadosBody.senha == undefined || !isNaN(dadosBody.senha) || dadosBody.senha.length > 515
+  ) {
+    return message.ERROR_REQUIRED_FIELDS
+  } else if (usuarioExistenteEmail.length) {
+    return message.ERROR_EMAIL_ALREADY_EXISTS
+  } else if (usuarioExistenteTag.length) {
+    return message.ERROR_TAG_NAME_ALREADY_EXISTS
+  } else {
+
+    let resultDadosUsuario = await usuarioModel.insertUsuarioModel(dadosBody)
+
+    if (resultDadosUsuario) {
+
+      let novoUsuario = await usuarioModel.selectLastIDUsuarioModel()
+
+      let dadosUsuarioJson = {}
+
+      let tokenUser =  await jwt.createJWT(novoUsuario[0].id);
+
+      dadosUsuarioJson.usuario = novoUsuario[0]
+      dadosUsuarioJson.message = message.SUCCESS_CREATED_ITEM.message
+      dadosUsuarioJson.status = message.SUCCESS_CREATED_ITEM.status
+      dadosUsuarioJson.token = tokenUser
+
+      return dadosUsuarioJson
+    } else {
+      return message.ERROR_INSERT_USER
+    }
+  }
+}
+
 module.exports = {
   insertUsuario,
   selectUserByLogin,
@@ -501,5 +542,6 @@ module.exports = {
   updateProfileTagLocality,
   selectAllUsers,
   selectAllUsuariosByTag,
-  deleteUserById
+  deleteUserById,
+  registrarUsuario
 };

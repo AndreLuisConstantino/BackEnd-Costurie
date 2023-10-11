@@ -63,8 +63,13 @@ const selectUserByLoginModel = async (dadosLogin) => {
 }
 
 const selectUserByEmailModel = async (email) => {
+    // console.log(email);
+
+    // let emailPoggers = {}
+    // emailPoggers.email = email
 
     let sql = `select tbl_usuario.id, tbl_usuario.nome_de_usuario, tbl_usuario.email from tbl_usuario where tbl_usuario.email = '${email.email}';`
+    // let sql = `select tbl_usuario.id, tbl_usuario.nome_de_usuario, tbl_usuario.email from tbl_usuario where tbl_usuario.email = '${emailPoggers.email}';`
 
     let response = await prisma.$queryRawUnsafe(sql)
     if (response.length > 0) {
@@ -282,10 +287,32 @@ const selectUserAndLocalityById = async (id) => {
     }
 } 
 
+const selectUserEmailModel = async (email) => {
+    let sql = `select tbl_usuario.id, tbl_usuario.nome_de_usuario, tbl_usuario.email from tbl_usuario where tbl_usuario.email = '${email}'`
+
+    let response = await prisma.$queryRawUnsafe(sql)
+    if (response.length > 0) {
+        return response
+    } else {
+        return false
+    }
+}
+
+const selectUserByTagNameModel = async (nome_de_usuario) => {
+    let sql = `select tbl_usuario.id, tbl_usuario.nome_de_usuario, tbl_usuario.email from tbl_usuario where tbl_usuario.nome_de_usuario = '${nome_de_usuario}'`
+
+    let response = await prisma.$queryRawUnsafe(sql)
+    // console.log(response);
+    if (response.length > 0) {
+        return response
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     insertUsuarioModel,
-    selectLastIDUsuarioModel
-    ,
+    selectLastIDUsuarioModel,
     selectUserByLoginModel,
     selectUserByEmailModel,
     selectUserByIdModel,
@@ -299,4 +326,6 @@ module.exports = {
     selectAllUsersModel,
     deleteUserByIdModel,
     selectUserAndLocalityById,
+    selectUserEmailModel,
+    selectUserByTagNameModel
 }

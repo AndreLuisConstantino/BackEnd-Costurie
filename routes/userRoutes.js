@@ -48,38 +48,49 @@ const verifyJWT = async (request, response, next) => {
 //Import do arquivo de configuração das variáveis, constantes e funções globais
 var message = require('../controller/modulo/config.js')
 
-//Endpoint para cadastrar um Usuário 
+// //Endpoint para cadastrar um Usuário 
+// router.post('/usuario/cadastro', cors(), bodyParserJSON, async (request, response) => {
+//     let contentType = request.headers['content-type']
+
+//     if (String(contentType).toLowerCase() == 'application/json') {
+//         //Recebe os dados encaminhados na requisição
+//         let dadosBody = request.body
+
+//         let resultUsuarioExistente = await usuarioController.selectUserByEmailTagName(dadosBody)
+
+//         if (resultUsuarioExistente.message == 'Usuário já existe em nosso sistema') {
+//             response.status(resultUsuarioExistente.status)
+//             response.json(resultUsuarioExistente)
+//         } else {
+//             let resultDadosUsuario = await usuarioController.insertUsuario(dadosBody)
+
+//             if (resultDadosUsuario) {
+//                 response.status(resultDadosUsuario.status)
+//                 response.json(resultDadosUsuario)
+//             } else {
+//                 response.status(resultDadosUsuario.status)
+//                 response.json(resultDadosUsuario)
+//             }
+
+//         }
+
+//     } else {
+//         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+//         response.json(message.ERROR_INVALID_CONTENT_TYPE)
+//     }
+// })
+
 router.post('/usuario/cadastro', cors(), bodyParserJSON, async (request, response) => {
-        let contentType = request.headers['content-type']
+    let dadosBody = request.body
 
-        if (String(contentType).toLowerCase() == 'application/json') {
-            //Recebe os dados encaminhados na requisição
-            let dadosBody = request.body
 
-            let resultUsuarioExistente = await usuarioController.selectUserByEmailTagName(dadosBody)
+    let dadosUsuarioRegistrado = await usuarioController.registrarUsuario(dadosBody)
 
-            if (resultUsuarioExistente.message == 'Usuário já existe em nosso sistema') {
-                response.status(resultUsuarioExistente.status)
-                response.json(resultUsuarioExistente)
-            } else {
-                let resultDadosUsuario = await usuarioController.insertUsuario(dadosBody)
-
-                if (resultDadosUsuario) {
-                    response.status(resultDadosUsuario.status)
-                    response.json(resultDadosUsuario)
-                } else {
-                    response.status(resultDadosUsuario.status)
-                    response.json(resultDadosUsuario)
-                }
-
-            }
-
-        } else {
-            response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
-            response.json(message.ERROR_INVALID_CONTENT_TYPE)
-        }
+    response.status(dadosUsuarioRegistrado.status)
+    response.json(dadosUsuarioRegistrado)
 })
 
+//Endpoint para a realização de login
 router.post('/usuario/login', cors(), bodyParserJSON, async (request, response) => {
     let contentType = request.headers['content-type']
 
@@ -325,6 +336,16 @@ router.get('/usuario/select_all', verifyJWT, cors(), bodyParserJSON, async (requ
         response.status(dadosUsuario.status)
         response.json(dadosUsuario)
     }
+})
+
+//Endpoint para selecionar usuário pelo email
+router.get('/usuario/:email', verifyJWT, cors(), async (request, response) => {
+    let emailUsuario = request.params.email
+
+    let dadosUsuario = await usuarioController.getUserByEmail(emailUsuario)
+
+    response.status(dadosUsuario.status)
+    response.json(dadosUsuario)
 })
 
 //Endpoint para deletar um usuário pelo id
