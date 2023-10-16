@@ -81,5 +81,5 @@ describe('Testes de Select by Email', () => {
     let res = await getUserByEmail(emailNaoEncontrado)
     expect(res.status).toBe(res.status = 404)
   })
-  
+
 })

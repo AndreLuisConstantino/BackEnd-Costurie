@@ -24,6 +24,7 @@ const selectAllTagsByCategoria = async (dadosBody) => {
             let allTags = await tagModel.selectAllTagsModel()
 
             if (allTags) {
+                // console.log(allTags);
                 let dadosTagJson = {}
 
                 dadosTagJson.tags = allTags

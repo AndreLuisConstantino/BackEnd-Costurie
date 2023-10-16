@@ -283,7 +283,7 @@ router.post('/usuario/inserir_localizacao', verifyJWT, cors(), bodyParserJSON, a
         let dadosBody = request.body
 
         let dadosInsertLocalizacao = await localizacaoController.insertLocalizacao(dadosBody)
-        // console.log(dadosInsertLocalizacao);
+        console.log(dadosInsertLocalizacao);
 
         if (dadosInsertLocalizacao) {
             response.status(dadosInsertLocalizacao.status)

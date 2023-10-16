@@ -252,6 +252,8 @@ const selectAllUsersModel = async () => {
 const deleteUserByIdModel = async (id) => {
     let sql = `delete from tbl_usuario where id = ${id}`
 
+    // console.log(sql);
+
     let response = await prisma.$executeRawUnsafe(sql)
 
     if (response) {
@@ -279,6 +281,8 @@ const selectUserAndLocalityById = async (id) => {
                 where tbl_usuario.id = ${id}`
 
     let response = await prisma.$queryRawUnsafe(sql)
+
+    // console.log(response);
 
     if (response.length > 0) {
         return response

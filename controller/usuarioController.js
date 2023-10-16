@@ -303,6 +303,7 @@ const selectProfileById = async (id) => {
     } else {
       // console.log('test3');
       let dadosUsuario = await usuarioModel.selectUserAndLocalityById(id)
+      // console.log(dadosUsuario);
 
       dadosUsuarioJson.usuario = dadosUsuario[0]
       if (dadosUsuario) {
@@ -344,11 +345,14 @@ const updateProfileTagLocality = async (dadosBody) => {
 
   } else if (dadosBody.tags.length == 0) {
 
+    console.log(dadosBody.tags);
+
     let resultDadosDeletado = await tagUsuarioModel.deleteAllTagsWithUserIdModel(dadosBody.id_usuario)
 
     if (resultDadosDeletado) {
       return message.SUCCESS_UPDATED_ITEM
     } else {
+      // console.log('teste 1');
       return message.ERROR_INTERNAL_SERVER
     }
 
@@ -367,6 +371,8 @@ const updateProfileTagLocality = async (dadosBody) => {
         return message.ERROR_UNABLE_TO_UPDATE
       }
     } else {
+      console.log('teste 1');
+
       return message.ERROR_INTERNAL_SERVER
     }
   } else {
