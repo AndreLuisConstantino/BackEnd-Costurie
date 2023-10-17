@@ -68,21 +68,6 @@ router.get('/localizacao/cidades/', verifyJWT, cors(), bodyParserJSON, async (re
     let dadosCidades = localizacaoController.selectAllCitiesByState()
 })
 
-//Endpoint para deletar localização pelo id
-// router.delete('/localizacao/:id', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
-//     let idLocalizacao = request.params.id
-
-//     let dadosLocalizacao = await localizacaoController.deleteLocalizacao(idLocalizacao)
-
-//     if (dadosLocalizacao) {
-//         response.status(dadosLocalizacao.status)
-//         response.json(dadosLocalizacao)
-//     } else {
-//         response.status(dadosLocalizacao.status)
-//         response.json(dadosLocalizacao)
-//     }
-// })
-
 router.get('/localizacao/select_all', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
 
     let dadosLocalizacao = await localizacaoController.selectAllLocations()

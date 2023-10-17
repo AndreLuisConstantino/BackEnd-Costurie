@@ -39,11 +39,13 @@ const userRouter = require('./routes/userRoutes.js')
 const localizacaoRouter = require('./routes/localizacaoRoutes.js')
 const tagRouter = require('./routes/tagRoutes.js')
 const categoriaRouter = require('./routes/categoriaRoutes.js')
+const publicacaoRouter = require('./routes/publicacaoRoutes.js')
 
 //Rotas para o usuário
 app.use('/', userRouter)
 app.use('/', localizacaoRouter)
 app.use('/', tagRouter)
 app.use('/', categoriaRouter)
+app.use('/', publicacaoRouter)
 
 app.listen(3000, () => console.log('Servidor rodando na porta 3000'))

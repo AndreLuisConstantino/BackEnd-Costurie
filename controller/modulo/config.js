@@ -46,7 +46,9 @@ const ERROR_TAG_NAME_ALREADY_EXISTS = {status: 400, message: 'Este nome de usuá
 
 const ERROR_INSERT_USER = {status: 400, message: 'Não foi possível atualizar o usuário'}
 
+const ERROR_TAGS_WERE_NOT_FORWARDED = {status: 400, message: 'As tags não foram encaminhadas na requisição'}
 
+const ERROR_NOT_POSSIBLE_INSERT_PUBLICATION = {status: 400, message: 'Não foi possível fazer a publicacao'}
 
 /******************************** MENSAGENS DE SUCESSO **********************************************/
 const SUCCESS_CREATED_ITEM = {status: 201, message: 'Item criado com sucesso.'}
@@ -95,5 +97,7 @@ module.exports = {
     ERROR_DELETED_USER,
     ERROR_NOT_POSSIBLE_UPDATE_LOCALIZATION,
     ERROR_TAG_NAME_ALREADY_EXISTS,
-    ERROR_INSERT_USER
+    ERROR_INSERT_USER,
+    ERROR_TAGS_WERE_NOT_FORWARDED,
+    ERROR_NOT_POSSIBLE_INSERT_PUBLICATION
 }

@@ -48,46 +48,26 @@ const verifyJWT = async (request, response, next) => {
 //Import do arquivo de configuração das variáveis, constantes e funções globais
 var message = require('../controller/modulo/config.js')
 
-// //Endpoint para cadastrar um Usuário 
-// router.post('/usuario/cadastro', cors(), bodyParserJSON, async (request, response) => {
-//     let contentType = request.headers['content-type']
-
-//     if (String(contentType).toLowerCase() == 'application/json') {
-//         //Recebe os dados encaminhados na requisição
-//         let dadosBody = request.body
-
-//         let resultUsuarioExistente = await usuarioController.selectUserByEmailTagName(dadosBody)
-
-//         if (resultUsuarioExistente.message == 'Usuário já existe em nosso sistema') {
-//             response.status(resultUsuarioExistente.status)
-//             response.json(resultUsuarioExistente)
-//         } else {
-//             let resultDadosUsuario = await usuarioController.insertUsuario(dadosBody)
-
-//             if (resultDadosUsuario) {
-//                 response.status(resultDadosUsuario.status)
-//                 response.json(resultDadosUsuario)
-//             } else {
-//                 response.status(resultDadosUsuario.status)
-//                 response.json(resultDadosUsuario)
-//             }
-
-//         }
-
-//     } else {
-//         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
-//         response.json(message.ERROR_INVALID_CONTENT_TYPE)
-//     }
-// })
-
 router.post('/usuario/cadastro', cors(), bodyParserJSON, async (request, response) => {
-    let dadosBody = request.body
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
 
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let dadosBody = request.body
 
-    let dadosUsuarioRegistrado = await usuarioController.registrarUsuario(dadosBody)
+        let dadosUsuarioRegistrado = await usuarioController.registrarUsuario(dadosBody)
 
-    response.status(dadosUsuarioRegistrado.status)
-    response.json(dadosUsuarioRegistrado)
+        if (dadosUsuarioRegistrado) {
+            response.status(dadosUsuarioRegistrado.status)
+            response.json(dadosUsuarioRegistrado)
+        } else {
+            response.status(dadosUsuarioRegistrado.status)
+            response.json(dadosUsuarioRegistrado)
+        }
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
 })
 
 //Endpoint para a realização de login
@@ -283,7 +263,7 @@ router.post('/usuario/inserir_localizacao', verifyJWT, cors(), bodyParserJSON, a
         let dadosBody = request.body
 
         let dadosInsertLocalizacao = await localizacaoController.insertLocalizacao(dadosBody)
-        console.log(dadosInsertLocalizacao);
+        // console.log(dadosInsertLocalizacao);
 
         if (dadosInsertLocalizacao) {
             response.status(dadosInsertLocalizacao.status)

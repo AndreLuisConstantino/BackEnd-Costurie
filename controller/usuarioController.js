@@ -343,9 +343,10 @@ const updateProfileTagLocality = async (dadosBody) => {
 
     return message.ERROR_MISTAKE_IN_THE_FILDS
 
+    //Corrigir está parte da função
   } else if (dadosBody.tags.length == 0) {
 
-    console.log(dadosBody.tags);
+    // console.log(dadosBody.tags);
 
     let resultDadosDeletado = await tagUsuarioModel.deleteAllTagsWithUserIdModel(dadosBody.id_usuario)
 
