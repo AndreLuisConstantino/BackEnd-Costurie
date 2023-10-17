@@ -328,6 +328,8 @@ const updateProfileTagLocality = async (dadosBody) => {
 
   let resultDadosParaDeletar = await tagUsuarioModel.selectAllTagsWithUserIdModel(dadosBody.id_usuario)
 
+  console.log(resultDadosParaDeletar);
+
   // console.log(dadosBody);
 
   if (dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario) ||
@@ -346,14 +348,21 @@ const updateProfileTagLocality = async (dadosBody) => {
     //Corrigir está parte da função
   } else if (dadosBody.tags.length == 0) {
 
-    // console.log(dadosBody.tags);
-
     let resultDadosDeletado = await tagUsuarioModel.deleteAllTagsWithUserIdModel(dadosBody.id_usuario)
 
     if (resultDadosDeletado) {
-      return message.SUCCESS_UPDATED_ITEM
+
+      await usuarioModel.updateProfileTagLocalityModel(dadosBody)
+
+      let usuarioAtualizado = await usuarioModel.selectProfileByIdModel(dadosBody.id_usuario)
+
+      dadosPerfilUsuarioJson.usuario_atualizado = usuarioAtualizado
+
+      dadosPerfilUsuarioJson.message = message.SUCCESS_UPDATED_ITEM.message
+      dadosPerfilUsuarioJson.status = message.SUCCESS_UPDATED_ITEM.status
+
+      return dadosPerfilUsuarioJson
     } else {
-      // console.log('teste 1');
       return message.ERROR_INTERNAL_SERVER
     }
 
@@ -372,7 +381,6 @@ const updateProfileTagLocality = async (dadosBody) => {
         return message.ERROR_UNABLE_TO_UPDATE
       }
     } else {
-      console.log('teste 1');
 
       return message.ERROR_INTERNAL_SERVER
     }
@@ -522,7 +530,7 @@ const registrarUsuario = async (dadosBody) => {
 
       let dadosUsuarioJson = {}
 
-      let tokenUser =  await jwt.createJWT(novoUsuario[0].id);
+      let tokenUser = await jwt.createJWT(novoUsuario[0].id);
 
       dadosUsuarioJson.usuario = novoUsuario[0]
       dadosUsuarioJson.message = message.SUCCESS_CREATED_ITEM.message

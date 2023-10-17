@@ -15,7 +15,7 @@ const deleteAllTagsWithUserIdModel = async (id_usuario) => {
 
   let resultStatus = await prisma.$executeRawUnsafe(sql);
 
-  console.log(resultStatus);
+  // console.log(resultStatus);
 
   if (resultStatus) {
     return true;
