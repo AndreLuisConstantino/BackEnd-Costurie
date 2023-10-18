@@ -31,7 +31,7 @@ const insertPublicacao = async (dadosBody) => {
         let dadosTagsInseridas = await insertTagsPublicacao(dadosBody.tags)
 
         if (dadosInsertPublicacao) {
-            let novaPublicacao = await publicacaoModel.selectLastIdPublicacaoModel()
+            let novaPublicacao = await publicacaoModel.selectLastId_publicacaoModel()
 
             let dadosPublicacaoJson = {}
 
@@ -55,7 +55,7 @@ const insertTagsPublicacao = async (tags) => {
     for (let i = 0; i < tags.length; i++) {
         let tag = tags[i]
 
-        let dadosPublicacao = await publicacaoModel.selectLastIdPublicacaoModel()
+        let dadosPublicacao = await publicacaoModel.selectLastId_publicacaoModel()
 
         // console.log(dadosPublicacao);
 
@@ -71,6 +71,76 @@ const insertTagsPublicacao = async (tags) => {
     return tagsArray
 }
 
+const selectAllPublications = async () => {
+
+    let dadosPublicacao = await publicacaoModel.selectAllPublicationsModel()
+
+    if (dadosPublicacao) {
+        let dadosPublicacaoJson = {}
+
+        dadosPublicacaoJson.publicacoes = dadosPublicacao
+        dadosPublicacaoJson.status = message.SUCCES_REQUEST.status
+        dadosPublicacaoJson.message = message.SUCCES_REQUEST.message
+
+        return dadosPublicacaoJson
+    } else {
+        return message.ERROR_INTERNAL_SERVER
+    }
+}
+
+const selectPublicacaoById = async (id_publicacao) => {
+
+    if (id_publicacao == '' || id_publicacao == undefined || isNaN(id_publicacao)) {
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let dadosPublicacao = await publicacaoModel.selectPublicacaoByIdModel(id_publicacao)
+
+        if (dadosPublicacao) {
+            let dadosPublicacaoJson = {}
+
+            dadosPublicacaoJson.publicacao = dadosPublicacao
+            dadosPublicacaoJson.status = message.SUCCES_REQUEST.status
+            dadosPublicacaoJson.message = message.SUCCES_REQUEST.message
+
+            return dadosPublicacaoJson
+        } else {
+            return message.ERROR_INTERNAL_SERVER
+        }
+    }
+}
+
+const updatePublicacao = async (dadosBody) => {
+
+    if (dadosBody.id_publicacao == '' || dadosBody.id_publicacao == undefined || isNaN(dadosBody.id_publicacao)  || 
+        dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario) ||
+        dadosBody.titulo == '' || dadosBody.titulo == undefined || !isNaN(dadosBody.titulo) || dadosBody.titulo.length > 45 ||
+        dadosBody.anexo == '' || dadosBody.anexo == undefined || !isNaN(dadosBody.anexo) ||
+        dadosBody.descricao == '' || dadosBody.descricao == undefined || !isNaN(dadosBody.descricao) || dadosBody.descricao.length > 500
+        ) {
+         return message.ERROR_MISTAKE_IN_THE_FILDS   
+    } else {
+
+        let dadosUpdatePublicacao = await publicacaoModel.updatePublicacaoModel(dadosBody)
+
+        if (dadosUpdatePublicacao) {
+            let dadosUpdatePublicacaoJson = {}
+
+
+            dadosUpdatePublicacaoJson.publicacao_atualizada = await publicacaoModel.selectPublicacaoByIdModel(dadosBody.id_usuario)
+            dadosUpdatePublicacaoJson.message = message.SUCCESS_UPDATED_ITEM.message
+            dadosUpdatePublicacaoJson.status = message.SUCCESS_UPDATED_ITEM.status
+            
+            return dadosUpdatePublicacaoJson
+        } else {
+            return message.ERROR_INTERNAL_SERVER
+        }
+    }
+}
+
 module.exports = {
-    insertPublicacao
+    insertPublicacao,
+    selectAllPublications,
+    selectPublicacaoById,
+    updatePublicacao
 }

@@ -48,6 +48,7 @@ const verifyJWT = async (request, response, next) => {
 //Import do arquivo de configuração das variáveis, constantes e funções globais
 var message = require('../controller/modulo/config.js')
 
+//Endpoint para inserir uma publicação
 router.post('/publicacao/inserir', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
      //Recebe o content-type da requisição
      let contentType = request.headers['content-type']
@@ -63,6 +64,49 @@ router.post('/publicacao/inserir', verifyJWT, cors(), bodyParserJSON, async (req
         } else {
             response.status(dadosInserirPublicacao.status)
             response.json(dadosInserirPublicacao)
+        }
+     } else {
+         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+         response.json(message.ERROR_INVALID_CONTENT_TYPE)
+     }
+})
+
+//Endpoint que retorna todas as publicações
+router.get('/publicacao/select_all', cors(), async (request, response) => {
+
+    let dadosPublicacao = await publicacaoController.selectAllPublications()
+
+    response.status(dadosPublicacao.status)
+    response.json(dadosPublicacao)
+})
+
+//Endpoint que retorna a publicação pelo id
+router.get('/publicacao/select_by_id/:id', verifyJWT, cors(), async (request, response) => {
+    
+    let idPublicacao = request.params.id
+
+    let dadosPublicacao = await publicacaoController.selectPublicacaoById(idPublicacao)
+
+    response.status(dadosPublicacao.status)
+    response.json(dadosPublicacao)
+})
+
+//Endpoint que atualiza uma publicação que já existe
+router.put('/publicacao/editar_publicacao', verifyJWT, cors(), async (request, response) => {
+
+    let contentType = request.headers['content-type']
+
+     if (String(contentType).toLowerCase() == 'application/json') {
+         let dadosBody = request.body
+ 
+         let dadosUpdatePublicacao = await publicacaoController.updatePublicacao(dadosBody)
+
+         if (dadosUpdatePublicacao) {
+            response.status(dadosUpdatePublicacao.status)
+            response.json(dadosUpdatePublicacao)
+        } else {
+            response.status(dadosUpdatePublicacao.status)
+            response.json(dadosUpdatePublicacao)
         }
      } else {
          response.status(message.ERROR_INVALID_CONTENT_TYPE.status)

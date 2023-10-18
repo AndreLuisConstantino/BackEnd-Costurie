@@ -43,6 +43,8 @@ const insertLocalizacao = async (dadosLocalizacao) => {
 
         let usuario = await usuarioModel.selectUserByIdModel(dadosLocalizacao.id_usuario)
 
+        // console.log(usuario);
+
         if (usuario) {
             let dadosInsertLocalizacao = await localizacaoModel.insertLocalizacaoModel(dadosLocalizacao)
 
@@ -75,6 +77,7 @@ const deleteLocalizacao = async (id) => {
         return message.ERROR_INVALID_ID
     } else {
 
+        console.log('teste');
         let dadosLocalizacaoDeletada = await localizacaoModel.selectLocalizacaoByIdModel(id)
 
         let deleteLocalizacao = await localizacaoModel.deleteLocalizacaoModel(id)

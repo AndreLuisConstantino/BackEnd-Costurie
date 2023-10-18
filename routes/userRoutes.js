@@ -36,7 +36,13 @@ const verifyJWT = async (request, response, next) => {
 
     let token = request.headers['x-access-token']
 
+    // console.log(token);
+
+    // console.log(typeof(token))
+
     const autenticidadeToken = await jwt.validateJWT(token)
+
+    // console.log(autenticidadeToken);
 
     if (autenticidadeToken) {
         next()
@@ -256,14 +262,14 @@ router.put('/usuario/editar_perfil', verifyJWT, cors(), bodyParserJSON, async (r
 
 //Endpoint para inserir a tela de localização
 router.post('/usuario/inserir_localizacao', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
-    //Recebe o content-type da requisição
+    //Recebe o content-type da requisição 
     let contentType = request.headers['content-type']
 
     if (String(contentType).toLowerCase() == 'application/json') {
         let dadosBody = request.body
 
         let dadosInsertLocalizacao = await localizacaoController.insertLocalizacao(dadosBody)
-        // console.log(dadosInsertLocalizacao);
+        // console.log(dadosInsertLocalizacao)
 
         if (dadosInsertLocalizacao) {
             response.status(dadosInsertLocalizacao.status)

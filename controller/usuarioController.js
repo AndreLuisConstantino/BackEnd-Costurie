@@ -328,7 +328,7 @@ const updateProfileTagLocality = async (dadosBody) => {
 
   let resultDadosParaDeletar = await tagUsuarioModel.selectAllTagsWithUserIdModel(dadosBody.id_usuario)
 
-  console.log(resultDadosParaDeletar);
+  // console.log(resultDadosParaDeletar);
 
   // console.log(dadosBody);
 
