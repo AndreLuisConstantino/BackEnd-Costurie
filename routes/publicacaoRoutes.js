@@ -114,4 +114,14 @@ router.put('/publicacao/editar_publicacao', verifyJWT, bodyParserJSON,cors(), as
      }
 })
 
+router.delete('/publicacao/:id', verifyJWT, cors(), async (request, response) => {
+
+    let idPublicacao = request.params.id
+
+    let dadosDeletarPublicacao = await publicacaoController.deletePublicacao(idPublicacao)
+
+    response.status(dadosDeletarPublicacao.status)
+    response.json(dadosDeletarPublicacao)
+})
+
 module.exports = router 

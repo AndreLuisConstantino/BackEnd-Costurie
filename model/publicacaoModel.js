@@ -100,10 +100,25 @@ const updatePublicacaoModel = async (dadosBody) => {
     }
 }
 
+const deletePublicacaoModel = async (id_publicacao) => {
+    let sql = `delete from tbl_publicacao where id = ${id_publicacao}`
+
+    // console.log(sql);
+
+    let response = await prisma.$executeRawUnsafe(sql)
+
+    if (response) {
+        return true
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     inserirPublicacaoModel,
     selectLastIdPublicacaoModel,
     selectAllPublicationsModel,
     selectPublicacaoByIdModel,
-    updatePublicacaoModel
+    updatePublicacaoModel,
+    deletePublicacaoModel
 }

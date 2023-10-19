@@ -297,11 +297,11 @@ const selectProfileById = async (id) => {
           return dadosUsuarioJson
         }
       } else {
-        // console.log('teste 2');
+        console.log('teste 2');
         return message.ERROR_INTERNAL_SERVER
       }
     } else {
-      // console.log('test3');
+      console.log('test3');
       let dadosUsuario = await usuarioModel.selectUserAndLocalityById(id)
       // console.log(dadosUsuario);
 
@@ -310,6 +310,8 @@ const selectProfileById = async (id) => {
 
         dadosUsuarioJson.status = 200
         dadosUsuarioJson.message = 'Usuário encontrado com sucesso'
+
+        console.log(dadosUsuarioJson);
 
         return dadosUsuarioJson
       } else {

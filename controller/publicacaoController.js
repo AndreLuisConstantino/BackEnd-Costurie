@@ -139,9 +139,35 @@ const updatePublicacao = async (dadosBody) => {
     }
 }
 
+const deletePublicacao = async (id_publicacao) => {
+
+    if (id_publicacao == '' || id_publicacao == undefined || id_publicacao == null || isNaN(id_publicacao)) {
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let publicacaoDeletada = await publicacaoModel.selectPublicacaoByIdModel(id_publicacao)
+
+        let dadosPublicacaoDeletada = await publicacaoModel.deletePublicacaoModel(id_publicacao)
+
+        if (dadosPublicacaoDeletada) {
+
+            let dadosPublicacaoJson = {}
+
+            dadosPublicacaoJson.publicacao_deletada = publicacaoDeletada
+            dadosPublicacaoJson.message = message.SUCCESS_DELETED_ITEM.message
+            dadosPublicacaoJson.status = message.SUCCESS_DELETED_ITEM.status
+
+            return dadosPublicacaoJson
+        } else {
+            return message.ERROR_DELETED_ITEM
+        }
+    }
+}
+
 module.exports = {
     insertPublicacao,
     selectAllPublications,
     selectPublicacaoById,
-    updatePublicacao
+    updatePublicacao,
+    deletePublicacao
 }
