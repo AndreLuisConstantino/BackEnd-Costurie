@@ -126,8 +126,9 @@ const updatePublicacao = async (dadosBody) => {
         if (dadosUpdatePublicacao) {
             let dadosUpdatePublicacaoJson = {}
 
+            let novaPublicacao = await publicacaoModel.selectPublicacaoByIdModel(dadosBody.id_publicacao)
 
-            dadosUpdatePublicacaoJson.publicacao_atualizada = await publicacaoModel.selectPublicacaoByIdModel(dadosBody.id_usuario)
+            dadosUpdatePublicacaoJson.publicacao_atualizada = novaPublicacao[0]
             dadosUpdatePublicacaoJson.message = message.SUCCESS_UPDATED_ITEM.message
             dadosUpdatePublicacaoJson.status = message.SUCCESS_UPDATED_ITEM.status
             

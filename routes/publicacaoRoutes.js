@@ -92,7 +92,7 @@ router.get('/publicacao/select_by_id/:id', verifyJWT, cors(), async (request, re
 })
 
 //Endpoint que atualiza uma publicação que já existe
-router.put('/publicacao/editar_publicacao', verifyJWT, cors(), async (request, response) => {
+router.put('/publicacao/editar_publicacao', verifyJWT, bodyParserJSON,cors(), async (request, response) => {
 
     let contentType = request.headers['content-type']
 

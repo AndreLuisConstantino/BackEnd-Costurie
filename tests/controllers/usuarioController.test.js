@@ -77,6 +77,7 @@ describe('Testes de Select by Email', () => {
     let res = await getUserByEmail(email)
     expect(res.status).toBe(res.status = 400)
   })
+  
   test('Selecionar Usuário pelo email || ERRO ', async () => {
     let res = await getUserByEmail(emailNaoEncontrado)
     expect(res.status).toBe(res.status = 404)

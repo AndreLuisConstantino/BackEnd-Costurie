@@ -67,6 +67,8 @@ const selectAllPublicationsModel = async () => {
 const selectPublicacaoByIdModel = async (id_publicacao) => {
     let sql = `select * from tbl_publicacao where id = ${id_publicacao}`
 
+    // console.log(sql);
+
     let response = await prisma.$queryRawUnsafe(sql)
 
     if (response.length > 0) {
@@ -78,7 +80,13 @@ const selectPublicacaoByIdModel = async (id_publicacao) => {
 
 const updatePublicacaoModel = async (dadosBody) => {
     //Script sql para atualizar os dados no BD
-    let sql = ``
+    let sql = `update tbl_publicacao set 
+                                        tbl_publicacao.titulo = '${dadosBody.titulo}', 
+                                        tbl_publicacao.anexo = '${dadosBody.anexo}', 
+                                        tbl_publicacao.data_publicacao = DATE(NOW()), 
+                                        tbl_publicacao.hora = TIME(NOW()), 
+                                        tbl_publicacao.descricao = 'teste update descricao' 
+                                    where tbl_publicacao.id = 2;`
 
     // console.log(sql);
 
@@ -96,5 +104,6 @@ module.exports = {
     inserirPublicacaoModel,
     selectLastIdPublicacaoModel,
     selectAllPublicationsModel,
-    selectPublicacaoByIdModel
+    selectPublicacaoByIdModel,
+    updatePublicacaoModel
 }
