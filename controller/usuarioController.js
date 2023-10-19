@@ -297,11 +297,11 @@ const selectProfileById = async (id) => {
           return dadosUsuarioJson
         }
       } else {
-        console.log('teste 2');
+        // console.log('teste 2');
         return message.ERROR_INTERNAL_SERVER
       }
     } else {
-      console.log('test3');
+      // console.log('test3');
       let dadosUsuario = await usuarioModel.selectUserAndLocalityById(id)
       // console.log(dadosUsuario);
 
@@ -311,7 +311,7 @@ const selectProfileById = async (id) => {
         dadosUsuarioJson.status = 200
         dadosUsuarioJson.message = 'Usuário encontrado com sucesso'
 
-        console.log(dadosUsuarioJson);
+        // console.log(dadosUsuarioJson);
 
         return dadosUsuarioJson
       } else {
@@ -350,13 +350,34 @@ const updateProfileTagLocality = async (dadosBody) => {
     //Corrigir está parte da função
   } else if (dadosBody.tags.length == 0) {
 
-    let resultDadosDeletado = await tagUsuarioModel.deleteAllTagsWithUserIdModel(dadosBody.id_usuario)
+    // let usuarioPossuiTag = await usuarioModel.selectAllTagsWithUserIdModel(dadosBody.id_usuario)
 
-    if (resultDadosDeletado) {
+    if (resultDadosParaDeletar) {
 
+      let resultDadosDeletado = await tagUsuarioModel.deleteAllTagsWithUserIdModel(dadosBody.id_usuario)
+
+      if (resultDadosDeletado) {
+
+        await usuarioModel.updateProfileTagLocalityModel(dadosBody)
+
+        let usuarioAtualizado = await usuarioModel.selectProfileByIdModel(dadosBody.id_usuario)
+
+        dadosPerfilUsuarioJson.usuario_atualizado = usuarioAtualizado
+
+        dadosPerfilUsuarioJson.message = message.SUCCESS_UPDATED_ITEM.message
+        dadosPerfilUsuarioJson.status = message.SUCCESS_UPDATED_ITEM.status
+
+        return dadosPerfilUsuarioJson
+      } else {
+        return message.ERROR_INTERNAL_SERVER
+      }
+
+    } else {
       await usuarioModel.updateProfileTagLocalityModel(dadosBody)
 
       let usuarioAtualizado = await usuarioModel.selectProfileByIdModel(dadosBody.id_usuario)
+
+      console.log(usuarioAtualizado);
 
       dadosPerfilUsuarioJson.usuario_atualizado = usuarioAtualizado
 
@@ -364,9 +385,8 @@ const updateProfileTagLocality = async (dadosBody) => {
       dadosPerfilUsuarioJson.status = message.SUCCESS_UPDATED_ITEM.status
 
       return dadosPerfilUsuarioJson
-    } else {
-      return message.ERROR_INTERNAL_SERVER
     }
+
 
   } else if (resultDadosParaDeletar) {
     let resultDadosDeletado = await tagUsuarioModel.deleteAllTagsWithUserIdModel(dadosBody.id_usuario)
@@ -383,7 +403,7 @@ const updateProfileTagLocality = async (dadosBody) => {
         return message.ERROR_UNABLE_TO_UPDATE
       }
     } else {
-
+      // console.log('teste 2');
       return message.ERROR_INTERNAL_SERVER
     }
   } else {

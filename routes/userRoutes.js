@@ -224,7 +224,7 @@ router.get('/usuario/meu_perfil/:id', verifyJWT, cors(), bodyParserJSON, async (
     let usuarioId = request.params.id
 
     let resultDadosPerfilUsuario = await usuarioController.selectProfileById(usuarioId)
-    console.log(resultDadosPerfilUsuario); 
+    // console.log(resultDadosPerfilUsuario); 
     // console.log(resultDadosPerfilUsuario.usuario.tags);
 
     if (resultDadosPerfilUsuario) {
@@ -243,7 +243,7 @@ router.put('/usuario/editar_perfil', verifyJWT, cors(), bodyParserJSON, async (r
 
     if (String(contentType).toLowerCase() == 'application/json') {
         let dadosBody = request.body
-
+ 
         let dadosUpdatePerfil = await usuarioController.updateProfileTagLocality(dadosBody)
         // console.log(dadosUpdatePerfil);
 

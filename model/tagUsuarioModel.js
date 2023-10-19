@@ -13,6 +13,8 @@ var prisma = new PrismaClient();
 const deleteAllTagsWithUserIdModel = async (id_usuario) => {
   let sql = `delete from tbl_tag_usuario where tbl_tag_usuario.id_usuario = ${id_usuario}`;
 
+  // console.log(sql);
+
   let resultStatus = await prisma.$executeRawUnsafe(sql);
 
   // console.log(resultStatus);
