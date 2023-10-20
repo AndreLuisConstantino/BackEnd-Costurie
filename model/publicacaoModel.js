@@ -14,14 +14,12 @@ const inserirPublicacaoModel = async (dadosBody) => {
     //Script sql para atualizar os dados no BD
     let sql = `insert into tbl_publicacao (
                                             titulo,
-                                            anexo,
                                             data_publicacao,
                                             hora,
                                             descricao,
                                             id_usuario
                                             ) values (
                                             '${dadosBody.titulo}',
-                                            '${dadosBody.anexo}',
                                             DATE(NOW()),
                                             TIME(NOW()),
                                             '${dadosBody.descricao}',

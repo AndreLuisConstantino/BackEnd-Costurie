@@ -12,17 +12,19 @@ var message = require('./modulo/config.js')
 const publicacaoModel = require('../model/publicacaoModel.js')
 const tagPublicacaoModel = require('../model/tagPublicacaoModel.js')
 const tagModel = require('../model/tagModel.js')
+const anexosModel = require('../model/anexosModel.js')
 
 const insertPublicacao = async (dadosBody) => {
 
     if (dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario) ||
         dadosBody.titulo == '' || dadosBody.titulo == undefined || !isNaN(dadosBody.titulo) || dadosBody.titulo.length > 45 ||
-        dadosBody.descricao == '' || dadosBody.descricao == undefined || !isNaN(dadosBody.descricao) ||
-        dadosBody.anexo == '' || dadosBody.anexo == undefined || !isNaN(dadosBody.anexo) || dadosBody.length == 0
+        dadosBody.descricao == '' || dadosBody.descricao == undefined || !isNaN(dadosBody.descricao)
     ) {
         return message.ERROR_REQUIRED_FIELDS
-    } else if (dadosBody.tags.length == 0) {
+    } else if (dadosBody.tags.length == 0) {     
         return message.ERROR_TAGS_WERE_NOT_FORWARDED
+    } else if (dadosBody.anexos.length == 0) {
+        return message.ERROR_ATTACHMENT_WERE_NOT_FORWARDED
     } else {
         // console.log(dadosBody.tags.length);
 
@@ -30,13 +32,18 @@ const insertPublicacao = async (dadosBody) => {
 
         let dadosTagsInseridas = await insertTagsPublicacao(dadosBody.tags)
 
+        let dadosAnexosInseridos = await insertAnexosPublicacao(dadosBody.anexos)
+
+        // console.log(dadosAnexosInseridos);
+
         if (dadosInsertPublicacao) {
-            let novaPublicacao = await publicacaoModel.selectLastId_publicacaoModel()
+            let novaPublicacao = await publicacaoModel.selectLastIdPublicacaoModel()
 
             let dadosPublicacaoJson = {}
 
             dadosPublicacaoJson.nova_publicacao = novaPublicacao
             dadosPublicacaoJson.tags_inseridas = dadosTagsInseridas
+            dadosPublicacaoJson.anexos_inseridas = dadosAnexosInseridos
             dadosPublicacaoJson.message = message.SUCCESS_CREATED_ITEM.message
             dadosPublicacaoJson.status = message.SUCCESS_CREATED_ITEM.status
 
@@ -55,7 +62,7 @@ const insertTagsPublicacao = async (tags) => {
     for (let i = 0; i < tags.length; i++) {
         let tag = tags[i]
 
-        let dadosPublicacao = await publicacaoModel.selectLastId_publicacaoModel()
+        let dadosPublicacao = await publicacaoModel.selectLastIdPublicacaoModel()
 
         // console.log(dadosPublicacao);
 
@@ -69,6 +76,24 @@ const insertTagsPublicacao = async (tags) => {
     }
 
     return tagsArray
+}
+
+const insertAnexosPublicacao = async (anexos) => {
+    let anexosArray = []
+
+    for (let i = 0; i < anexos.length; i++) {
+        let anexo = anexos[i]
+
+        let dadosPublicacao = await publicacaoModel.selectLastIdPublicacaoModel()
+
+        await anexosModel.insertAnexoModel(anexo.conteudo, dadosPublicacao[0].id)
+        
+        let anexoAtualizado = await anexosModel.selectLastIdAnexoModel()
+        
+        anexosArray.push(anexoAtualizado)
+    }
+
+    return anexosArray
 }
 
 const selectAllPublications = async () => {

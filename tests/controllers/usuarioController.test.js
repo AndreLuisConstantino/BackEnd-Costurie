@@ -84,3 +84,9 @@ describe('Testes de Select by Email', () => {
   })
 
 })
+
+describe('Fazer o update do token e do tempo de expiração', () => {
+    test('Atualizar o token de troca de senha e tempo de expiração', () => {
+        
+    })
+})

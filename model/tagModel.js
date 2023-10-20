@@ -74,7 +74,10 @@ const selectAllTagsByCategoriaIdModel = async (id) => {
 }
 
 const selectAllTagsModel = async () => {
-    let sql = `select * from tbl_tag`
+    let sql = `select tbl_tag.id as id_tag, tbl_tag.nome, tbl_tag.imagem, tbl_categoria.id as id_categoria
+                                        from tbl_tag
+                                            inner join tbl_categoria
+                                                on tbl_tag.id_categoria = tbl_categoria.id;`
 
     // console.log(sql);
 

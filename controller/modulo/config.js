@@ -50,6 +50,8 @@ const ERROR_TAGS_WERE_NOT_FORWARDED = {status: 400, message: 'As tags não foram
 
 const ERROR_NOT_POSSIBLE_INSERT_PUBLICATION = {status: 400, message: 'Não foi possível fazer a publicacao'}
 
+const ERROR_ATTACHMENT_WERE_NOT_FORWARDED = {status: 400, message: 'Os anexos não foram encaminhados na requisição'}
+
 /******************************** MENSAGENS DE SUCESSO **********************************************/
 const SUCCESS_CREATED_ITEM = {status: 201, message: 'Item criado com sucesso.'}
 
@@ -99,5 +101,6 @@ module.exports = {
     ERROR_TAG_NAME_ALREADY_EXISTS,
     ERROR_INSERT_USER,
     ERROR_TAGS_WERE_NOT_FORWARDED,
-    ERROR_NOT_POSSIBLE_INSERT_PUBLICATION
+    ERROR_NOT_POSSIBLE_INSERT_PUBLICATION,
+    ERROR_ATTACHMENT_WERE_NOT_FORWARDED
 }
