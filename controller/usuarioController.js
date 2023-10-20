@@ -375,11 +375,11 @@ const updateProfileTagLocality = async (dadosBody) => {
     } else {
       await usuarioModel.updateProfileTagLocalityModel(dadosBody)
 
-      let usuarioAtualizado = await usuarioModel.selectProfileByIdModel(dadosBody.id_usuario)
+      let usuarioAtualizado = await usuarioModel.selectUserByIdModel(dadosBody.id_usuario)
 
-      console.log(usuarioAtualizado);
+      // console.log(usuarioAtualizado);
 
-      dadosPerfilUsuarioJson.usuario_atualizado = usuarioAtualizado
+      dadosPerfilUsuarioJson.usuario_atualizado = usuarioAtualizado[0]
 
       dadosPerfilUsuarioJson.message = message.SUCCESS_UPDATED_ITEM.message
       dadosPerfilUsuarioJson.status = message.SUCCESS_UPDATED_ITEM.status
