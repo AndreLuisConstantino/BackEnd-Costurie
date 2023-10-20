@@ -90,7 +90,7 @@ const insertAnexosPublicacao = async (anexos) => {
         
         let anexoAtualizado = await anexosModel.selectLastIdAnexoModel()
         
-        anexosArray.push(anexoAtualizado)
+        anexosArray.push(anexoAtualizado[0])
     }
 
     return anexosArray
@@ -140,7 +140,6 @@ const updatePublicacao = async (dadosBody) => {
     if (dadosBody.id_publicacao == '' || dadosBody.id_publicacao == undefined || isNaN(dadosBody.id_publicacao)  || 
         dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario) ||
         dadosBody.titulo == '' || dadosBody.titulo == undefined || !isNaN(dadosBody.titulo) || dadosBody.titulo.length > 45 ||
-        dadosBody.anexo == '' || dadosBody.anexo == undefined || !isNaN(dadosBody.anexo) ||
         dadosBody.descricao == '' || dadosBody.descricao == undefined || !isNaN(dadosBody.descricao) || dadosBody.descricao.length > 500
         ) {
          return message.ERROR_MISTAKE_IN_THE_FILDS   
