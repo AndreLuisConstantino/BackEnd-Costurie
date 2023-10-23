@@ -81,7 +81,24 @@ const selectUserByEmailModel = async (email) => {
 
 const selectUserByIdModel = async (id) => {
     // console.log(id);
-    let sql = `select * from tbl_usuario where id = ${id}`
+    let sql = `select
+                    tbl_localizacao.id AS id_localizacao,
+                    tbl_localizacao.cidade,
+                    tbl_localizacao.estado,
+                    tbl_localizacao.bairro,
+                    tbl_usuario.id AS id_usuario,
+                    tbl_usuario.nome_de_usuario,
+                    tbl_usuario.descricao,
+                    tbl_usuario.foto,
+                    tbl_usuario.email,
+                    tbl_usuario.senha
+                from
+                    tbl_localizacao
+                inner join
+                    tbl_usuario
+                on
+                    tbl_usuario.id_localizacao = tbl_localizacao.id
+                    where tbl_usuario.id = ${id};`
 
     let response = await prisma.$queryRawUnsafe(sql)
 

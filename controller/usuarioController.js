@@ -15,6 +15,7 @@ const jwt = require("../middleware/middlewareJWT.js");
 const usuarioModel = require("../model/usuarioModel.js");
 const tagModel = require("../model/tagModel.js");
 const tagUsuarioModel = require("../model/tagUsuarioModel.js");
+const localizacaoModel = require("../model/localizacaoModel.js");
 
 const insertUsuario = async (dadosUsuario) => {
   if (
@@ -483,7 +484,19 @@ const selectAllUsuariosByTag = async (tag) => {
       for (let i = 0; i < dadosUsuarios.length; i++) {
         let usuarioIndex = dadosUsuarios[i]
 
+        let dadosJson = {}
+
         let usuario = await usuarioModel.selectUserByIdModel(usuarioIndex.id_usuario)
+
+        // console.log(usuarioIndex);
+        // console.log(usuario);
+
+        // let localizacaoUsuario = await localizacaoModel.selectLocationById(usuario[0].id_localizacao)
+
+        // console.log(localizacaoUsuario);
+
+        // usuario.localizacao = localizacaoUsuario[0]
+
         // console.log(usuario);
 
         usuariosArray.push(usuario[0])

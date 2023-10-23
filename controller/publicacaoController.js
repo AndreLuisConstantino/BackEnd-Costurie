@@ -90,8 +90,6 @@ const insertAnexosPublicacao = async (anexos, id_publicacao) => {
     for (let i = 0; i < anexos.length; i++) {
         let anexo = anexos[i]
 
-        let dadosPublicacao = await publicacaoModel.selectLastIdPublicacaoModel()
-
         await anexosModel.insertAnexoModel(anexo.conteudo, id_publicacao)
         
         let anexoAtualizado = await anexosModel.selectLastIdAnexoModel()
@@ -153,6 +151,10 @@ const updatePublicacao = async (dadosBody) => {
 
         let dadosUpdatePublicacao = await publicacaoModel.updatePublicacaoModel(dadosBody)
 
+        let dadosUpdateTagsPublicacao = await publicacaoModel.updateTagsPublicacao(dadosBody.tags)
+
+        let dadosUpdateAnexoPublicacao = await publicacaoModel.updateAnexosPublicacao(dadosBody.anexos, dadosBody.id_publicacao)
+
         if (dadosUpdatePublicacao) {
             let dadosUpdatePublicacaoJson = {}
 
@@ -191,6 +193,15 @@ const deletePublicacao = async (id_publicacao) => {
         } else {
             return message.ERROR_DELETED_ITEM
         }
+    }
+}
+
+const updateTagsPublicacao = async (tags) => {
+    let tagsArray = []
+
+    for (let i = 0; i < tags.length; i++) {
+        let tag = tags[i]
+
     }
 }
 
