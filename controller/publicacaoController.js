@@ -32,7 +32,13 @@ const insertPublicacao = async (dadosBody) => {
 
         let dadosTagsInseridas = await insertTagsPublicacao(dadosBody.tags)
 
-        let dadosAnexosInseridos = await insertAnexosPublicacao(dadosBody.anexos)
+        // console.log(dadosBody.anexos);
+
+        let lastPublicacao = await publicacaoModel.selectLastIdPublicacaoModel()
+
+        // console.log(lastPublicacao);
+
+        let dadosAnexosInseridos = await insertAnexosPublicacao(dadosBody.anexos, lastPublicacao[0].id)
 
         // console.log(dadosAnexosInseridos);
 
@@ -78,7 +84,7 @@ const insertTagsPublicacao = async (tags) => {
     return tagsArray
 }
 
-const insertAnexosPublicacao = async (anexos) => {
+const insertAnexosPublicacao = async (anexos, id_publicacao) => {
     let anexosArray = []
 
     for (let i = 0; i < anexos.length; i++) {
@@ -86,7 +92,7 @@ const insertAnexosPublicacao = async (anexos) => {
 
         let dadosPublicacao = await publicacaoModel.selectLastIdPublicacaoModel()
 
-        await anexosModel.insertAnexoModel(anexo.conteudo, dadosPublicacao[0].id)
+        await anexosModel.insertAnexoModel(anexo.conteudo, id_publicacao)
         
         let anexoAtualizado = await anexosModel.selectLastIdAnexoModel()
         
