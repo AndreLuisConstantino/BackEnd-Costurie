@@ -21,7 +21,7 @@ const insertPublicacao = async (dadosBody) => {
         dadosBody.descricao == '' || dadosBody.descricao == undefined || !isNaN(dadosBody.descricao)
     ) {
         return message.ERROR_REQUIRED_FIELDS
-    } else if (dadosBody.tags.length == 0) {     
+    } else if (dadosBody.tags.length == 0) {
         return message.ERROR_TAGS_WERE_NOT_FORWARDED
     } else if (dadosBody.anexos.length == 0) {
         return message.ERROR_ATTACHMENT_WERE_NOT_FORWARDED
@@ -91,9 +91,9 @@ const insertAnexosPublicacao = async (anexos, id_publicacao) => {
         let anexo = anexos[i]
 
         await anexosModel.insertAnexoModel(anexo.conteudo, id_publicacao)
-        
+
         let anexoAtualizado = await anexosModel.selectLastIdAnexoModel()
-        
+
         anexosArray.push(anexoAtualizado[0])
     }
 
@@ -141,19 +141,23 @@ const selectPublicacaoById = async (id_publicacao) => {
 
 const updatePublicacao = async (dadosBody) => {
 
-    if (dadosBody.id_publicacao == '' || dadosBody.id_publicacao == undefined || isNaN(dadosBody.id_publicacao)  || 
+    if (dadosBody.id_publicacao == '' || dadosBody.id_publicacao == undefined || isNaN(dadosBody.id_publicacao) ||
         dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario) ||
         dadosBody.titulo == '' || dadosBody.titulo == undefined || !isNaN(dadosBody.titulo) || dadosBody.titulo.length > 45 ||
         dadosBody.descricao == '' || dadosBody.descricao == undefined || !isNaN(dadosBody.descricao) || dadosBody.descricao.length > 500
-        ) {
-         return message.ERROR_MISTAKE_IN_THE_FILDS   
+    ) {
+        return message.ERROR_MISTAKE_IN_THE_FILDS
+    } else if (dadosBody.tags.length == 0) {
+        return message.ERROR_TAGS_WERE_NOT_FORWARDED
+    } else if (dadosBody.anexo.length == 0) {
+        return message.ERROR_ATTACHMENT_WERE_NOT_FORWARDED
     } else {
 
         let dadosUpdatePublicacao = await publicacaoModel.updatePublicacaoModel(dadosBody)
 
-        let dadosUpdateTagsPublicacao = await publicacaoModel.updateTagsPublicacao(dadosBody.tags)
+        let dadosUpdateTagsPublicacao = await updateTagsPublicacao(dadosBody.tags, dadosBody.id_publicacao)
 
-        let dadosUpdateAnexoPublicacao = await publicacaoModel.updateAnexosPublicacao(dadosBody.anexos, dadosBody.id_publicacao)
+        let dadosUpdateAnexoPublicacao = await updateAnexosPublicacao(dadosBody.anexos, dadosBody.id_publicacao)
 
         if (dadosUpdatePublicacao) {
             let dadosUpdatePublicacaoJson = {}
@@ -161,14 +165,57 @@ const updatePublicacao = async (dadosBody) => {
             let novaPublicacao = await publicacaoModel.selectPublicacaoByIdModel(dadosBody.id_publicacao)
 
             dadosUpdatePublicacaoJson.publicacao_atualizada = novaPublicacao[0]
+            dadosUpdatePublicacaoJson.tags_atualizadas = dadosUpdateTagsPublicacao
+            dadosUpdatePublicacaoJson.anexos_atualizados = dadosUpdateAnexoPublicacao
             dadosUpdatePublicacaoJson.message = message.SUCCESS_UPDATED_ITEM.message
             dadosUpdatePublicacaoJson.status = message.SUCCESS_UPDATED_ITEM.status
-            
+
             return dadosUpdatePublicacaoJson
         } else {
             return message.ERROR_INTERNAL_SERVER
         }
     }
+}
+
+const updateTagsPublicacao = async (tags, id_publicacao) => {
+    let tagsArray = []
+
+    await tagPublicacaoModel.deleteAllTagsByIdPublicacao(id_publicacao)
+    
+    for (let i = 0; i < tags.length; i++) {
+        let tag = tags[i]
+
+        await tagPublicacaoModel.insertTagPublicacaoModel(tag.id_tag, id_publicacao)
+
+        let tagPublicacaoAtualizada = await tagPublicacaoModel.selectLastId()
+
+        let tagAtualizada = await tagModel.selectTagByIdModel(tagPublicacaoAtualizada[0].id_tag)
+
+        tagsArray.push(tagAtualizada[0])
+    }
+
+    return tagsArray
+
+}
+
+const updateAnexosPublicacao = async (anexos, id_publicacao) => {
+    let anexosArray = []
+
+    await anexosModel.deleteAllAnexosByIdPublicacao(id_publicacao)
+
+    for (let i = 0; i < anexos.length; i++) {
+        let anexo = anexos[i]
+
+        // console.log(anexo);
+
+        await anexosModel.insertAnexoModel(anexo.conteudo, id_publicacao)
+
+        let anexoAtualizado = await anexosModel.selectLastIdAnexoModel()
+
+        anexosArray.push(anexoAtualizado[0])
+    }
+
+    return anexosArray
 }
 
 const deletePublicacao = async (id_publicacao) => {
@@ -196,14 +243,7 @@ const deletePublicacao = async (id_publicacao) => {
     }
 }
 
-const updateTagsPublicacao = async (tags) => {
-    let tagsArray = []
 
-    for (let i = 0; i < tags.length; i++) {
-        let tag = tags[i]
-
-    }
-}
 
 module.exports = {
     insertPublicacao,

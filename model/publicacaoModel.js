@@ -79,8 +79,7 @@ const selectPublicacaoByIdModel = async (id_publicacao) => {
 const updatePublicacaoModel = async (dadosBody) => {
     //Script sql para atualizar os dados no BD
     let sql = `update tbl_publicacao set 
-                                        tbl_publicacao.titulo = '${dadosBody.titulo}', 
-                                        tbl_publicacao.anexo = '${dadosBody.anexo}', 
+                                        tbl_publicacao.titulo = '${dadosBody.titulo}',
                                         tbl_publicacao.data_publicacao = DATE(NOW()), 
                                         tbl_publicacao.hora = TIME(NOW()), 
                                         tbl_publicacao.descricao = 'teste update descricao' 

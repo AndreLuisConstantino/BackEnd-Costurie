@@ -91,7 +91,8 @@ const selectUserByIdModel = async (id) => {
                     tbl_usuario.descricao,
                     tbl_usuario.foto,
                     tbl_usuario.email,
-                    tbl_usuario.senha
+                    tbl_usuario.senha,
+                    tbl_usuario.nome
                 from
                     tbl_localizacao
                 inner join

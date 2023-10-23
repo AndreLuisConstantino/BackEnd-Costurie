@@ -40,7 +40,24 @@ const selectLastId = async () => {
     }
 }
 
+const deleteAllTagsByIdPublicacao = async (id_publicacao) => {
+    let sql = `delete from tbl_tag_publicacao where tbl_tag_publicacao.id_publicacao = ${id_publicacao}`;
+
+    // console.log(sql)
+  
+    let resultStatus = await prisma.$executeRawUnsafe(sql);
+  
+    // console.log(resultStatus);
+  
+    if (resultStatus) {
+      return true;
+    } else {
+      return false;
+    }
+}
+
 module.exports = {
     insertTagPublicacaoModel,
-    selectLastId
+    selectLastId,
+    deleteAllTagsByIdPublicacao
 }
