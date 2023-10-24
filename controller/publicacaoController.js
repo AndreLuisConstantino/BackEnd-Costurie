@@ -115,12 +115,7 @@ const selectAllPublications = async () => {
     for (let i = 0; i < dadosPublicacao.length; i++) {
         let publicacao = dadosPublicacao[i]
 
-        let dadosPublicacaoAnexoJson = {}
-
         let dadosAnexos = await anexosModel.selectAnexosByIdModel(publicacao.id)
-
-        // dadosPublicacaoAnexoJson.publicacao = publicacao
-        // dadosPublicacaoAnexoJson.anexos = dadosAnexos
 
         publicacao.anexos = dadosAnexos
 

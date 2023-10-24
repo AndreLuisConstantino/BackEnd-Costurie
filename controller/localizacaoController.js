@@ -41,7 +41,9 @@ const insertLocalizacao = async (dadosLocalizacao) => {
         return message.ERROR_MISTAKE_IN_THE_FILDS
     } else {
 
-        let usuario = await usuarioModel.selectUserByIdModel(dadosLocalizacao.id_usuario)
+        // let usuario = await usuarioModel.selectUserByIdModel(dadosLocalizacao.id_usuario)
+
+        let usuario = await usuarioModel.selectUserById(dadosLocalizacao.id_usuario)
 
         // console.log(usuario);
 

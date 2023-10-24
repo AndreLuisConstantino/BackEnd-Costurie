@@ -309,6 +309,18 @@ const selectUserByTagNameModel = async (nome_de_usuario) => {
     }
 }
 
+const selectUserById = async (id_usuario) => {
+    let sql = `select * from tbl_usuario where id = ${id_usuario}`
+
+    let response = await prisma.$queryRawUnsafe(sql)
+    // console.log(response);
+    if (response.length > 0) {
+        return response
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     insertUsuarioModel,
     selectLastIDUsuarioModel,
@@ -326,5 +338,6 @@ module.exports = {
     deleteUserByIdModel,
     selectUserAndLocalityById,
     selectUserEmailModel,
-    selectUserByTagNameModel
+    selectUserByTagNameModel,
+    selectUserById
 }
