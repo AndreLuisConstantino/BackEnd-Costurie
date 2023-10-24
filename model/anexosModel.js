@@ -62,8 +62,21 @@ const deleteAllAnexosByIdPublicacao = async (id_publicacao) => {
     }
 } 
 
+const selectAnexosByIdModel = async (id_publicacao) => {
+  let sql = `select * from tbl_anexo_publicacao where id_publicacao = ${id_publicacao}`;
+
+  let rsUsuario = await prisma.$queryRawUnsafe(sql);
+
+  if (rsUsuario.length > 0) {
+    return rsUsuario;
+  } else {
+    return false;
+  }
+}
+
 module.exports = {
     insertAnexoModel,
     selectLastIdAnexoModel,
-    deleteAllAnexosByIdPublicacao
+    deleteAllAnexosByIdPublicacao,
+    selectAnexosByIdModel
 }

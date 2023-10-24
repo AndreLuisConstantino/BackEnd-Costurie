@@ -16,6 +16,8 @@ const anexosModel = require('../model/anexosModel.js')
 
 const insertPublicacao = async (dadosBody) => {
 
+    console.log(dadosBody)
+
     if (dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario) ||
         dadosBody.titulo == '' || dadosBody.titulo == undefined || !isNaN(dadosBody.titulo) || dadosBody.titulo.length > 45 ||
         dadosBody.descricao == '' || dadosBody.descricao == undefined || !isNaN(dadosBody.descricao)
@@ -40,8 +42,6 @@ const insertPublicacao = async (dadosBody) => {
 
         let dadosAnexosInseridos = await insertAnexosPublicacao(dadosBody.anexos, lastPublicacao[0].id)
 
-        // console.log(dadosAnexosInseridos);
-
         if (dadosInsertPublicacao) {
             let novaPublicacao = await publicacaoModel.selectLastIdPublicacaoModel()
 
@@ -52,6 +52,8 @@ const insertPublicacao = async (dadosBody) => {
             dadosPublicacaoJson.anexos_inseridas = dadosAnexosInseridos
             dadosPublicacaoJson.message = message.SUCCESS_CREATED_ITEM.message
             dadosPublicacaoJson.status = message.SUCCESS_CREATED_ITEM.status
+
+            // console.log(dadosPublicacaoJson);
 
             return dadosPublicacaoJson
         } else {
@@ -81,6 +83,8 @@ const insertTagsPublicacao = async (tags) => {
         tagsArray.push(tagAtualizada[0])
     }
 
+    console.log(tagsArray);
+
     return tagsArray
 }
 
@@ -97,17 +101,36 @@ const insertAnexosPublicacao = async (anexos, id_publicacao) => {
         anexosArray.push(anexoAtualizado[0])
     }
 
+    console.log(anexosArray);
+
     return anexosArray
 }
 
 const selectAllPublications = async () => {
 
+    let dadosPublicacaoComAnexoArray = []
+
     let dadosPublicacao = await publicacaoModel.selectAllPublicationsModel()
+
+    for (let i = 0; i < dadosPublicacao.length; i++) {
+        let publicacao = dadosPublicacao[i]
+
+        let dadosPublicacaoAnexoJson = {}
+
+        let dadosAnexos = await anexosModel.selectAnexosByIdModel(publicacao.id)
+
+        // dadosPublicacaoAnexoJson.publicacao = publicacao
+        // dadosPublicacaoAnexoJson.anexos = dadosAnexos
+
+        publicacao.anexos = dadosAnexos
+
+        dadosPublicacaoComAnexoArray.push(publicacao)
+    }
 
     if (dadosPublicacao) {
         let dadosPublicacaoJson = {}
 
-        dadosPublicacaoJson.publicacoes = dadosPublicacao
+        dadosPublicacaoJson.publicacoes = dadosPublicacaoComAnexoArray
         dadosPublicacaoJson.status = message.SUCCES_REQUEST.status
         dadosPublicacaoJson.message = message.SUCCES_REQUEST.message
 
@@ -181,7 +204,7 @@ const updateTagsPublicacao = async (tags, id_publicacao) => {
     let tagsArray = []
 
     await tagPublicacaoModel.deleteAllTagsByIdPublicacao(id_publicacao)
-    
+
     for (let i = 0; i < tags.length; i++) {
         let tag = tags[i]
 

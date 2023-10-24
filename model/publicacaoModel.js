@@ -51,7 +51,7 @@ const selectLastIdPublicacaoModel = async () => {
 }
 
 const selectAllPublicationsModel = async () => {
-    let sql = `select * from tbl_publicacao `
+    let sql = `select * from tbl_publicacao`
 
     let response = await prisma.$queryRawUnsafe(sql)
 
