@@ -15,7 +15,8 @@ const jwt = require("../middleware/middlewareJWT.js");
 const usuarioModel = require("../model/usuarioModel.js");
 const tagModel = require("../model/tagModel.js");
 const tagUsuarioModel = require("../model/tagUsuarioModel.js");
-const localizacaoModel = require("../model/localizacaoModel.js");
+// const localizacaoModel = require("../model/localizacaoModel.js");
+const publicacaoModel = require("../model/publicacaoModel.js");
 
 const insertUsuario = async (dadosUsuario) => {
   if (
@@ -237,6 +238,7 @@ const selectProfileById = async (id) => {
   let dadosUsuarioJson = {}
   let dadosNovoUsuarioJson = {}
   let tagArray = []
+  let publicacaoArray = []
 
   if (id == '' || id == undefined || isNaN(id)) {
     return message.ERROR_INVALID_ID
@@ -254,6 +256,7 @@ const selectProfileById = async (id) => {
 
       if (dadosPerfilUsuario) {
         dadosPerfilUsuario.forEach((usuario) => {
+
           let dadosTagJson = {}
 
           dadosTagJson.id_tag = usuario.id_tag
@@ -280,8 +283,22 @@ const selectProfileById = async (id) => {
           dadosNovoUsuarioJson.id_localizacao = usuario.id_localizacao
         })
 
+        // console.log(dadosNovoUsuarioJson);
+
+        //Colocar as publicações dentro de um array
+        let publicacoesUsuario = await publicacaoModel.selectAllPublicationsByIdUsuario(dadosNovoUsuarioJson.id_usuario)
+
+        if (publicacoesUsuario) {
+          //Colocar todas as publicações de um JSON
+          dadosNovoUsuarioJson.publicacoes = publicacoesUsuario
+        } else {
+          dadosNovoUsuarioJson.publicacoes = 'O usuário não possui nenhuma publicação'
+        }
+        
+        //Colocar todas as tags dentro de um JSON
         dadosNovoUsuarioJson.tags = tagArray
 
+        //Colocar o usuário dentro do JSON
         dadosUsuarioJson.usuario = dadosNovoUsuarioJson
 
         if (dadosPerfilUsuario) {

@@ -122,6 +122,32 @@ const selectAllPublications = async () => {
         dadosPublicacaoComAnexoArray.push(publicacao)
     }
 
+    for (let i = 0; i < dadosPublicacao.length; i++) {
+        let arrayTags = []
+
+        let publicacao = dadosPublicacao[i]
+
+        let dadosTags = await tagPublicacaoModel.selectAllTagsByIdPublicacaoModel(publicacao.id)
+
+        for (let i = 0; i < dadosTags.length; i++) {
+            let tag = dadosTags[i]
+
+            let tagJson = {}
+
+            let tagSelecionada = await tagModel.selectTagByIdModel(tag.id_tag)
+
+            // console.log(tagSelecionada);
+
+            arrayTags.push(tagSelecionada)
+        }
+
+        publicacao.tags = arrayTags
+
+        // console.log(publicacao);
+
+        dadosPublicacaoComAnexoArray.push(publicacao)
+    }
+
     if (dadosPublicacao) {
         let dadosPublicacaoJson = {}
 
@@ -260,8 +286,6 @@ const deletePublicacao = async (id_publicacao) => {
         }
     }
 }
-
-
 
 module.exports = {
     insertPublicacao,

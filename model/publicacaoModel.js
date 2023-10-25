@@ -111,11 +111,26 @@ const deletePublicacaoModel = async (id_publicacao) => {
     }
 }
 
+const selectAllPublicationsByIdUsuario = async (id_usuario) => {
+    let sql = `select * from tbl_publicacao where id_usuario = ${id_usuario};`
+
+    // console.log(sql);
+
+    let response = await prisma.$queryRawUnsafe(sql)
+
+    if (response.length > 0) {
+        return response
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     inserirPublicacaoModel,
     selectLastIdPublicacaoModel,
     selectAllPublicationsModel,
     selectPublicacaoByIdModel,
     updatePublicacaoModel,
-    deletePublicacaoModel
+    deletePublicacaoModel,
+    selectAllPublicationsByIdUsuario
 }
