@@ -13,10 +13,11 @@ const publicacaoModel = require('../model/publicacaoModel.js')
 const tagPublicacaoModel = require('../model/tagPublicacaoModel.js')
 const tagModel = require('../model/tagModel.js')
 const anexosModel = require('../model/anexosModel.js')
+const usuarioModel = require('../model/usuarioModel.js')
 
 const insertPublicacao = async (dadosBody) => {
 
-    console.log(dadosBody)
+    // console.log(dadosBody)
 
     if (dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario) ||
         dadosBody.titulo == '' || dadosBody.titulo == undefined || !isNaN(dadosBody.titulo) || dadosBody.titulo.length > 45 ||
@@ -83,7 +84,7 @@ const insertTagsPublicacao = async (tags) => {
         tagsArray.push(tagAtualizada[0])
     }
 
-    console.log(tagsArray);
+    // console.log(tagsArray);
 
     return tagsArray
 }
@@ -101,7 +102,7 @@ const insertAnexosPublicacao = async (anexos, id_publicacao) => {
         anexosArray.push(anexoAtualizado[0])
     }
 
-    console.log(anexosArray);
+    // console.log(anexosArray);
 
     return anexosArray
 }
@@ -112,6 +113,8 @@ const selectAllPublications = async () => {
 
     let dadosPublicacao = await publicacaoModel.selectAllPublicationsModel()
 
+    // console.log(dadosPublicacao);
+
     for (let i = 0; i < dadosPublicacao.length; i++) {
         let publicacao = dadosPublicacao[i]
 
@@ -119,34 +122,19 @@ const selectAllPublications = async () => {
 
         publicacao.anexos = dadosAnexos
 
-        dadosPublicacaoComAnexoArray.push(publicacao)
-    }
-
-    for (let i = 0; i < dadosPublicacao.length; i++) {
-        let arrayTags = []
-
-        let publicacao = dadosPublicacao[i]
-
         let dadosTags = await tagPublicacaoModel.selectAllTagsByIdPublicacaoModel(publicacao.id)
 
-        for (let i = 0; i < dadosTags.length; i++) {
-            let tag = dadosTags[i]
+        let tags = await selectTags(dadosTags)
 
-            let tagJson = {}
+        // console.log(tags);
 
-            let tagSelecionada = await tagModel.selectTagByIdModel(tag.id_tag)
-
-            // console.log(tagSelecionada);
-
-            arrayTags.push(tagSelecionada)
-        }
-
-        publicacao.tags = arrayTags
-
-        // console.log(publicacao);
+        publicacao.tags = tags
 
         dadosPublicacaoComAnexoArray.push(publicacao)
     }
+
+    // console.log(dadosPublicacaoComAnexoArray);
+
 
     if (dadosPublicacao) {
         let dadosPublicacaoJson = {}
@@ -161,6 +149,24 @@ const selectAllPublications = async () => {
     }
 }
 
+const selectTags = async (tags) => {
+    let arrayTags = []
+
+    for (let i = 0; i < tags.length; i++) {
+        let tag = tags[i]
+
+        let tagSelecionada = await tagModel.selectTagByIdModel(tag.id_tag)
+
+        // console.log(tagSelecionada);
+
+        arrayTags.push(tagSelecionada[0])
+    }
+
+    // console.log(arrayTags);
+
+    return arrayTags
+}
+
 const selectPublicacaoById = async (id_publicacao) => {
 
     if (id_publicacao == '' || id_publicacao == undefined || isNaN(id_publicacao)) {
@@ -169,10 +175,14 @@ const selectPublicacaoById = async (id_publicacao) => {
 
         let dadosPublicacao = await publicacaoModel.selectPublicacaoByIdModel(id_publicacao)
 
+        // let usuario = await usuarioModel.a
+
+        // console.log(dadosPublicacao[0].id);
+
         if (dadosPublicacao) {
             let dadosPublicacaoJson = {}
 
-            dadosPublicacaoJson.publicacao = dadosPublicacao
+            dadosPublicacaoJson.publicacao = dadosPublicacao[0]
             dadosPublicacaoJson.status = message.SUCCES_REQUEST.status
             dadosPublicacaoJson.message = message.SUCCES_REQUEST.message
 
