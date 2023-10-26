@@ -104,6 +104,7 @@ const selectUserByIdModel = async (id) => {
     let response = await prisma.$queryRawUnsafe(sql)
 
     // console.log(response);
+    // console.log(sql);
 
     if (response.length > 0) {
         return response

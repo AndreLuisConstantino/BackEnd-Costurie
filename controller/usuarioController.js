@@ -238,7 +238,6 @@ const selectProfileById = async (id) => {
   let dadosUsuarioJson = {}
   let dadosNovoUsuarioJson = {}
   let tagArray = []
-  let publicacaoArray = []
 
   if (id == '' || id == undefined || isNaN(id)) {
     return message.ERROR_INVALID_ID
@@ -294,7 +293,7 @@ const selectProfileById = async (id) => {
         } else {
           dadosNovoUsuarioJson.publicacoes = 'O usuário não possui nenhuma publicação'
         }
-        
+
         //Colocar todas as tags dentro de um JSON
         dadosNovoUsuarioJson.tags = tagArray
 
@@ -499,20 +498,7 @@ const selectAllUsuariosByTag = async (tag) => {
       for (let i = 0; i < dadosUsuarios.length; i++) {
         let usuarioIndex = dadosUsuarios[i]
 
-        let dadosJson = {}
-
         let usuario = await usuarioModel.selectUserByIdModel(usuarioIndex.id_usuario)
-
-        // console.log(usuarioIndex);
-        // console.log(usuario);
-
-        // let localizacaoUsuario = await localizacaoModel.selectLocationById(usuario[0].id_localizacao)
-
-        // console.log(localizacaoUsuario);
-
-        // usuario.localizacao = localizacaoUsuario[0]
-
-        // console.log(usuario);
 
         usuariosArray.push(usuario[0])
       }
@@ -608,5 +594,6 @@ module.exports = {
   selectAllUsers,
   selectAllUsuariosByTag,
   deleteUserById,
-  registrarUsuario
+  registrarUsuario,
+  updateTag
 };

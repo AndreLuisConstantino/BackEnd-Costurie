@@ -8,14 +8,18 @@
 const {
     registrarUsuario,
     selectUserByLogin,
-    selectProfileById, 
-    getUserByEmail, 
+    selectProfileById,
+    getUserByEmail,
     updateUserTokenAndExpires,
     updateUserPassword,
     updateUserProfile,
     selectUserByEmailTagName,
-    updateProfileTagLocality
- } = require('../../controller/usuarioController.js')
+    updateProfileTagLocality,
+    updateTag,
+    selectAllUsers,
+    selectAllUsuariosByTag,
+    registrarUsuario
+} = require('../../controller/usuarioController.js')
 
 // const usuarioModel = require('../../model/usuarioModel.js')
 
@@ -27,7 +31,7 @@ describe(`Testes de Insert Usuário`, () => {
     //     console.log(res);
     //     expect(res.usuario.id_usuario).toBe(ultimoUsuario[0].id_usuario)
     // })
-    
+
     test('Deve inserir usuário || ERRO NOS VALORES INSERIDOS', async () => {
         const usuarioParaSerInseridoErro = { "nome_de_usuario": "", "email": "andreluis081205@gmail.com", "senha": "andre@123" }
         const res = await registrarUsuario(usuarioParaSerInseridoErro)
@@ -92,7 +96,7 @@ describe('Fazer o update do token e do tempo de expiração', () => {
 
 describe('Atualização de senha', () => {
     test('Deve fazer a atualização de senha', async () => {
-        let body = {id: 2, senha: 'Luiz@123'}
+        let body = { id: 2, senha: 'Luiz@123' }
 
         let res = await updateUserPassword(body)
 
@@ -100,7 +104,7 @@ describe('Atualização de senha', () => {
     })
 
     test('Deve dar erro nos campos ao tentar atualizar a senha', async () => {
-        let body = {id: 0, senha: 'Luiz@123'}
+        let body = { id: 0, senha: 'Luiz@123' }
 
         let res = await updateUserPassword(body)
 
@@ -132,7 +136,7 @@ describe('Atualizar o perfil de usuário', () => {
 
         let res = await updateUserProfile(body)
 
-        expect(res.status).toBe(400) 
+        expect(res.status).toBe(400)
     })
 })
 
@@ -148,7 +152,7 @@ describe('Selecionar um usuário pela tag de identificação', () => {
 
         expect(res.message).toBe('Usuário já existe em nosso sistema')
     })
-  
+
     test('Deve dar erro nos campos ao selecionar o usuário', async () => {
         let body = {
             nome_de_usuario: '',
@@ -191,16 +195,16 @@ describe('Selecionar um perfil pelo id', () => {
 describe('Atualização do perfil de usuário', () => {
     test('Deve atualizar o perfil do usuário', async () => {
         let body = {
-            "id_usuario":10,
-            "id_localizacao":9,
-            "bairro":"Novo Osasco",
-            "cidade":"Osasco",
-            "estado":"São Paulo",
-            "nome":"Marcelo Gabriel2",
-            "descricao":"Descrição Teste2",
-            "foto":"https://firebasestorage.googleapis.com/v0/b/costurie-images.appspot.com/o/img%2FLost%20by%20Rico%20De%20Zoysa.jpeg?alt=media&token=4fd1ba6b-bf4c-4cb5-996c-86e56ab22eef",
-            "nome_de_usuario":"MarceloTeste322",
-            "tags":[
+            "id_usuario": 10,
+            "id_localizacao": 9,
+            "bairro": "Novo Osasco",
+            "cidade": "Osasco",
+            "estado": "São Paulo",
+            "nome": "Marcelo Gabriel2",
+            "descricao": "Descrição Teste2",
+            "foto": "https://firebasestorage.googleapis.com/v0/b/costurie-images.appspot.com/o/img%2FLost%20by%20Rico%20De%20Zoysa.jpeg?alt=media&token=4fd1ba6b-bf4c-4cb5-996c-86e56ab22eef",
+            "nome_de_usuario": "MarceloTeste322",
+            "tags": [
                 {
                     "id_tag": 2
                 },
@@ -216,32 +220,117 @@ describe('Atualização do perfil de usuário', () => {
 
         expect(res.status).toBe(200)
     })
-    // test('Deve atualizar o perfil do usuárioe verificar o id_usuário', async () => {
-    //     let body = {
-    //         "id_usuario":10,
-    //         "id_localizacao":9,
-    //         "bairro":"Novo Osasco",
-    //         "cidade":"Osasco",
-    //         "estado":"São Paulo",
-    //         "nome":"Marcelo Gabriel2",
-    //         "descricao":"Descrição Teste2",
-    //         "foto":"https://firebasestorage.googleapis.com/v0/b/costurie-images.appspot.com/o/img%2FLost%20by%20Rico%20De%20Zoysa.jpeg?alt=media&token=4fd1ba6b-bf4c-4cb5-996c-86e56ab22eef",
-    //         "nome_de_usuario":"MarceloTeste322",
-    //         "tags":[
-    //             {
-    //                 "id_tag": 2
-    //             },
-    //             {
-    //                 "id_tag": 3
-    //             }
-    //         ]
-    //     }
 
-    //     let res = await updateProfileTagLocality(body)
+    test('Deve atualizar o perfil do usuárioe verificar o id_usuário', async () => {
+        let body = {
+            "id_usuario": 10,
+            "id_localizacao": 9,
+            "bairro": "Novo Osasco",
+            "cidade": "Osasco",
+            "estado": "São Paulo",
+            "nome": "Marcelo Gabriel2",
+            "descricao": "Descrição Teste2",
+            "foto": "https://firebasestorage.googleapis.com/v0/b/costurie-images.appspot.com/o/img%2FLost%20by%20Rico%20De%20Zoysa.jpeg?alt=media&token=4fd1ba6b-bf4c-4cb5-996c-86e56ab22eef",
+            "nome_de_usuario": "MarceloTeste322",
+            "tags": [
+                {
+                    "id_tag": 2
+                },
+                {
+                    "id_tag": 3
+                }
+            ]
+        }
 
-    //     // console.log(res);
+        let res = await updateProfileTagLocality(body)
 
-    //     expect(res.usuario_atualizado.id_usuario).toBe(10)
-    // })
-    
+        // console.log(res);
+
+        expect(res.usuario_atualizado.usuario.id_usuario).toBe(10)
+    })
 })
+
+describe('Atualizações de tags', () => {
+    test('Deve atualizar as tags do usuário', async () => {
+        let body = {
+            "id_usuario": 10,
+            "id_localizacao": 9,
+            "bairro": "Novo Osasco",
+            "cidade": "Osasco",
+            "estado": "São Paulo",
+            "nome": "Marcelo Gabriel2",
+            "descricao": "Descrição Teste2",
+            "foto": "https://firebasestorage.googleapis.com/v0/b/costurie-images.appspot.com/o/img%2FLost%20by%20Rico%20De%20Zoysa.jpeg?alt=media&token=4fd1ba6b-bf4c-4cb5-996c-86e56ab22eef",
+            "nome_de_usuario": "MarceloTeste322",
+            "tags": [
+                {
+                    "id_tag": 2
+                },
+                {
+                    "id_tag": 3
+                }
+            ]
+        }
+
+        let res = await updateTag(body)
+
+        // console.log(res);
+
+        expect(res.usuario.id_usuario).toBe(body.id_usuario)
+
+    })
+
+    test('Deve atualizar as tags de usuário e verificar as tags', async () => {
+        let body = {
+            "id_usuario": 10,
+            "id_localizacao": 9,
+            "bairro": "Novo Osasco",
+            "cidade": "Osasco",
+            "estado": "São Paulo",
+            "nome": "Marcelo Gabriel2",
+            "descricao": "Descrição Teste2",
+            "foto": "https://firebasestorage.googleapis.com/v0/b/costurie-images.appspot.com/o/img%2FLost%20by%20Rico%20De%20Zoysa.jpeg?alt=media&token=4fd1ba6b-bf4c-4cb5-996c-86e56ab22eef",
+            "nome_de_usuario": "MarceloTeste322",
+            "tags": [
+                {
+                    "id_tag": 2
+                },
+                {
+                    "id_tag": 3
+                }
+            ]
+        }
+
+        let res = await updateTag(body)
+
+        expect(res.tags_atualizadas[0].id_tag).toBe(body.tags[0].id_tag)
+    })
+})
+
+describe('Selecionar todos os usuários', () => {
+    test('Deve selecionar todos os usuários', async () => {
+        let res = await selectAllUsers()
+
+        expect(res.status).toBe(200)
+    })
+})
+
+describe('Selecionar todos os usuários pelas tags', () => {
+    test('Deve selecionar usuários pela tag', async () => {
+        let body = {
+            id_tag: 2,
+            nome_tag: 'Teste'
+        }
+
+        let res = await selectAllUsuariosByTag(body)
+
+        expect(res.status).toBe(200)
+    })
+})
+
+// describe('Inserir um usuário', () => {  
+//     test('Deve inserir um usuário', async () => {
+      
+//     })
+    
+//  })

@@ -52,6 +52,8 @@ const ERROR_NOT_POSSIBLE_INSERT_PUBLICATION = {status: 400, message: 'Não foi p
 
 const ERROR_ATTACHMENT_WERE_NOT_FORWARDED = {status: 400, message: 'Os anexos não foram encaminhados na requisição'}
 
+const ERROR_PUBLICATION_ID_NOT_FOUND = {status: 404, message: 'O id informado não exite no sistema'}
+
 /******************************** MENSAGENS DE SUCESSO **********************************************/
 const SUCCESS_CREATED_ITEM = {status: 201, message: 'Item criado com sucesso.'}
 
@@ -102,5 +104,6 @@ module.exports = {
     ERROR_INSERT_USER,
     ERROR_TAGS_WERE_NOT_FORWARDED,
     ERROR_NOT_POSSIBLE_INSERT_PUBLICATION,
-    ERROR_ATTACHMENT_WERE_NOT_FORWARDED
+    ERROR_ATTACHMENT_WERE_NOT_FORWARDED,
+    ERROR_PUBLICATION_ID_NOT_FOUND
 }

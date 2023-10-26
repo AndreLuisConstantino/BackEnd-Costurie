@@ -122,13 +122,13 @@ const selectAllPublications = async () => {
 
         publicacao.anexos = dadosAnexos
 
-        let dadosTags = await tagPublicacaoModel.selectAllTagsByIdPublicacaoModel(publicacao.id)
+        // let dadosTags = await tagPublicacaoModel.selectAllTagsByIdPublicacaoModel(publicacao.id)
 
-        let tags = await selectTags(dadosTags)
+        // let tags = await selectTags(dadosTags)
 
         // console.log(tags);
 
-        publicacao.tags = tags
+        // publicacao.tags = tags
 
         dadosPublicacaoComAnexoArray.push(publicacao)
     }
@@ -157,27 +157,41 @@ const selectTags = async (tags) => {
 
         let tagSelecionada = await tagModel.selectTagByIdModel(tag.id_tag)
 
-        // console.log(tagSelecionada);
-
         arrayTags.push(tagSelecionada[0])
     }
-
-    // console.log(arrayTags);
 
     return arrayTags
 }
 
 const selectPublicacaoById = async (id_publicacao) => {
 
-    if (id_publicacao == '' || id_publicacao == undefined || isNaN(id_publicacao)) {
+    let publicacao_existente = await publicacaoModel.selectPublicacaoByIdModel(id_publicacao)
+
+    if (publicacao_existente == false) {
+        return message.ERROR_PUBLICATION_ID_NOT_FOUND
+    } else if (id_publicacao == '' || id_publicacao == undefined || isNaN(id_publicacao)) {
         return message.ERROR_INVALID_ID
     } else {
 
         let dadosPublicacao = await publicacaoModel.selectPublicacaoByIdModel(id_publicacao)
 
-        // let usuario = await usuarioModel.a
+        // console.log(dadosPublicacao);
 
-        // console.log(dadosPublicacao[0].id);
+        let usuario = await usuarioModel.selectUserByIdModel(dadosPublicacao[0].id_usuario)
+
+        let anexos = await anexosModel.selectAnexosByIdModel(dadosPublicacao[0].id)
+
+        let tags = await tagPublicacaoModel.selectAllTagsByIdPublicacaoModel(dadosPublicacao[0].id)
+
+        let tagSelecionada = await selectTags(tags)
+
+        delete dadosPublicacao[0].id_usuario
+
+        dadosPublicacao[0].usuario = usuario[0]
+
+        dadosPublicacao[0].anexos = anexos
+
+        dadosPublicacao[0].tags = tagSelecionada
 
         if (dadosPublicacao) {
             let dadosPublicacaoJson = {}
