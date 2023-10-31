@@ -134,7 +134,7 @@ const selectAllTagsInCategoriaModel = async () => {
             on tbl_tag.id_categoria = tbl_categoria.id`
 
     // console.log(sql);
-
+        
     let response = await prisma.$queryRawUnsafe(sql);
 
     // console.log(response);

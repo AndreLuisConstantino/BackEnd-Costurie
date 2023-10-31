@@ -311,10 +311,32 @@ const deletePublicacao = async (id_publicacao) => {
     }
 }
 
+const curtirPublicacao = async (id_publicacao) => {
+
+    if (id_publicacao == '' || id_publicacao == undefined || isNaN(id_publicacao)) {
+        return message.ERROR_INVALID_ID
+    } else {
+        let publicacao = await selectPublicacaoById(id_publicacao)
+
+        // console.log(publicacao);
+
+        let insertCurtidaPublicacao = await publicacaoModel.insertCurtidaPublicacaoModel(id_publicacao)
+
+        if (insertCurtidaPublicacao) {
+            
+            let insertCurtidaTag = await publicacaoModel.insertCurtidaTagModel()
+
+        } else {
+            return message.ERROR_NOT_POSSIBLE_INSERT_LIKE
+        }
+    }
+}
+
 module.exports = {
     insertPublicacao,
     selectAllPublications,
     selectPublicacaoById,
     updatePublicacao,
-    deletePublicacao
+    deletePublicacao,
+    curtirPublicacao
 }

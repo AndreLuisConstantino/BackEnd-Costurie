@@ -50,6 +50,8 @@ const ERROR_TAGS_WERE_NOT_FORWARDED = {status: 400, message: 'As tags não foram
 
 const ERROR_NOT_POSSIBLE_INSERT_PUBLICATION = {status: 400, message: 'Não foi possível fazer a publicacao'}
 
+const ERROR_NOT_POSSIBLE_INSERT_LIKE = {status: 400, message: 'Não foi possível dar uma curtida na publicação.'}
+
 const ERROR_ATTACHMENT_WERE_NOT_FORWARDED = {status: 400, message: 'Os anexos não foram encaminhados na requisição'}
 
 const ERROR_PUBLICATION_ID_NOT_FOUND = {status: 404, message: 'O id informado não exite no sistema'}
@@ -105,5 +107,6 @@ module.exports = {
     ERROR_TAGS_WERE_NOT_FORWARDED,
     ERROR_NOT_POSSIBLE_INSERT_PUBLICATION,
     ERROR_ATTACHMENT_WERE_NOT_FORWARDED,
-    ERROR_PUBLICATION_ID_NOT_FOUND
+    ERROR_PUBLICATION_ID_NOT_FOUND,
+    ERROR_NOT_POSSIBLE_INSERT_LIKE
 }

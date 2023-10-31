@@ -114,6 +114,7 @@ router.put('/publicacao/editar_publicacao', verifyJWT, bodyParserJSON, cors(), a
      }
 })
 
+//Endpoint que deleta uma publicação
 router.delete('/publicacao/:id', verifyJWT, cors(), async (request, response) => {
 
     let idPublicacao = request.params.id
@@ -122,6 +123,17 @@ router.delete('/publicacao/:id', verifyJWT, cors(), async (request, response) =>
 
     response.status(dadosDeletarPublicacao.status)
     response.json(dadosDeletarPublicacao)
+})
+
+//Endpoint para curtir uma publicacao
+router.post('/publicacao/curtir/:id', verifyJWT, cors(), async (request, response) => {
+
+    let idPublicacao = request.params.id
+
+    let dadosCurtirPublicacao = await publicacaoController.curtirPublicacao(idPublicacao)
+
+    response.status(dadosCurtirPublicacao.status)
+    response.json(dadosCurtirPublicacao)
 })
 
 module.exports = router 
