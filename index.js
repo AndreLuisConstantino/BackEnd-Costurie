@@ -5,6 +5,14 @@
  * Versão: 1.0
  *****************************************************************************/
 
+ const mongoose = require('mongoose')
+
+ //Constantes MongoDB
+const DB_USER = 'muryllovieira59'
+const DB_PASSWORD = '9BEzjV00xrXvFv65'
+const STRING_CONNECTION = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@chat-tcc-costurie.lenlxrh.mongodb.net/?retryWrites=true&w=majority`
+
+
 /* 
 
     Para rodar o servidor, basta digitar no terminal : npm run dev
@@ -12,6 +20,15 @@
     Import das depenencias do projeto
 
 */
+
+/**
+ * MongoDB:
+ * 
+ * Username: muryllovieira59
+ * Password: 9BEzjV00xrXvFv65
+ * 
+ * StringConnection: mongodb+srv://muryllovieira59:$9BEzjV00xrXvFv65@chat-tcc-costurie.lenlxrh.mongodb.net/?retryWrites=true&w=majority
+ **/
 
 //Dependencia para criar as requisições da API
 const express = require('express')
@@ -40,6 +57,9 @@ const localizacaoRouter = require('./routes/localizacaoRoutes.js')
 const tagRouter = require('./routes/tagRoutes.js')
 const categoriaRouter = require('./routes/categoriaRoutes.js')
 const publicacaoRouter = require('./routes/publicacaoRoutes.js')
+const chatRouter = require('./routes/chatRoutes')
+const messageRouter = require('./routes/messageRoutes')
+
 
 //Rotas para o usuário
 app.use('/', userRouter)
@@ -47,5 +67,19 @@ app.use('/', localizacaoRouter)
 app.use('/', tagRouter)
 app.use('/', categoriaRouter)
 app.use('/', publicacaoRouter)
+app.use('/', chatRouter)
+app.use('/', messageRouter)
+
+//Conexão com o banco
+mongoose
+    .connect(
+        STRING_CONNECTION
+    )
+    .then(() => {
+        app.listen(8080, function () {
+            console.log('Servidor aguardando requisições na porta 8080');
+        })        
+    })
+    .catch((err) => console.log(err))
 
 app.listen(3000, () => console.log('Servidor rodando na porta 3000'))
