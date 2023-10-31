@@ -17,6 +17,7 @@ const tagModel = require("../model/tagModel.js");
 const tagUsuarioModel = require("../model/tagUsuarioModel.js");
 // const localizacaoModel = require("../model/localizacaoModel.js");
 const publicacaoModel = require("../model/publicacaoModel.js");
+const anexosModel = require("../model/anexosModel.js");
 
 const insertUsuario = async (dadosUsuario) => {
   if (
@@ -287,9 +288,29 @@ const selectProfileById = async (id) => {
         //Colocar as publicações dentro de um array
         let publicacoesUsuario = await publicacaoModel.selectAllPublicationsByIdUsuario(dadosNovoUsuarioJson.id_usuario)
 
+        let publicacaoArray = []
+
+        // publicacoesUsuario.forEach(async (publicacao) => {
+        //   let anexosPublicacao = await anexosModel.selectAnexosByIdModel(publicacao.id)
+
+        //   publicacao.anexos = anexosPublicacao
+
+        //   publicacaoArray.push(publicacao)
+        // })
+
+        for (let i = 0; i < publicacoesUsuario.length; i++) {
+          let publicacao = publicacoesUsuario[i]
+
+          let anexosPublicacao = await anexosModel.selectAnexosByIdModel(publicacao.id)
+
+          publicacao.anexos = anexosPublicacao
+
+          publicacaoArray.push(publicacao)
+        }
+
         if (publicacoesUsuario) {
           //Colocar todas as publicações de um JSON
-          dadosNovoUsuarioJson.publicacoes = publicacoesUsuario
+          dadosNovoUsuarioJson.publicacoes = publicacaoArray
         } else {
           dadosNovoUsuarioJson.publicacoes = 'O usuário não possui nenhuma publicação'
         }
