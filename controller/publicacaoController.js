@@ -330,11 +330,40 @@ const curtirPublicacao = async (id_publicacao) => {
     }
 }
 
+const selectAllPublicationsOfSystem = async () => {
+    let dadosPublicacaoComAnexoArray = []
+
+    let dadosPublicacao = await publicacaoModel.selectAllPublicationsModel()
+
+    for (let i = 0; i < dadosPublicacao.length; i++) {
+        let publicacao = dadosPublicacao[i]
+
+        let dadosAnexos = await anexosModel.selectAnexosByIdModel(publicacao.id)
+
+        publicacao.anexos = dadosAnexos
+
+        dadosPublicacaoComAnexoArray.push(publicacao)
+    }
+
+    if (dadosPublicacao) {
+        let dadosPublicacaoJson = {}
+
+        dadosPublicacaoJson.publicacoes = dadosPublicacaoComAnexoArray
+        dadosPublicacaoJson.status = message.SUCCES_REQUEST.status
+        dadosPublicacaoJson.message = message.SUCCES_REQUEST.message
+
+        return dadosPublicacaoJson
+    } else {
+        return message.ERROR_INTERNAL_SERVER
+    }
+}
+
 module.exports = {
     insertPublicacao,
     selectAllPublications,
     selectPublicacaoById,
     updatePublicacao,
     deletePublicacao,
-    curtirPublicacao
+    curtirPublicacao,
+    selectAllPublicationsOfSystem
 }

@@ -136,4 +136,13 @@ router.post('/publicacao/curtir/:id', verifyJWT, cors(), async (request, respons
     response.json(dadosCurtirPublicacao)
 })
 
+//Endpoint que traz todas as publicações existentes no sistema
+router.get('/publicacao/', verifyJWT, cors(), async (request, response) => {
+
+    let dadosPublicacoes = await publicacaoController.selectAllPublicationsOfSystem()
+
+    response.status(dadosPublicacoes.status)
+    response.json(dadosPublicacoes)
+})
+
 module.exports = router 
