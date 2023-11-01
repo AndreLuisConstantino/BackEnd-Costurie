@@ -63,6 +63,8 @@ const SUCCESS_UPDATED_ITEM = {status: 200, message: 'Item atualizado com sucesso
 
 const SUCCESS_DELETED_ITEM = {status: 200, message: 'Item excluido com sucesso.'}
 
+const SUCCESS_LIKED_PUBLICATION = {status: 200, message: 'Publicação curtida com sucesso.'}
+
 const SUCCES_REQUEST = {status: 200, message: 'Requisição bem secedida'}
 
 const SUCCESS_EMAIL_FOUND = {status: 200, message: 'Email encontrado com sucesso.'}
@@ -108,5 +110,6 @@ module.exports = {
     ERROR_NOT_POSSIBLE_INSERT_PUBLICATION,
     ERROR_ATTACHMENT_WERE_NOT_FORWARDED,
     ERROR_PUBLICATION_ID_NOT_FOUND,
-    ERROR_NOT_POSSIBLE_INSERT_LIKE
+    ERROR_NOT_POSSIBLE_INSERT_LIKE,
+    SUCCESS_LIKED_PUBLICATION
 }

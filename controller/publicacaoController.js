@@ -317,8 +317,13 @@ const curtirPublicacao = async (id_publicacao) => {
 
         if (insertCurtidaPublicacao) {
             
-            let insertCurtidaTag = await publicacaoModel.insertCurtidaTagModel()
+            let dadosCurtidaJson = {}
 
+            dadosCurtidaJson.status = message.SUCCESS_LIKED_PUBLICATION.status
+            dadosCurtidaJson.message = message.SUCCESS_LIKED_PUBLICATION.message
+            dadosCurtidaJson.publicacao_curtida = publicacao
+
+            return dadosCurtidaJson
         } else {
             return message.ERROR_NOT_POSSIBLE_INSERT_LIKE
         }
