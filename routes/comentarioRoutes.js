@@ -72,11 +72,20 @@ router.post('/comentario/inserir', verifyJWT, cors(), bodyParserJSON, async (req
 })
 
 //Endpoint que seleciona os comentários pelo id da publicação
-router.get('/comentario/select_by_id_publicacao/:id', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.get('/comentario/select_by_id_publicacao/:id', verifyJWT, cors(), async (request, response) => {
     
     let idPublicacao = request.params.id
 
     let dadosComentarios = await comentarioController.selectComentariosByIdPublicacao(idPublicacao)
+
+    response.status(dadosComentarios.status)
+    response.json(dadosComentarios)
+})
+
+//Endpoint para selecionar todos os comentários do sistema
+router.get('/comentario/select_all', verifyJWT, cors(), async (request, response) => {
+    
+    let dadosComentarios = await comentarioController.selectAllComentarios()
 
     response.status(dadosComentarios.status)
     response.json(dadosComentarios)

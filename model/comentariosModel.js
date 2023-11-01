@@ -62,8 +62,21 @@ const selectComentariosByIdPublicacaoModel = async (id_publicacao) => {
     }
 }
 
+const selectAllComentariosModel = async () => {
+    let sql = `select * from tbl_comentario`
+
+    let response = await prisma.$queryRawUnsafe(sql)
+
+    if (response.length > 0) {
+        return response
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     insertComentarioModel,
     selectLastIdComentarioModel,
-    selectComentariosByIdPublicacaoModel
+    selectComentariosByIdPublicacaoModel,
+    selectAllComentariosModel
 }

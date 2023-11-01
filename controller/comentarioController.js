@@ -61,7 +61,25 @@ const selectComentariosByIdPublicacao = async (id_publicacao) => {
     }
 }
 
+const selectAllComentarios = async () => {
+
+    let dadosComentarios = await comentarioModel.selectAllComentariosModel()
+
+    if (dadosComentarios) {
+        let dadosComentariosJson = {}
+
+        dadosComentariosJson.comentarios = dadosComentarios
+        dadosComentariosJson.message = message.SUCCES_REQUEST.message
+        dadosComentariosJson.status = message.SUCCES_REQUEST.status
+
+        return dadosComentariosJson
+    } else {
+        return message.ERROR_ITEM_NOT_FOUND
+    }
+}
+
 module.exports = {
     insertComentario,
-    selectComentariosByIdPublicacao
+    selectComentariosByIdPublicacao,
+    selectAllComentarios
 }
