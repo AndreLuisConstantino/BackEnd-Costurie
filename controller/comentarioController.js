@@ -39,6 +39,29 @@ const insertComentario = async (dadosBody) => {
     }
 }
 
+const selectComentariosByIdPublicacao = async (id_publicacao) => {
+
+    if (id_publicacao == '' || id_publicacao == undefined || isNaN(id_publicacao)) {
+        return message.ERROR_INVALID_ID
+    } else {
+        
+        let dadosComentarios = await comentarioModel.selectComentariosByIdPublicacaoModel(id_publicacao)
+
+        if (dadosComentarios) {
+            let dadosComentariosJson = {}
+
+            dadosComentariosJson.comentarios = dadosComentarios
+            dadosComentariosJson.message = message.SUCCES_REQUEST.message
+            dadosComentariosJson.status = message.SUCCES_REQUEST.status
+
+            return dadosComentariosJson
+        } else {
+            return message.ERROR_ITEM_NOT_FOUND
+        }
+    }
+}
+
 module.exports = {
-    insertComentario
+    insertComentario,
+    selectComentariosByIdPublicacao
 }
