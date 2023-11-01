@@ -74,7 +74,7 @@ router.post('/publicacao/inserir', verifyJWT, cors(), bodyParserJSON, async (req
 //Endpoint que retorna todas as publicações
 router.get('/publicacao/select_all', verifyJWT, cors(), async (request, response) => {
 
-    let dadosPublicacao = await publicacaoController.selectAllPublications()
+    let dadosPublicacao = await publicacaoController.selectMostRecentPublications()
 
     response.status(dadosPublicacao.status)
     response.json(dadosPublicacao)
@@ -143,6 +143,15 @@ router.get('/publicacao/', verifyJWT, cors(), async (request, response) => {
 
     response.status(dadosPublicacoes.status)
     response.json(dadosPublicacoes)
+})
+
+//Endpoint de selecionar as publicações mais populares
+router.get('/publicacao/populares', verifyJWT, cors(), async (request, response) => {
+
+    let dadosPublicacoesPopulares = await publicacaoController.selectMostPopularPublications()
+
+    response.status(dadosPublicacoesPopulares.status)
+    response.json(dadosPublicacoesPopulares)
 })
 
 module.exports = router 

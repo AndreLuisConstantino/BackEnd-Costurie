@@ -14,6 +14,7 @@ const tagPublicacaoModel = require('../model/tagPublicacaoModel.js')
 const tagModel = require('../model/tagModel.js')
 const anexosModel = require('../model/anexosModel.js')
 const usuarioModel = require('../model/usuarioModel.js')
+const avaliacaoModel = require('../model/avaliacaoModel.js')
 
 const insertPublicacao = async (dadosBody) => {
 
@@ -107,12 +108,11 @@ const insertAnexosPublicacao = async (anexos, id_publicacao) => {
     return anexosArray
 }
 
-const selectAllPublications = async () => {
+const selectMostRecentPublications = async () => {
 
     let dadosPublicacaoComAnexoArray = []
 
     let dadosPublicacao = await publicacaoModel.selectAllPublicationsModel()
-
 
     let ultimaPosicaoArray = dadosPublicacao.length
 
@@ -317,7 +317,7 @@ const curtirPublicacao = async (id_publicacao) => {
         let insertCurtidaPublicacao = await publicacaoModel.insertCurtidaPublicacaoModel(id_publicacao)
 
         if (insertCurtidaPublicacao) {
-            
+
             let dadosCurtidaJson = {}
 
             dadosCurtidaJson.status = message.SUCCESS_LIKED_PUBLICATION.status
@@ -359,12 +359,54 @@ const selectAllPublicationsOfSystem = async () => {
     }
 }
 
+const selectMostPopularPublications = async () => {
+
+    let dadosPublicacoes = await publicacaoModel.selectAllPublicationsModel()
+
+    let publicacoesArray = []
+
+    for (let i = 0; i < dadosPublicacoes.length; i++) {
+        let publicacao = dadosPublicacoes[i]
+
+        let curtidas = await avaliacaoModel.selectAllAvaliationsByIdPublicacao(publicacao.id)
+
+        let quantidadeCurtidas = curtidas.length
+
+        if (quantidadeCurtidas == undefined) {
+            publicacao.curtidas = 'Esta publicação não possui curtidas'
+        } else {
+            publicacao.curtidas = quantidadeCurtidas
+        }
+
+        publicacoesArray.push(publicacao)
+    }
+
+    publicacoesArray.sort((primeioElemento ,segundoElemento) => {
+        const curtidasA = primeioElemento.curtidas === "Esta publicação não possui curtidas" ? 0 : primeioElemento.curtidas;
+        const curtidasB = segundoElemento.curtidas === "Esta publicação não possui curtidas" ? 0 : segundoElemento.curtidas;
+        return curtidasB - curtidasA;
+    })
+
+    if (dadosPublicacoes) {
+        let dadosPublicacaoJson = {}
+
+        dadosPublicacaoJson.publicacao = publicacoesArray
+        dadosPublicacaoJson.message = message.SUCCES_REQUEST.message
+        dadosPublicacaoJson.status = message.SUCCES_REQUEST.status
+
+        return dadosPublicacaoJson
+    } else {
+        return message.ERROR_ITEM_NOT_FOUND
+    }
+}
+
 module.exports = {
     insertPublicacao,
-    selectAllPublications,
+    selectMostRecentPublications,
     selectPublicacaoById,
     updatePublicacao,
     deletePublicacao,
     curtirPublicacao,
-    selectAllPublicationsOfSystem
+    selectAllPublicationsOfSystem,
+    selectMostPopularPublications
 }
