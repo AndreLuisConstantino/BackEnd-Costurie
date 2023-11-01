@@ -56,6 +56,8 @@ const ERROR_ATTACHMENT_WERE_NOT_FORWARDED = {status: 400, message: 'Os anexos n�
 
 const ERROR_PUBLICATION_ID_NOT_FOUND = {status: 404, message: 'O id informado não exite no sistema'}
 
+const ERROR_INSERT_COMMENT = {status: 404, message: 'Não foi possível inserir o comentário.'}
+
 /******************************** MENSAGENS DE SUCESSO **********************************************/
 const SUCCESS_CREATED_ITEM = {status: 201, message: 'Item criado com sucesso.'}
 
@@ -111,5 +113,6 @@ module.exports = {
     ERROR_ATTACHMENT_WERE_NOT_FORWARDED,
     ERROR_PUBLICATION_ID_NOT_FOUND,
     ERROR_NOT_POSSIBLE_INSERT_LIKE,
-    SUCCESS_LIKED_PUBLICATION
+    SUCCESS_LIKED_PUBLICATION,
+    ERROR_INSERT_COMMENT
 }
