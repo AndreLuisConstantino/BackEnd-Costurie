@@ -113,11 +113,12 @@ const selectAllPublications = async () => {
 
     let dadosPublicacao = await publicacaoModel.selectAllPublicationsModel()
 
-    // console.log(dadosPublicacao);
 
-    let cincoPrimeirasPublicacoes = await dadosPublicacao.slice(0,5)
+    let ultimaPosicaoArray = dadosPublicacao.length
 
-    // console.log(cincoPrimeirasPublicacoes);
+    let primeiraPosicaoDeletada = ultimaPosicaoArray - 5
+
+    let cincoPrimeirasPublicacoes = await dadosPublicacao.slice(primeiraPosicaoDeletada, ultimaPosicaoArray)
 
     for (let i = 0; i < cincoPrimeirasPublicacoes.length; i++) {
         let publicacao = cincoPrimeirasPublicacoes[i]
