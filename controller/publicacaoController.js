@@ -115,26 +115,19 @@ const selectAllPublications = async () => {
 
     // console.log(dadosPublicacao);
 
-    for (let i = 0; i < dadosPublicacao.length; i++) {
-        let publicacao = dadosPublicacao[i]
+    let cincoPrimeirasPublicacoes = await dadosPublicacao.slice(0,5)
+
+    // console.log(cincoPrimeirasPublicacoes);
+
+    for (let i = 0; i < cincoPrimeirasPublicacoes.length; i++) {
+        let publicacao = cincoPrimeirasPublicacoes[i]
 
         let dadosAnexos = await anexosModel.selectAnexosByIdModel(publicacao.id)
 
         publicacao.anexos = dadosAnexos
 
-        // let dadosTags = await tagPublicacaoModel.selectAllTagsByIdPublicacaoModel(publicacao.id)
-
-        // let tags = await selectTags(dadosTags)
-
-        // console.log(tags);
-
-        // publicacao.tags = tags
-
         dadosPublicacaoComAnexoArray.push(publicacao)
     }
-
-    // console.log(dadosPublicacaoComAnexoArray);
-
 
     if (dadosPublicacao) {
         let dadosPublicacaoJson = {}

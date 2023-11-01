@@ -72,7 +72,7 @@ router.post('/publicacao/inserir', verifyJWT, cors(), bodyParserJSON, async (req
 })
 
 //Endpoint que retorna todas as publicações
-router.get('/publicacao/select_all', cors(), async (request, response) => {
+router.get('/publicacao/select_all', verifyJWT, cors(), async (request, response) => {
 
     let dadosPublicacao = await publicacaoController.selectAllPublications()
 
