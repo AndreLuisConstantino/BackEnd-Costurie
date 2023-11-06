@@ -82,8 +82,8 @@ const updatePublicacaoModel = async (dadosBody) => {
                                         tbl_publicacao.titulo = '${dadosBody.titulo}',
                                         tbl_publicacao.data_publicacao = DATE(NOW()), 
                                         tbl_publicacao.hora = TIME(NOW()), 
-                                        tbl_publicacao.descricao = 'teste update descricao' 
-                                    where tbl_publicacao.id = 2;`
+                                        tbl_publicacao.descricao = '${dadosBody.descricao}' 
+                                    where tbl_publicacao.id = ${dadosBody.id_publicacao};`
 
     // console.log(sql);
 

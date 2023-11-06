@@ -101,6 +101,8 @@ router.put('/publicacao/editar_publicacao', verifyJWT, bodyParserJSON, cors(), a
  
          let dadosUpdatePublicacao = await publicacaoController.updatePublicacao(dadosBody)
 
+        //  console.log(dadosUpdatePublicacao);
+
          if (dadosUpdatePublicacao) {
             response.status(dadosUpdatePublicacao.status)
             response.json(dadosUpdatePublicacao)

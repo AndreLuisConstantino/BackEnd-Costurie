@@ -211,11 +211,13 @@ const updatePublicacao = async (dadosBody) => {
         return message.ERROR_MISTAKE_IN_THE_FILDS
     } else if (dadosBody.tags.length == 0) {
         return message.ERROR_TAGS_WERE_NOT_FORWARDED
-    } else if (dadosBody.anexo.length == 0) {
+    } else if (dadosBody.anexos.length == 0) {
         return message.ERROR_ATTACHMENT_WERE_NOT_FORWARDED
     } else {
 
         let dadosUpdatePublicacao = await publicacaoModel.updatePublicacaoModel(dadosBody)
+
+        // console.log(dadosUpdatePublicacao);
 
         let dadosUpdateTagsPublicacao = await updateTagsPublicacao(dadosBody.tags, dadosBody.id_publicacao)
 
@@ -368,6 +370,10 @@ const selectMostPopularPublications = async () => {
     for (let i = 0; i < dadosPublicacoes.length; i++) {
         let publicacao = dadosPublicacoes[i]
 
+        let dadosAnexos = await anexosModel.selectAnexosByIdModel(publicacao.id)
+
+        publicacao.anexos = dadosAnexos
+
         let curtidas = await avaliacaoModel.selectAllAvaliationsByIdPublicacao(publicacao.id)
 
         let quantidadeCurtidas = curtidas.length
@@ -380,6 +386,8 @@ const selectMostPopularPublications = async () => {
 
         publicacoesArray.push(publicacao)
     }
+
+    let dadosAnexos = 
 
     publicacoesArray.sort((primeioElemento ,segundoElemento) => {
         const curtidasA = primeioElemento.curtidas === "Esta publicação não possui curtidas" ? 0 : primeioElemento.curtidas;
