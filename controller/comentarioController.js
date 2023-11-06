@@ -9,8 +9,9 @@
 var message = require('./modulo/config.js')
 
 //Import models
-var comentarioModel = require('../model/comentariosModel.js')
-var usuarioModel = require('../model/usuarioModel.js')
+let comentarioModel = require('../model/comentariosModel.js')
+let usuarioModel = require('../model/usuarioModel.js')
+let respostasModel = require('../model/respostasModel.js')
 
 const insertComentario = async (dadosBody) => {
 
@@ -53,16 +54,18 @@ const selectComentariosByIdPublicacao = async (id_publicacao) => {
         for (let i = 0; i < dadosComentarios.length; i++) {
             let comentario = dadosComentarios[i]
 
+            // console.log(comentario);
+
             let usuario = await usuarioModel.selectProfileByIdModel(comentario.id_usuario)
 
-            // console.log(usuario);
+            let respostas = await respostasModel.selectAllRespostasByIdComentario(comentario.id)
+
+            comentario.respostas = respostas
 
             let usuarioJson = {
                 nome_de_usuario: usuario[0].nome_de_usuario,
                 foto: usuario[0].foto
             }
-
-            // console.log(usuarioJson);
 
             comentario.usuario = usuarioJson
         }

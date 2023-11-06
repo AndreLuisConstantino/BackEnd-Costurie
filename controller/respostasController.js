@@ -34,8 +34,6 @@ const inserirResposta = async (dadosBody) => {
 
             let usuario = await usuarioModel.selectProfileByIdModel(dadosBody.id_usuario)
 
-            // console.log(usuario);
-
             let usuarioJson = {
                 nome_de_usuario: usuario[0].nome_de_usuario,
                 foto: usuario[0].foto
