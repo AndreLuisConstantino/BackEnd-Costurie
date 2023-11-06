@@ -11,6 +11,7 @@ var message = require('./modulo/config.js')
 //Import Models
 const respostasModel = require('../model/respostasModel.js')
 const comentarioModel = require('../model/comentariosModel.js')
+const usuarioModel = require('../model/usuarioModel.js')
 
 
 const inserirResposta = async (dadosBody) => {
@@ -31,10 +32,20 @@ const inserirResposta = async (dadosBody) => {
 
             let comentario = await comentarioModel.selectComentarioByIdModel(dadosBody.id_comentario)
 
+            let usuario = await usuarioModel.selectProfileByIdModel(dadosBody.id_usuario)
+
+            // console.log(usuario);
+
+            let usuarioJson = {
+                nome_de_usuario: usuario[0].nome_de_usuario,
+                foto: usuario[0].foto
+            }
+
             let dadosRespostaJson = {}
 
             dadosRespostaJson.resposta = dadosResposta
             dadosRespostaJson.comentario = comentario
+            dadosRespostaJson.usuario = usuarioJson
             dadosRespostaJson.message = 'Comentário inserido com sucesso'
             dadosRespostaJson.status = 201
 
