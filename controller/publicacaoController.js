@@ -387,8 +387,6 @@ const selectMostPopularPublications = async () => {
         publicacoesArray.push(publicacao)
     }
 
-    let dadosAnexos = 
-
     publicacoesArray.sort((primeioElemento ,segundoElemento) => {
         const curtidasA = primeioElemento.curtidas === "Esta publicação não possui curtidas" ? 0 : primeioElemento.curtidas;
         const curtidasB = segundoElemento.curtidas === "Esta publicação não possui curtidas" ? 0 : segundoElemento.curtidas;
