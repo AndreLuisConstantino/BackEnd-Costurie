@@ -101,8 +101,33 @@ const selectAllComentarios = async () => {
     }
 }
 
+const deleteComentario = async (id_comentario) => {
+
+    if (id_comentario == '' || id_comentario == undefined || isNaN(id_comentario)) {
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let comentarioExcluido = await comentarioModel.selectComentarioByIdModel(id_comentario)
+
+        let excluirComentario = await comentarioModel.deleteComentarioModel(id_comentario)
+
+        if (excluirComentario) {
+            let dadosDeleteComentarioJson = {}
+
+            dadosDeleteComentarioJson.comentario_excluido = comentarioExcluido[0]
+            dadosDeleteComentarioJson.message = message.SUCCESS_DELETED_ITEM.message
+            dadosDeleteComentarioJson.status = message.SUCCESS_DELETED_ITEM.status
+
+            return dadosDeleteComentarioJson
+        } else {
+            return message.ERROR_DELETED_ITEM
+        }
+    }
+}
+
 module.exports = {
     insertComentario,
     selectComentariosByIdPublicacao,
-    selectAllComentarios
+    selectAllComentarios,
+    deleteComentario
 }

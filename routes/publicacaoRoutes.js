@@ -134,6 +134,8 @@ router.post('/publicacao/curtir/:id', verifyJWT, cors(), async (request, respons
 
     let dadosCurtirPublicacao = await publicacaoController.curtirPublicacao(idPublicacao)
 
+    console.log('testezika123');
+
     response.status(dadosCurtirPublicacao.status)
     response.json(dadosCurtirPublicacao)
 })

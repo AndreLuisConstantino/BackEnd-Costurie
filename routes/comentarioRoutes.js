@@ -91,4 +91,15 @@ router.get('/comentario/select_all', verifyJWT, cors(), async (request, response
     response.json(dadosComentarios)
 })
 
+//Endpoint para deletar um comentario
+router.delete('/comentario/:id', verifyJWT, cors(), async (request, response) => {
+
+    let idComentario = request.params.id
+
+    let dadosDeleteComentario = await comentarioController.deleteComentario(idComentario)
+
+    response.status(dadosDeleteComentario.status)
+    response.json(dadosDeleteComentario)
+})
+
 module.exports = router 

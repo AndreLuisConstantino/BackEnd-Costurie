@@ -86,10 +86,27 @@ const selectComentarioByIdModel = async (id_comentario) => {
     }
 }
 
+const deleteComentarioModel = async (id_comentario) => {
+    let sql = `delete from tbl_comentario where id = ${id_comentario}`;
+
+    // console.log(sql)
+  
+    let resultStatus = await prisma.$executeRawUnsafe(sql);
+  
+    // console.log(resultStatus);
+  
+    if (resultStatus) {
+      return true;
+    } else {
+      return false;
+    }
+}
+
 module.exports = {
     insertComentarioModel,
     selectLastIdComentarioModel,
     selectComentariosByIdPublicacaoModel,
     selectAllComentariosModel,
-    selectComentarioByIdModel
+    selectComentarioByIdModel,
+    deleteComentarioModel
 }

@@ -312,9 +312,7 @@ const curtirPublicacao = async (id_publicacao) => {
     if (id_publicacao == '' || id_publicacao == undefined || isNaN(id_publicacao)) {
         return message.ERROR_INVALID_ID
     } else {
-        let publicacao = await selectPublicacaoById(id_publicacao)
-
-        // console.log(publicacao);
+        // let publicacao = await selectPublicacaoById(id_publicacao)
 
         let insertCurtidaPublicacao = await publicacaoModel.insertCurtidaPublicacaoModel(id_publicacao)
 
@@ -324,7 +322,7 @@ const curtirPublicacao = async (id_publicacao) => {
 
             dadosCurtidaJson.status = message.SUCCESS_LIKED_PUBLICATION.status
             dadosCurtidaJson.message = message.SUCCESS_LIKED_PUBLICATION.message
-            dadosCurtidaJson.publicacao_curtida = publicacao
+            // dadosCurtidaJson.publicacao_curtida = publicacao
 
             return dadosCurtidaJson
         } else {
