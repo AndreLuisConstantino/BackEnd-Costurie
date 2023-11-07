@@ -58,6 +58,8 @@ const ERROR_PUBLICATION_ID_NOT_FOUND = {status: 404, message: 'O id informado n�
 
 const ERROR_INSERT_COMMENT = {status: 404, message: 'Não foi possível inserir o comentário.'}
 
+const ERROR_USER_ALREADY_LIKED = {status: 400, message: 'Usuário já curtiu está publicação.'}
+
 /******************************** MENSAGENS DE SUCESSO **********************************************/
 const SUCCESS_CREATED_ITEM = {status: 201, message: 'Item criado com sucesso.'}
 
@@ -114,5 +116,6 @@ module.exports = {
     ERROR_PUBLICATION_ID_NOT_FOUND,
     ERROR_NOT_POSSIBLE_INSERT_LIKE,
     SUCCESS_LIKED_PUBLICATION,
-    ERROR_INSERT_COMMENT
+    ERROR_INSERT_COMMENT,
+    ERROR_USER_ALREADY_LIKED
 }

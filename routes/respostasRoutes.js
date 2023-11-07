@@ -48,6 +48,7 @@ const verifyJWT = async (request, response, next) => {
 //Import do arquivo de configuração das variáveis, constantes e funções globais
 var message = require('../controller/modulo/config.js')
 
+//Endpoint para fazer uma resposta de comentário
 router.post('/respostas_comentario/inserir', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
     //Recebe o content-type da requisição
     let contentType = request.headers['content-type']
@@ -68,6 +69,14 @@ router.post('/respostas_comentario/inserir', verifyJWT, cors(), bodyParserJSON, 
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
         response.json(message.ERROR_INVALID_CONTENT_TYPE)
     }
+})
+
+router.get('/respostas_comentario/', verifyJWT, cors(), async (request, response) => {
+
+    let dadosResposta = await respostasController.selectAllRespostas()
+
+    response.status(dadosResposta.status)
+    response.json(dadosResposta)
 })
 
 module.exports = router 

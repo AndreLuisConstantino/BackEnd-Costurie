@@ -307,26 +307,31 @@ const deletePublicacao = async (id_publicacao) => {
     }
 }
 
-const curtirPublicacao = async (id_publicacao) => {
+const curtirPublicacao = async (dadosBody) => {
 
-    if (id_publicacao == '' || id_publicacao == undefined || isNaN(id_publicacao)) {
+    if (dadosBody.id_publicacao == '' || dadosBody.id_publicacao == undefined || isNaN(dadosBody.id_publicacao) ||
+        dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario)
+    ) {
         return message.ERROR_INVALID_ID
     } else {
-        // let publicacao = await selectPublicacaoById(id_publicacao)
 
-        let insertCurtidaPublicacao = await publicacaoModel.insertCurtidaPublicacaoModel(id_publicacao)
+        let usuarioJaCurtiu = await publicacaoModel.selectCurtidaPublicacaoModel(dadosBody)
 
-        if (insertCurtidaPublicacao) {
-
-            let dadosCurtidaJson = {}
-
-            dadosCurtidaJson.status = message.SUCCESS_LIKED_PUBLICATION.status
-            dadosCurtidaJson.message = message.SUCCESS_LIKED_PUBLICATION.message
-            // dadosCurtidaJson.publicacao_curtida = publicacao
-
-            return dadosCurtidaJson
+        if (usuarioJaCurtiu.length) {
+            return message.ERROR_USER_ALREADY_LIKED
         } else {
-            return message.ERROR_NOT_POSSIBLE_INSERT_LIKE
+            let insertCurtidaPublicacao = await publicacaoModel.insertCurtidaPublicacaoModel(dadosBody)
+
+            if (insertCurtidaPublicacao) {
+                let dadosCurtidaJson = {}
+
+                dadosCurtidaJson.status = message.SUCCESS_LIKED_PUBLICATION.status
+                dadosCurtidaJson.message = message.SUCCESS_LIKED_PUBLICATION.message
+
+                return dadosCurtidaJson
+            } else {
+                return message.ERROR_NOT_POSSIBLE_INSERT_LIKE
+            }
         }
     }
 }
@@ -385,7 +390,7 @@ const selectMostPopularPublications = async () => {
         publicacoesArray.push(publicacao)
     }
 
-    publicacoesArray.sort((primeioElemento ,segundoElemento) => {
+    publicacoesArray.sort((primeioElemento, segundoElemento) => {
         const curtidasA = primeioElemento.curtidas === "Esta publicação não possui curtidas" ? 0 : primeioElemento.curtidas;
         const curtidasB = segundoElemento.curtidas === "Esta publicação não possui curtidas" ? 0 : segundoElemento.curtidas;
         return curtidasB - curtidasA;
@@ -404,6 +409,29 @@ const selectMostPopularPublications = async () => {
     }
 }
 
+const retirarCurtida = async (dadosBody) => {
+
+    if (dadosBody.id_publicacao == '' || dadosBody.id_publicacao == undefined || isNaN(dadosBody.id_publicacao) ||
+        dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario)
+    ) {
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let dadosRetirarCurtida = await avaliacaoModel.retirarCurtidaModel(dadosBody)
+
+        if (dadosRetirarCurtida) {
+            let dadosRetirarCurtidaJson = {}
+            
+            dadosRetirarCurtidaJson.message = message.SUCCESS_DELETED_ITEM.message
+            dadosRetirarCurtidaJson.status = message.SUCCESS_DELETED_ITEM.status
+
+            return dadosRetirarCurtidaJson
+        } else {
+            return message.ERROR_DELETED_ITEM
+        }
+    }
+}
+
 module.exports = {
     insertPublicacao,
     selectMostRecentPublications,
@@ -412,5 +440,6 @@ module.exports = {
     deletePublicacao,
     curtirPublicacao,
     selectAllPublicationsOfSystem,
-    selectMostPopularPublications
+    selectMostPopularPublications,
+    retirarCurtida
 }

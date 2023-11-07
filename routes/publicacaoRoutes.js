@@ -50,25 +50,25 @@ var message = require('../controller/modulo/config.js')
 
 //Endpoint para inserir uma publicação
 router.post('/publicacao/inserir', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
-     //Recebe o content-type da requisição
-     let contentType = request.headers['content-type']
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
 
-     if (String(contentType).toLowerCase() == 'application/json') {
-         let dadosBody = request.body
- 
-         let dadosInserirPublicacao = await publicacaoController.insertPublicacao(dadosBody)
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let dadosBody = request.body
 
-         if (dadosInserirPublicacao) {
+        let dadosInserirPublicacao = await publicacaoController.insertPublicacao(dadosBody)
+
+        if (dadosInserirPublicacao) {
             response.status(dadosInserirPublicacao.status)
             response.json(dadosInserirPublicacao)
         } else {
             response.status(dadosInserirPublicacao.status)
             response.json(dadosInserirPublicacao)
         }
-     } else {
-         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
-         response.json(message.ERROR_INVALID_CONTENT_TYPE)
-     }
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
 })
 
 //Endpoint que retorna todas as publicações
@@ -82,7 +82,7 @@ router.get('/publicacao/select_all', verifyJWT, cors(), async (request, response
 
 //Endpoint que retorna a publicação pelo id
 router.get('/publicacao/select_by_id/:id', verifyJWT, cors(), async (request, response) => {
-    
+
     let idPublicacao = request.params.id
 
     let dadosPublicacao = await publicacaoController.selectPublicacaoById(idPublicacao)
@@ -96,24 +96,24 @@ router.put('/publicacao/editar_publicacao', verifyJWT, bodyParserJSON, cors(), a
 
     let contentType = request.headers['content-type']
 
-     if (String(contentType).toLowerCase() == 'application/json') {
-         let dadosBody = request.body
- 
-         let dadosUpdatePublicacao = await publicacaoController.updatePublicacao(dadosBody)
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let dadosBody = request.body
+
+        let dadosUpdatePublicacao = await publicacaoController.updatePublicacao(dadosBody)
 
         //  console.log(dadosUpdatePublicacao);
 
-         if (dadosUpdatePublicacao) {
+        if (dadosUpdatePublicacao) {
             response.status(dadosUpdatePublicacao.status)
             response.json(dadosUpdatePublicacao)
         } else {
             response.status(dadosUpdatePublicacao.status)
             response.json(dadosUpdatePublicacao)
         }
-     } else {
-         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
-         response.json(message.ERROR_INVALID_CONTENT_TYPE)
-     }
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
 })
 
 //Endpoint que deleta uma publicação
@@ -128,16 +128,49 @@ router.delete('/publicacao/:id', verifyJWT, cors(), async (request, response) =>
 })
 
 //Endpoint para curtir uma publicação
-router.post('/publicacao/curtir/:id', verifyJWT, cors(), async (request, response) => {
+router.post('/publicacao/curtir', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
 
-    let idPublicacao = request.params.id
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let dadosBody = request.body
 
-    let dadosCurtirPublicacao = await publicacaoController.curtirPublicacao(idPublicacao)
+        let dadosCurtirPublicacao = await publicacaoController.curtirPublicacao(dadosBody)
 
-    console.log('testezika123');
+        if (dadosCurtirPublicacao) {
+            response.status(dadosCurtirPublicacao.status)
+            response.json(dadosCurtirPublicacao)
+        } else {
+            response.status(dadosCurtirPublicacao.status)
+            response.json(dadosCurtirPublicacao)
+        }
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+})
 
-    response.status(dadosCurtirPublicacao.status)
-    response.json(dadosCurtirPublicacao)
+router.delete('/publicacao/retirar_curtida', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let dadosBody = request.body
+
+        let dadosRetirarCurtidaPublicacao = await publicacaoController.retirarCurtida(dadosBody)
+
+        if (dadosRetirarCurtidaPublicacao) {
+            response.status(dadosRetirarCurtidaPublicacao.status)
+            response.json(dadosRetirarCurtidaPublicacao)
+        } else {
+            response.status(dadosRetirarCurtidaPublicacao.status)
+            response.json(dadosRetirarCurtidaPublicacao)
+        }
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+
 })
 
 //Endpoint que traz todas as publicações existentes no sistema

@@ -62,8 +62,21 @@ const selectAllRespostasByIdComentario = async (id_comentario) => {
     }
 }
 
+const selectAllRespostasModel = async () => {
+    let sql = `select * from tbl_resposta_comentario`
+
+    let response = await prisma.$queryRawUnsafe(sql)
+
+    if (response.length > 0) {
+        return response
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     inserirRespostaModel,
     selectLastIdRespostaModel,
-    selectAllRespostasByIdComentario
+    selectAllRespostasByIdComentario,
+    selectAllRespostasModel
 }

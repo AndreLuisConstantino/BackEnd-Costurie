@@ -54,6 +54,24 @@ const inserirResposta = async (dadosBody) => {
     }
 }
 
+const selectAllRespostas = async () => {
+
+    let dadosRespostas = await respostasModel.selectAllRespostasModel()
+
+    if (dadosRespostas) {
+        let dadosRespostaJson = {}
+
+        dadosRespostaJson.respostas = dadosRespostas
+        dadosRespostaJson.status = message.SUCCES_REQUEST.status
+        dadosRespostaJson.message = message.SUCCES_REQUEST.message
+
+        return dadosRespostaJson
+    } else {
+        return message.ERROR_ITEM_NOT_FOUND
+    }
+}
+
 module.exports = {
-    inserirResposta
+    inserirResposta,
+    selectAllRespostas
 }

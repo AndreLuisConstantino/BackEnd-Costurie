@@ -125,15 +125,17 @@ const selectAllPublicationsByIdUsuario = async (id_usuario) => {
     }
 }
 
-const insertCurtidaPublicacaoModel = async (id_publicacao) => {
+const insertCurtidaPublicacaoModel = async (dadosBody) => {
     //Script sql para atualizar os dados no BD
     let sql = `insert into tbl_avaliacao_publicacao 
                                                     (
                                                     curtida, 
-                                                    id_publicacao
+                                                    id_publicacao,
+                                                    id_usuario
                                                     ) values (
                                                         1, 
-                                                        ${id_publicacao}
+                                                        ${dadosBody.id_publicacao},
+                                                        ${dadosBody.id_usuario}
                                                         );`
 
     //Executa o script no BD
@@ -148,6 +150,20 @@ const insertCurtidaPublicacaoModel = async (id_publicacao) => {
     }
 }
 
+const selectCurtidaPublicacaoModel = async (dadosBody) => {
+    let sql = `select * from tbl_avaliacao_publicacao where id_publicacao = ${dadosBody.id_publicacao} and id_usuario = ${dadosBody.id_usuario};`
+
+    // console.log(sql);
+
+    let response = await prisma.$queryRawUnsafe(sql)
+
+    if (response.length > 0) {
+        return response
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     inserirPublicacaoModel,
     selectLastIdPublicacaoModel,
@@ -156,5 +172,6 @@ module.exports = {
     updatePublicacaoModel,
     deletePublicacaoModel,
     selectAllPublicationsByIdUsuario,
-    insertCurtidaPublicacaoModel
+    insertCurtidaPublicacaoModel,
+    selectCurtidaPublicacaoModel
 }

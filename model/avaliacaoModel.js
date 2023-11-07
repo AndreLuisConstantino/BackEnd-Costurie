@@ -22,6 +22,21 @@ const selectAllAvaliationsByIdPublicacao = async (id_publicacao) => {
     }
 }
 
+const retirarCurtidaModel = async (dadosBody) => {
+    let sql = `delete from tbl_avaliacao_publicacao where id_publicacao = ${dadosBody.id_publicacao} and id_usuario = ${dadosBody.id_usuario}`
+
+    // console.log(sql);
+
+    let response = await prisma.$executeRawUnsafe(sql)
+
+    if (response) {
+        return true
+    } else {
+        return false
+    }
+}
+
 module.exports = {
-    selectAllAvaliationsByIdPublicacao
+    selectAllAvaliationsByIdPublicacao,
+    retirarCurtidaModel
 }
