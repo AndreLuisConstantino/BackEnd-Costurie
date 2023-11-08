@@ -366,31 +366,95 @@ const selectAllPublicationsOfSystem = async () => {
 
 const selectMostPopularPublications = async () => {
 
-    let dadosPublicacoes = await publicacaoModel.selectAllPublicationsModel()
+    // let dadosPublicacoes = await publicacaoModel.selectAllPublicationsModel()
 
-    let publicacoesArray = []
+    // let publicacoesArray = []
 
-    for (let i = 0; i < dadosPublicacoes.length; i++) {
-        let publicacao = dadosPublicacoes[i]
+    // for (let i = 0; i < dadosPublicacoes.length; i++) {
+    //     let publicacao = dadosPublicacoes[i]
 
-        let dadosAnexos = await anexosModel.selectAnexosByIdModel(publicacao.id)
+    //     let dadosAnexos = await anexosModel.selectAnexosByIdModel(publicacao.id)
 
-        publicacao.anexos = dadosAnexos
+    //     publicacao.anexos = dadosAnexos
 
+    //     let curtidas = await avaliacaoModel.selectAllAvaliationsByIdPublicacao(publicacao.id)
+
+    //     let quantidadeCurtidas = curtidas.length
+
+    //     if (quantidadeCurtidas == undefined) {
+    //         publicacao.curtidas = 'Esta publicação não possui curtidas'
+    //     } else {
+    //         publicacao.curtidas = quantidadeCurtidas
+    //     }
+
+    //     publicacoesArray.push(publicacao)
+    // }
+
+    // let ultimaPosicaoArray = publicacoesArray.length
+
+    // let primeiraPosicaoDeletada = ultimaPosicaoArray - 5
+
+    // let cincoPrimeirasPublicacoes = publicacoesArray.slice(primeiraPosicaoDeletada, ultimaPosicaoArray)
+
+    // cincoPrimeirasPublicacoes.sort((primeioElemento, segundoElemento) => {
+    //     const curtidasA = primeioElemento.curtidas === "Esta publicação não possui curtidas" ? 0 : primeioElemento.curtidas;
+    //     const curtidasB = segundoElemento.curtidas === "Esta publicação não possui curtidas" ? 0 : segundoElemento.curtidas;
+    //     return curtidasB - curtidasA;
+    // })
+
+    let dadosPublicacoes = await publicacaoModel.selectPublicationWithAttachment()
+
+    dadosPublicacoes.forEach(async publicacao => {
+        let dadosAnexosJson = {}
+        let anexosArray = []
+
+        //Coloca os anexos dentro de um json
+        if (publicacao.id_publicacao == publicacao.id_publicacao_anexo) {
+            dadosAnexosJson.id = publicacao.id_anexo
+            dadosAnexosJson.anexo = publicacao.anexo
+            dadosAnexosJson.id_publicacao = publicacao.id_publicacao_anexo
+            
+            //Coloca os anexos dentro de um array
+            anexosArray.push(dadosAnexosJson)
+        }
+        
+        //Colocando o array dentro do Json principal
+        publicacao.anexos = anexosArray
+        
+        //Deleta o anexo e o id_anexos que vem do banco
+        delete publicacao.anexo
+        delete publicacao.id_anexo
+        delete publicacao.id_publicacao_anexo
+
+        publicacao.id = publicacao.id_publicacao
+        delete publicacao.id_publicacao
+
+
+
+        //Seleciona as curtidas
         let curtidas = await avaliacaoModel.selectAllAvaliationsByIdPublicacao(publicacao.id)
 
         let quantidadeCurtidas = curtidas.length
 
+        //Gerencia a quantidade de curtidas
         if (quantidadeCurtidas == undefined) {
             publicacao.curtidas = 'Esta publicação não possui curtidas'
         } else {
             publicacao.curtidas = quantidadeCurtidas
         }
 
-        publicacoesArray.push(publicacao)
-    }
+    })
 
-    publicacoesArray.sort((primeioElemento, segundoElemento) => {
+    dadosPublicacoes.sort((primeioElemento, segundoElemento) => {
+        if (primeioElemento.id == segundoElemento.id) {
+            return primeioElemento
+        } else {
+            return primeioElemento + segundoElemento
+        }
+    })
+
+    //Pega os dois primeiros elementos e vai reorganizando o array baseado na quantidade de curtidas definida acima
+    dadosPublicacoes.sort((primeioElemento, segundoElemento) => {
         const curtidasA = primeioElemento.curtidas === "Esta publicação não possui curtidas" ? 0 : primeioElemento.curtidas;
         const curtidasB = segundoElemento.curtidas === "Esta publicação não possui curtidas" ? 0 : segundoElemento.curtidas;
         return curtidasB - curtidasA;
@@ -399,7 +463,7 @@ const selectMostPopularPublications = async () => {
     if (dadosPublicacoes) {
         let dadosPublicacaoJson = {}
 
-        dadosPublicacaoJson.publicacao = publicacoesArray
+        dadosPublicacaoJson.publicacao = dadosPublicacoes
         dadosPublicacaoJson.message = message.SUCCES_REQUEST.message
         dadosPublicacaoJson.status = message.SUCCES_REQUEST.status
 

@@ -164,6 +164,29 @@ const selectCurtidaPublicacaoModel = async (dadosBody) => {
     }
 }
 
+const selectPublicationWithAttachment = async () => {
+    let sql = `select tbl_publicacao.id as id_publicacao,
+                                        tbl_publicacao.titulo,
+                                        tbl_publicacao.descricao,
+                                        tbl_publicacao.data_publicacao,
+                                        tbl_publicacao.hora,
+                                        tbl_publicacao.id_usuario,
+                                        tbl_anexo_publicacao.id as id_anexo,
+                                        tbl_anexo_publicacao.anexo,
+                                        tbl_anexo_publicacao.id_publicacao as id_publicacao_anexo
+                                        from tbl_publicacao
+                                            inner join tbl_anexo_publicacao
+                                            on tbl_publicacao.id = tbl_anexo_publicacao.id_publicacao;`
+
+    let response = await prisma.$queryRawUnsafe(sql)
+
+    if (response.length > 0) {
+        return response
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     inserirPublicacaoModel,
     selectLastIdPublicacaoModel,
@@ -173,5 +196,6 @@ module.exports = {
     deletePublicacaoModel,
     selectAllPublicationsByIdUsuario,
     insertCurtidaPublicacaoModel,
-    selectCurtidaPublicacaoModel
+    selectCurtidaPublicacaoModel,
+    selectPublicationWithAttachment
 }

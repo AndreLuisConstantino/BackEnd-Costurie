@@ -81,7 +81,7 @@ mongoose
     )
     .then(() => {
         app.listen(8080, function () {
-            console.log('Servidor aguardando requisições na porta 8080');
+            console.log('Servidor aguardando requisições na porta 8080')
         })        
     })
     .catch((err) => console.log(err))
