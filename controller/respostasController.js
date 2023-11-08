@@ -71,7 +71,31 @@ const selectAllRespostas = async () => {
     }
 }
 
+const deleteResposta = async (id_resposta) => {
+
+    if (id_resposta == '' || id_resposta == undefined || isNaN(id_resposta)) {
+        return message.ERROR_INVALID_ID
+    } else {
+        let respostaDeletada = await respostasModel.selectRespostaById(id_resposta)
+
+        let dadosDeleteResposta = await respostasModel.deleteRespostaModel(id_resposta)
+
+        if (dadosDeleteResposta) {
+            let dadosDeleteRespostaJson = {}
+
+            dadosDeleteRespostaJson.message = message.SUCCESS_DELETED_ITEM.message
+            dadosDeleteRespostaJson.status = message.SUCCESS_DELETED_ITEM.status
+            dadosDeleteRespostaJson.resposta_deletada = respostaDeletada[0]
+
+            return dadosDeleteRespostaJson
+        } else {
+            return message.ERROR_DELETED_ITEM
+        }
+    }
+}
+
 module.exports = {
     inserirResposta,
-    selectAllRespostas
+    selectAllRespostas,
+    deleteResposta
 }

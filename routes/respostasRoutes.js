@@ -79,4 +79,13 @@ router.get('/respostas_comentario/', verifyJWT, cors(), async (request, response
     response.json(dadosResposta)
 })
 
+router.delete('/respostas_comentario/:id', verifyJWT, cors(), async (request, response) => {
+    let idResposta = request.params.id
+
+    let dadosDeletarResposta = await respostasController.deleteResposta(idResposta)
+
+    response.status(dadosDeletarResposta.status)
+    response.json(dadosDeletarResposta)
+})
+
 module.exports = router 

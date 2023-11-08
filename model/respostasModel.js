@@ -74,9 +74,35 @@ const selectAllRespostasModel = async () => {
     }
 }
 
+const selectRespostaById = async (id_resposta) => {
+    let sql = `select * from tbl_resposta_comentario where id = ${id_resposta}`
+
+    let response = await prisma.$queryRawUnsafe(sql)
+
+    if (response.length > 0) {
+        return response
+    } else {
+        return false
+    }
+}
+
+const deleteRespostaModel = async (id_resposta) => {
+    let sql = `delete from tbl_resposta_comentario where id = ${id_resposta}`
+  
+    let resultStatus = await prisma.$executeRawUnsafe(sql);
+  
+    if (resultStatus) {
+      return true;
+    } else {
+      return false;
+    }
+}
+
 module.exports = {
     inserirRespostaModel,
     selectLastIdRespostaModel,
     selectAllRespostasByIdComentario,
-    selectAllRespostasModel
+    selectAllRespostasModel,
+    selectRespostaById,
+    deleteRespostaModel
 }
