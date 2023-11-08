@@ -421,7 +421,7 @@ const retirarCurtida = async (dadosBody) => {
 
         if (dadosRetirarCurtida) {
             let dadosRetirarCurtidaJson = {}
-            
+
             dadosRetirarCurtidaJson.message = message.SUCCESS_DELETED_ITEM.message
             dadosRetirarCurtidaJson.status = message.SUCCESS_DELETED_ITEM.status
 

@@ -150,7 +150,8 @@ router.post('/publicacao/curtir', verifyJWT, cors(), bodyParserJSON, async (requ
     }
 })
 
-router.delete('/publicacao/retirar_curtida', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+//Endpoint para retirar a curtida
+router.post('/publicacao/retirar_curtida', verifyJWT, cors(), bodyParserJSON, async (request, response) => { 
     //Recebe o content-type da requisição
     let contentType = request.headers['content-type']
 
