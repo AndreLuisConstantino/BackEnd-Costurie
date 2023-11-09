@@ -58,11 +58,13 @@ router.post('/respostas_comentario/inserir', verifyJWT, cors(), bodyParserJSON, 
 
         let dadosInserirRespostaComentario = await respostasController.inserirResposta(dadosBody)
 
+        // console.log(dadosInserirRespostaComentario);
+
         if (dadosInserirRespostaComentario) {
             response.status(dadosInserirRespostaComentario.status)
             response.json(dadosInserirRespostaComentario)
         } else {
-            response.status(dadosInserirPublicacao.status)
+            response.status(dadosInserirRespostaComentario.status)
             response.json(dadosInserirRespostaComentario)
         }
     } else {
@@ -71,14 +73,26 @@ router.post('/respostas_comentario/inserir', verifyJWT, cors(), bodyParserJSON, 
     }
 })
 
-router.get('/respostas_comentario/', verifyJWT, cors(), async (request, response) => {
-
+//Endpoint para selecionar todas as respostas de comentário
+router.get('/respostas_comentario', verifyJWT, cors(), async (request, response) => {
+    // console.log('teste');
     let dadosResposta = await respostasController.selectAllRespostas()
 
     response.status(dadosResposta.status)
     response.json(dadosResposta)
 })
 
+router.get('/respostas_comentario/:id_comentario', verifyJWT, cors(), async (request, response) => {
+
+    let idComentario = request.params.id_comentario
+
+    let dadosRespostas = await respostasController.selectRespostasByIdComentario(idComentario)
+
+    response.status(dadosRespostas.status)
+    response.json(dadosRespostas)
+})
+
+//Endpoint para deletar uma resposta de comentário
 router.delete('/respostas_comentario/:id', verifyJWT, cors(), async (request, response) => {
     let idResposta = request.params.id
 

@@ -12,6 +12,7 @@ var message = require('./modulo/config.js')
 let comentarioModel = require('../model/comentariosModel.js')
 let usuarioModel = require('../model/usuarioModel.js')
 let respostasModel = require('../model/respostasModel.js')
+let publicacaoModel = require('../model/publicacaoModel.js')
 
 const insertComentario = async (dadosBody) => {
 
@@ -19,24 +20,36 @@ const insertComentario = async (dadosBody) => {
         dadosBody.id_publicacao == '' || dadosBody.id_publicacao == undefined || isNaN(dadosBody.id_publicacao)
     ) {
         return message.ERROR_INVALID_ID
-    } else if(dadosBody.mensagem == '' || dadosBody.mensagem == undefined || !isNaN(dadosBody.mensagem) || dadosBody.mensagem > 255 ){
+    } else if (dadosBody.mensagem == '' || dadosBody.mensagem == undefined || !isNaN(dadosBody.mensagem) || dadosBody.mensagem > 255) {
         return message.ERROR_REQUIRED_FIELDS
     } else {
-        
-        let dadosInserirComentario = await comentarioModel.insertComentarioModel(dadosBody)
 
-        if (dadosInserirComentario) {
-            let inserirComentarioJson = {}
+        let usuario = await usuarioModel.selectProfileByIdModel(dadosBody.id_usuario)
 
-            let comentario = await comentarioModel.selectLastIdComentarioModel()
+        if (usuario) {
+            let publicacao = await publicacaoModel.selectPublicacaoByIdModel(dadosBody.id_publicacao)
 
-            inserirComentarioJson.comentario = comentario[0]
-            inserirComentarioJson.message = message.SUCCESS_CREATED_ITEM.message
-            inserirComentarioJson.status = message.SUCCESS_CREATED_ITEM.status
+            if (publicacao) {
+                let dadosInserirComentario = await comentarioModel.insertComentarioModel(dadosBody)
 
-            return inserirComentarioJson
+                if (dadosInserirComentario) {
+                    let inserirComentarioJson = {}
+
+                    let comentario = await comentarioModel.selectLastIdComentarioModel()
+
+                    inserirComentarioJson.comentario = comentario[0]
+                    inserirComentarioJson.message = message.SUCCESS_CREATED_ITEM.message
+                    inserirComentarioJson.status = message.SUCCESS_CREATED_ITEM.status
+
+                    return inserirComentarioJson
+                } else {
+                    return message.ERROR_NOT_POSSIBLE_INSERT_COMMENT
+                }
+            } else {
+                return message.ERROR_PUBLICATION_NOT_FOUND
+            }
         } else {
-            return message
+            return message.ERROR_USER_NOT_FOUND
         }
     }
 }
@@ -46,40 +59,42 @@ const selectComentariosByIdPublicacao = async (id_publicacao) => {
     if (id_publicacao == '' || id_publicacao == undefined || isNaN(id_publicacao)) {
         return message.ERROR_INVALID_ID
     } else {
-        
-        let dadosComentarios = await comentarioModel.selectComentariosByIdPublicacaoModel(id_publicacao)
 
-        // console.log(dadosComentarios);
+        let publicacao = await publicacaoModel.selectPublicacaoByIdModel(id_publicacao)
 
-        for (let i = 0; i < dadosComentarios.length; i++) {
-            let comentario = dadosComentarios[i]
+        if (publicacao) {
+            let dadosComentarios = await comentarioModel.selectComentariosByIdPublicacaoModel(id_publicacao)
 
-            // console.log(comentario);
+            for (let i = 0; i < dadosComentarios.length; i++) {
+                let comentario = dadosComentarios[i]
 
-            let usuario = await usuarioModel.selectProfileByIdModel(comentario.id_usuario)
+                let usuario = await usuarioModel.selectProfileByIdModel(comentario.id_usuario)
 
-            let respostas = await respostasModel.selectAllRespostasByIdComentario(comentario.id)
+                let respostas = await respostasModel.selectAllRespostasByIdComentario(comentario.id)
 
-            comentario.respostas = respostas
+                comentario.respostas = respostas
 
-            let usuarioJson = {
-                nome_de_usuario: usuario[0].nome_de_usuario,
-                foto: usuario[0].foto
+                let usuarioJson = {
+                    nome_de_usuario: usuario[0].nome_de_usuario,
+                    foto: usuario[0].foto
+                }
+
+                comentario.usuario = usuarioJson
             }
 
-            comentario.usuario = usuarioJson
-        }
+            if (dadosComentarios) {
+                let dadosComentariosJson = {}
 
-        if (dadosComentarios) {
-            let dadosComentariosJson = {}
+                dadosComentariosJson.comentarios = dadosComentarios
+                dadosComentariosJson.message = message.SUCCES_REQUEST.message
+                dadosComentariosJson.status = message.SUCCES_REQUEST.status
 
-            dadosComentariosJson.comentarios = dadosComentarios
-            dadosComentariosJson.message = message.SUCCES_REQUEST.message
-            dadosComentariosJson.status = message.SUCCES_REQUEST.status
-
-            return dadosComentariosJson
+                return dadosComentariosJson
+            } else {
+                return message.ERROR_ITEM_NOT_FOUND
+            }
         } else {
-            return message.ERROR_ITEM_NOT_FOUND
+            return message.ERROR_PUBLICATION_NOT_FOUND
         }
     }
 }

@@ -11,6 +11,7 @@ var { PrismaClient } = require("@prisma/client");
 var prisma = new PrismaClient();
 
 const inserirRespostaModel = async (dadosBody) => {
+    console.log(dadosBody);
     //Script sql para atualizar os dados no BD
     let sql = `insert into tbl_resposta_comentario (
                                                     id_usuario,
@@ -25,11 +26,9 @@ const inserirRespostaModel = async (dadosBody) => {
                                                                 DATE(NOW()),
                                                                 TIME(NOW())
                                                                 );`
-
     //Executa o script no BD
     let resultStatus = await prisma.$executeRawUnsafe(sql)
 
-    // console.log(dadosBody);
 
     if (resultStatus) {
         return resultStatus
@@ -66,6 +65,8 @@ const selectAllRespostasModel = async () => {
     let sql = `select * from tbl_resposta_comentario`
 
     let response = await prisma.$queryRawUnsafe(sql)
+
+    // console.log(response);
 
     if (response.length > 0) {
         return response

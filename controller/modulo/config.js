@@ -50,15 +50,23 @@ const ERROR_TAGS_WERE_NOT_FORWARDED = {status: 400, message: 'As tags não foram
 
 const ERROR_NOT_POSSIBLE_INSERT_PUBLICATION = {status: 400, message: 'Não foi possível fazer a publicacao'}
 
+const ERROR_NOT_POSSIBLE_INSERT_COMMENT = {status: 400, message: 'Não foi possível fazer o comentário'}
+
 const ERROR_NOT_POSSIBLE_INSERT_LIKE = {status: 400, message: 'Não foi possível dar uma curtida na publicação.'}
 
 const ERROR_ATTACHMENT_WERE_NOT_FORWARDED = {status: 400, message: 'Os anexos não foram encaminhados na requisição'}
 
 const ERROR_PUBLICATION_ID_NOT_FOUND = {status: 404, message: 'O id informado não exite no sistema'}
 
+const ERROR_PUBLICATION_NOT_FOUND = {status: 404, message: 'O id da publicação informado não exite no sistema'}
+
 const ERROR_INSERT_COMMENT = {status: 404, message: 'Não foi possível inserir o comentário.'}
 
 const ERROR_USER_ALREADY_LIKED = {status: 400, message: 'Usuário já curtiu está publicação.'}
+
+const ERROR_COMMENTARY_NOT_FOUND = {status: 400, message: 'Comentário não foi encontrado no nosso sistema'}
+
+const ERROR_COMMENTARY_RESPONSES_NOT_FOUND = {status: 400, message: 'Não existem respostas para este comentário'}
 
 /******************************** MENSAGENS DE SUCESSO **********************************************/
 const SUCCESS_CREATED_ITEM = {status: 201, message: 'Item criado com sucesso.'}
@@ -78,6 +86,8 @@ const SUCCESS_CATEGORY_FOUND = {status: 200, message: 'Tags encontradas com suce
 const SUCCESS_CATEGORIES_FOUND = {status: 200, message: 'Categorias encontradas com sucesso.'}
 
 const SUCCESS_USER_FOUND = {status: 200, message: 'Requisição bem secedida'}
+
+const SUCCESS_COMENTARY_RESPONSES_FOUND = {status: 200, message: 'Respostas de comentário encontradas com sucesso'}
 
 
 
@@ -117,5 +127,10 @@ module.exports = {
     ERROR_NOT_POSSIBLE_INSERT_LIKE,
     SUCCESS_LIKED_PUBLICATION,
     ERROR_INSERT_COMMENT,
-    ERROR_USER_ALREADY_LIKED
+    ERROR_USER_ALREADY_LIKED,
+    ERROR_NOT_POSSIBLE_INSERT_COMMENT,
+    ERROR_PUBLICATION_NOT_FOUND,
+    ERROR_COMMENTARY_NOT_FOUND,
+    ERROR_COMMENTARY_RESPONSES_NOT_FOUND,
+    SUCCESS_COMENTARY_RESPONSES_FOUND
 }

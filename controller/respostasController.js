@@ -13,7 +13,6 @@ const respostasModel = require('../model/respostasModel.js')
 const comentarioModel = require('../model/comentariosModel.js')
 const usuarioModel = require('../model/usuarioModel.js')
 
-
 const inserirResposta = async (dadosBody) => {
 
     if (dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario) ||
@@ -24,32 +23,44 @@ const inserirResposta = async (dadosBody) => {
         return message.ERROR_MISTAKE_IN_THE_FILDS
     } else {
 
-        let dadosInserirResposta = await respostasModel.inserirRespostaModel(dadosBody)
+        let usuario = await  usuarioModel.selectUserById(dadosBody.id_usuario)
 
-        if (dadosInserirResposta) {
-
-            let dadosResposta = await respostasModel.selectLastIdRespostaModel()
-
+        if (usuario.length) {
             let comentario = await comentarioModel.selectComentarioByIdModel(dadosBody.id_comentario)
 
-            let usuario = await usuarioModel.selectProfileByIdModel(dadosBody.id_usuario)
+            if (comentario) {
+                let dadosInserirResposta = await respostasModel.inserirRespostaModel(dadosBody)
 
-            let usuarioJson = {
-                nome_de_usuario: usuario[0].nome_de_usuario,
-                foto: usuario[0].foto
+                if (dadosInserirResposta) {
+
+                    let dadosResposta = await respostasModel.selectLastIdRespostaModel()
+
+                    let comentario = await comentarioModel.selectComentarioByIdModel(dadosBody.id_comentario)
+
+                    let usuario = await usuarioModel.selectProfileByIdModel(dadosBody.id_usuario)
+
+                    let usuarioJson = {
+                        nome_de_usuario: usuario[0].nome_de_usuario,
+                        foto: usuario[0].foto
+                    }
+
+                    let dadosRespostaJson = {}
+
+                    dadosRespostaJson.resposta = dadosResposta
+                    dadosRespostaJson.comentario = comentario
+                    dadosRespostaJson.usuario = usuarioJson
+                    dadosRespostaJson.message = 'Comentário inserido com sucesso'
+                    dadosRespostaJson.status = 201
+
+                    return dadosRespostaJson
+                } else {
+                    return message.ERROR_INTERNAL_SERVER
+                }
+            } else {
+                return message.ERROR_COMMENTARY_NOT_FOUND
             }
-
-            let dadosRespostaJson = {}
-
-            dadosRespostaJson.resposta = dadosResposta
-            dadosRespostaJson.comentario = comentario
-            dadosRespostaJson.usuario = usuarioJson
-            dadosRespostaJson.message = 'Comentário inserido com sucesso'
-            dadosRespostaJson.status = 201
-
-            return dadosRespostaJson
         } else {
-            return message.ERROR_INTERNAL_SERVER
+            return message.ERROR_USER_NOT_FOUND
         }
     }
 }
@@ -94,8 +105,40 @@ const deleteResposta = async (id_resposta) => {
     }
 }
 
+const selectRespostasByIdComentario = async (id_comentario) => {
+
+    if (id_comentario == '' || id_comentario == undefined || isNaN(id_comentario)) {
+        return message.ERROR_INVALID_ID
+    } else {
+        let comentario = await comentarioModel.selectComentarioByIdModel(id_comentario)
+
+        if (comentario) {
+            
+            let dadosRespostas = await respostasModel.selectAllRespostasByIdComentario(id_comentario)
+
+            if (dadosRespostas) {
+
+                let dadosRespostasJson = {}
+
+                dadosRespostasJson.message = message.SUCCESS_COMENTARY_RESPONSES_FOUND.message
+                dadosRespostasJson.status = message.SUCCESS_COMENTARY_RESPONSES_FOUND.status
+                dadosRespostasJson.respostas = dadosRespostas
+
+                return dadosRespostasJson
+            } else {
+                return message.ERROR_COMMENTARY_RESPONSES_NOT_FOUND
+            }
+
+            
+        } else {
+            return message.ERROR_COMMENTARY_NOT_FOUND
+        }
+    }
+}
+
 module.exports = {
     inserirResposta,
     selectAllRespostas,
-    deleteResposta
+    deleteResposta,
+    selectRespostasByIdComentario
 }
