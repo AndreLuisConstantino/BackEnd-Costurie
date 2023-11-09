@@ -40,5 +40,16 @@ describe('Teste de integração com a controller de usuário', () => {
     //     expect(response.body).toBeInstanceOf(Object)
     //  })
      
-     
+     test('Deve trocar a senha do usuário',async () => { 
+        const response = await app
+                                .put('/usuario/atualizar_senha')
+                                .send({
+                                    "id": 1,
+                                    "senha": "Teste@123"
+                                })
+
+        expect(response.status).toBe(200)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body.user.senha).toBe("Teste@123")
+      })
 })
