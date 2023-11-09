@@ -17,8 +17,7 @@ const {
     updateProfileTagLocality,
     updateTag,
     selectAllUsers,
-    selectAllUsuariosByTag,
-    registrarUsuario
+    selectAllUsuariosByTag
 } = require('../../controller/usuarioController.js')
 
 // const usuarioModel = require('../../model/usuarioModel.js')
@@ -327,10 +326,3 @@ describe('Selecionar todos os usuários pelas tags', () => {
         expect(res.status).toBe(200)
     })
 })
-
-// describe('Inserir um usuário', () => {  
-//     test('Deve inserir um usuário', async () => {
-      
-//     })
-    
-//  })

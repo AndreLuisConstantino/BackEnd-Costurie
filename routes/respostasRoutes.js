@@ -58,7 +58,7 @@ router.post('/respostas_comentario/inserir', verifyJWT, cors(), bodyParserJSON, 
 
         let dadosInserirRespostaComentario = await respostasController.inserirResposta(dadosBody)
 
-        // console.log(dadosInserirRespostaComentario);
+        console.log(dadosInserirRespostaComentario);
 
         if (dadosInserirRespostaComentario) {
             response.status(dadosInserirRespostaComentario.status)

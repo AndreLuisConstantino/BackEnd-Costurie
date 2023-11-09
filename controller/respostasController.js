@@ -15,6 +15,8 @@ const usuarioModel = require('../model/usuarioModel.js')
 
 const inserirResposta = async (dadosBody) => {
 
+    console.log(dadosBody);
+
     if (dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario) ||
         dadosBody.id_comentario == '' || dadosBody.id_comentario == undefined || isNaN(dadosBody.id_comentario)
     ) {
@@ -24,6 +26,8 @@ const inserirResposta = async (dadosBody) => {
     } else {
 
         let usuario = await  usuarioModel.selectUserById(dadosBody.id_usuario)
+
+        // console.log(usuario);w
 
         if (usuario.length) {
             let comentario = await comentarioModel.selectComentarioByIdModel(dadosBody.id_comentario)
@@ -115,6 +119,19 @@ const selectRespostasByIdComentario = async (id_comentario) => {
         if (comentario) {
             
             let dadosRespostas = await respostasModel.selectAllRespostasByIdComentario(id_comentario)
+
+            for (let i = 0; i < dadosRespostas.length; i++) {
+                let resposta = dadosRespostas[i]
+
+                let usuario = await usuarioModel.selectUserById(resposta.id_usuario)
+
+                let novoUsuarioJson = {}
+
+                novoUsuarioJson.nome_de_usuario = usuario[0].nome_de_usuario
+                novoUsuarioJson.foto = usuario[0].foto
+
+                resposta.usuario = novoUsuarioJson
+            }
 
             if (dadosRespostas) {
 
