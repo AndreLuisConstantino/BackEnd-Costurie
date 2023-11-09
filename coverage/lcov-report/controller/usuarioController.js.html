@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60.14% </span>
+                <span class="strong">61.24% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>169/281</span>
+                <span class='fraction'>177/289</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">59.85% </span>
+                <span class="strong">60.83% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>167/279</span>
+                <span class='fraction'>174/286</span>
             </div>
         
             
@@ -662,7 +662,28 @@
 <a name='L597'></a><a href='#L597'>597</a>
 <a name='L598'></a><a href='#L598'>598</a>
 <a name='L599'></a><a href='#L599'>599</a>
-<a name='L600'></a><a href='#L600'>600</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L600'></a><a href='#L600'>600</a>
+<a name='L601'></a><a href='#L601'>601</a>
+<a name='L602'></a><a href='#L602'>602</a>
+<a name='L603'></a><a href='#L603'>603</a>
+<a name='L604'></a><a href='#L604'>604</a>
+<a name='L605'></a><a href='#L605'>605</a>
+<a name='L606'></a><a href='#L606'>606</a>
+<a name='L607'></a><a href='#L607'>607</a>
+<a name='L608'></a><a href='#L608'>608</a>
+<a name='L609'></a><a href='#L609'>609</a>
+<a name='L610'></a><a href='#L610'>610</a>
+<a name='L611'></a><a href='#L611'>611</a>
+<a name='L612'></a><a href='#L612'>612</a>
+<a name='L613'></a><a href='#L613'>613</a>
+<a name='L614'></a><a href='#L614'>614</a>
+<a name='L615'></a><a href='#L615'>615</a>
+<a name='L616'></a><a href='#L616'>616</a>
+<a name='L617'></a><a href='#L617'>617</a>
+<a name='L618'></a><a href='#L618'>618</a>
+<a name='L619'></a><a href='#L619'>619</a>
+<a name='L620'></a><a href='#L620'>620</a>
+<a name='L621'></a><a href='#L621'>621</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -680,6 +701,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -950,6 +972,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1280,6 +1322,7 @@ const tagModel = require("../model/tagModel.js");
 const tagUsuarioModel = require("../model/tagUsuarioModel.js");
 // const localizacaoModel = require("../model/localizacaoModel.js");
 const publicacaoModel = require("../model/publicacaoModel.js");
+const anexosModel = require("../model/anexosModel.js");
 &nbsp;
 const insertUsuario = <span class="fstat-no" title="function not covered" >as</span>ync (dadosUsuario) =&gt; {
 <span class="cstat-no" title="statement not covered" >  if (</span>
@@ -1550,9 +1593,29 @@ const selectProfileById = async (id) =&gt; {
         //Colocar as publicações dentro de um array
         let publicacoesUsuario = await publicacaoModel.selectAllPublicationsByIdUsuario(dadosNovoUsuarioJson.id_usuario)
 &nbsp;
+        let publicacaoArray = []
+&nbsp;
+        // publicacoesUsuario.forEach(async (publicacao) =&gt; {
+        //   let anexosPublicacao = await anexosModel.selectAnexosByIdModel(publicacao.id)
+&nbsp;
+        //   publicacao.anexos = anexosPublicacao
+&nbsp;
+        //   publicacaoArray.push(publicacao)
+        // })
+&nbsp;
+        for (let i = 0; i &lt; publicacoesUsuario.length; i++) {
+          let publicacao = publicacoesUsuario[i]
+&nbsp;
+          let anexosPublicacao = await anexosModel.selectAnexosByIdModel(publicacao.id)
+&nbsp;
+          publicacao.anexos = anexosPublicacao
+&nbsp;
+          publicacaoArray.push(publicacao)
+        }
+&nbsp;
         if (publicacoesUsuario) {
           //Colocar todas as publicações de um JSON
-          dadosNovoUsuarioJson.publicacoes = publicacoesUsuario
+          dadosNovoUsuarioJson.publicacoes = publicacaoArray
         } else {
           dadosNovoUsuarioJson.publicacoes = 'O usuário não possui nenhuma publicação'
         }
@@ -1867,7 +1930,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-26T19:44:41.095Z
+                at 2023-11-09T19:42:51.910Z
             </div>
         <script src="../prettify.js"></script>
         <script>
