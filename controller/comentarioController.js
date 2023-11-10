@@ -68,11 +68,15 @@ const selectComentariosByIdPublicacao = async (id_publicacao) => {
             for (let i = 0; i < dadosComentarios.length; i++) {
                 let comentario = dadosComentarios[i]
 
+                // console.log(comentario);
+
                 let usuario = await usuarioModel.selectProfileByIdModel(comentario.id_usuario)
 
                 let respostas = await respostasModel.selectAllRespostasByIdComentario(comentario.id)
 
                 comentario.respostas = respostas
+
+                // console.log(usuario);
 
                 let usuarioJson = {
                     nome_de_usuario: usuario[0].nome_de_usuario,
