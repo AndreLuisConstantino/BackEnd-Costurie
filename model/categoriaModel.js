@@ -28,9 +28,9 @@ const selectAllCategorias = async () => {
 }
 
 const selectCategoriasByIdModel = async (id) => {
-    let sql = `select * from tbl_categoria where id = ${id}`
+    let sql = `select * from tbl_categoria where id = ?`
 
-    let response = await prisma.$queryRawUnsafe(sql);
+    let response = await prisma.$queryRawUnsafe(sql, id);
 
     if (response.length > 0) {
         return response;

@@ -16,13 +16,13 @@ const insertUsuarioModel = async (dadosUsuario) => {
         nome_de_usuario, 
         email, 
         senha) values (
-            '${dadosUsuario.nome_de_usuario}', 
-            '${dadosUsuario.email}', 
+            ?, 
+            ?, 
             '${dadosUsuario.senha}'
             );`
 
 
-    let resultStatus = await prisma.$executeRawUnsafe(sql)
+    let resultStatus = await prisma.$executeRawUnsafe(sql, dadosUsuario.nome_de_usuario, dadosUsuario.email, dadosUsuario.senha)
 
     if (resultStatus) {
         return true
@@ -51,9 +51,9 @@ const selectLastIDUsuarioModel = async () => {
 }
 
 const selectUserByLoginModel = async (dadosLogin) => {
-    let sql = `select tbl_usuario.id ,tbl_usuario.nome_de_usuario, tbl_usuario.email from tbl_usuario where tbl_usuario.email = '${dadosLogin.email}' and tbl_usuario.senha = '${dadosLogin.senha}'`
+    let sql = `select tbl_usuario.id ,tbl_usuario.nome_de_usuario, tbl_usuario.email from tbl_usuario where tbl_usuario.email = ? and tbl_usuario.senha = ?`
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, dadosLogin.email, dadosLogin.senha)
 
     if (response.length > 0) {
         return response

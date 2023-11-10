@@ -40,13 +40,13 @@ describe(`Testes de Insert Usuário`, () => {
 
 describe('Testes de Login', () => {
     test('Deve selecionar o usuário pelo login', async () => {
-        const usuarioLoginAcerto = { "email": "andredograu@gmail.com", "senha": "123456789" }
+        const usuarioLoginAcerto = { "email": "andredograu@gmail.com", "senha": "Teste@123" }
         const res = await selectUserByLogin(usuarioLoginAcerto)
         expect(res.status).toBe(res.status = 200)
     })
 
     test('Deve selecionar o usuário pelo login e fazer a validação do id_login', async () => {
-        const usuarioLoginAcerto = { "email": "andredograu@gmail.com", "senha": "123456789" }
+        const usuarioLoginAcerto = { "email": "andredograu@gmail.com", "senha": "Teste@123" }
         const res = await selectUserByLogin(usuarioLoginAcerto)
         const usuario = await selectProfileById(res.login.id)
         // console.log(usuario.usuario.id_usuario);
@@ -54,7 +54,7 @@ describe('Testes de Login', () => {
     })
 
     test('Deve dar erro nos valores do selecionar usuário pelo login', async () => {
-        const usuarioLoginErro = { "email": "", "senha": "123456789" }
+        const usuarioLoginErro = { "email": "", "senha": "Teste@123" }
 
         const res = await selectUserByLogin(usuarioLoginErro)
         expect(res.status).toBe(400)

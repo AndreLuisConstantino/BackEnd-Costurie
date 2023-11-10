@@ -50,9 +50,13 @@ const verifyJWT = async (request, response, next) => {
         return response.status(401).end()
     }
 }
-
+ 
 //Import do arquivo de configuração das variáveis, constantes e funções globais
 var message = require('../controller/modulo/config.js')
+
+router.get('/', (request, response) => {
+    response.send('Hello Worde')
+})
 
 router.post('/usuario/cadastro', cors(), bodyParserJSON, async (request, response) => {
     //Recebe o content-type da requisição
@@ -84,6 +88,7 @@ router.post('/usuario/login', cors(), bodyParserJSON, async (request, response) 
         let dadosLogin = request.body
 
         let dadosResponseLogin = await usuarioController.selectUserByLogin(dadosLogin)
+
         if (dadosResponseLogin) {
             response.status(dadosResponseLogin.status)
             response.json(dadosResponseLogin)

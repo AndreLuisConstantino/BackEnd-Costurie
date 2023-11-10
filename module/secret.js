@@ -34,13 +34,25 @@ smtp.use('compile', hbs({
         extName: ".hbs",
         partialsDir: path.resolve('./views'),
         defaultLayout: false
-      },
-      viewPath: path.resolve('./views'),
-      extName: ".hbs"
+    },
+    viewPath: path.resolve('./views'),
+    extName: ".hbs"
 }))
+
+const verifySqlInjection = (dadosBody) => {
+    Object.keys(dadosBody).forEach((chave) => {
+        if (typeof dadosBody[chave] === 'string') {
+            if (dadosBody[chave].includes("'")) {
+                dadosBody[chave] = dadosBody[chave].replace("'", "");
+            }
+        }
+    });
+    return dadosBody;
+};
 
 module.exports = {
     SECRET,
     EXPIRE,
-    smtp
+    smtp, 
+    verifySqlInjection
 }

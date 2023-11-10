@@ -8,8 +8,11 @@
 //Import do arquivo de configuração das variáveis, constantes e funções globais
 var message = require("../controller/modulo/config.js");
 
+//Import da secret.js
+const secret = require('../module/secret.js')
+
 //Import JWT
-const jwt = require("../middleware/middlewareJWT.js");
+const jwt = require("../middleware/middlewareJWT.js")
 
 /* Imports Models */
 const usuarioModel = require("../model/usuarioModel.js");
@@ -18,48 +21,6 @@ const tagUsuarioModel = require("../model/tagUsuarioModel.js");
 // const localizacaoModel = require("../model/localizacaoModel.js");
 const publicacaoModel = require("../model/publicacaoModel.js");
 const anexosModel = require("../model/anexosModel.js");
-
-const insertUsuario = async (dadosUsuario) => {
-  if (
-    dadosUsuario.nome_de_usuario == "" ||
-    dadosUsuario.nome_de_usuario == undefined ||
-    dadosUsuario.nome_de_usuario.lenght > 100 ||
-    dadosUsuario.email == "" ||
-    dadosUsuario.email == undefined ||
-    dadosUsuario.email.length > 255 ||
-    dadosUsuario.senha == "" ||
-    dadosUsuario.senha == undefined ||
-    dadosUsuario.senha.length > 515
-  ) {
-    return message.ERROR_REQUIRED_FIELDS;
-  } else {
-    let resultEmail = await usuarioModel.selectUserByEmailModel(dadosUsuario.email);
-
-    if (resultEmail.length) {
-      return message.ERROR_EMAIL_ALREADY_EXISTS;
-    } else {
-      let resultDadosUsuario = await usuarioModel.insertUsuarioModel(dadosUsuario);
-
-      //Valida se o BD inseriu corretamente os dados
-      if (resultDadosUsuario) {
-        //Chama a função que vai encontrar o ID gerado após o inser
-        let novoUsuario = await usuarioModel.selectLastIDUsuarioModel();
-
-        //Gera o token pelo jwt
-        let tokenUser = await jwt.createJWT(novoUsuario[0].id);
-
-        let dadosUsuarioJson = {};
-        dadosUsuarioJson.status = message.SUCCESS_CREATED_ITEM.status;
-        dadosUsuarioJson.aluno = novoUsuario[0];
-        dadosUsuarioJson.token = tokenUser
-
-        return dadosUsuarioJson; //StatusCode 201
-      } else {
-        return message.ERROR_INTERNAL_SERVER; //StatusCode 500
-      }
-    }
-  }
-};
 
 const selectUserByLogin = async (dadosLogin) => {
   if (
@@ -565,8 +526,6 @@ const registrarUsuario = async (dadosBody) => {
 
   let usuarioExistenteEmail = await usuarioModel.selectUserEmailModel(dadosBody.email)
   let usuarioExistenteTag = await usuarioModel.selectUserByTagNameModel(dadosBody.nome_de_usuario)
-  // console.log(usuarioExistenteTag);
-
 
   if (dadosBody.nome_de_usuario == '' || dadosBody.nome_de_usuario == undefined || !isNaN(dadosBody.nome_de_usuario) || dadosBody.nome_de_usuario.length > 100 ||
     dadosBody.email == '' || dadosBody.email == undefined || !isNaN(dadosBody.email) || dadosBody.email.length > 255 ||
@@ -602,7 +561,6 @@ const registrarUsuario = async (dadosBody) => {
 }
 
 module.exports = {
-  insertUsuario,
   selectUserByLogin,
   getUserByEmail,
   updateUserTokenAndExpires,
