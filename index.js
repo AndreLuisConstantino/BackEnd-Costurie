@@ -11,7 +11,7 @@
 const DB_USER = 'muryllovieira59'
 const DB_PASSWORD = '9BEzjV00xrXvFv65'
 const STRING_CONNECTION = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@chat-tcc-costurie.lenlxrh.mongodb.net/?retryWrites=true&w=majority`
-
+//teste
 
 /* 
 

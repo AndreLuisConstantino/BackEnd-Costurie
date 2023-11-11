@@ -66,6 +66,8 @@ const selectComentariosByIdPublicacao = async (id_publicacao) => {
             let dadosComentarios = await comentarioModel.selectComentariosByIdPublicacaoModel(id_publicacao)
 
             for (let i = 0; i < dadosComentarios.length; i++) {
+                let arrayRespostas = []
+
                 let comentario = dadosComentarios[i]
 
                 // console.log(comentario);
@@ -74,7 +76,26 @@ const selectComentariosByIdPublicacao = async (id_publicacao) => {
 
                 let respostas = await respostasModel.selectAllRespostasByIdComentario(comentario.id)
 
-                comentario.respostas = respostas
+                for (let i = 0; i < respostas.length; i++) {
+                    let resposta = respostas[i]
+
+                    let usuarioResposta = await usuarioModel.selectProfileByIdModel(resposta.id_usuario)
+
+                    // console.log(usuarioResposta);
+
+                    let usuarioRespostaJson = {
+                        nome_de_usuario: usuarioResposta[0].nome_de_usuario,
+                        foto: usuarioResposta[0].foto
+                    }
+
+                    resposta.usuario = usuarioRespostaJson
+
+                    arrayRespostas.push(resposta)
+                }
+
+                // console.log(respostas);
+
+                comentario.respostas = arrayRespostas
 
                 // console.log(usuario);
 
