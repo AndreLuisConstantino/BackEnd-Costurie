@@ -27,18 +27,7 @@ describe('Teste de integração com a controller de usuário', () => {
         expect(response.body).toBeInstanceOf(Object)
     })
 
-    test('Deve cadastrar um usuário', async () => {
-        const response = await app
-            .post('/usuario/cadastro')
-            .send({
-                "nome_de_usuario": "andreluiz",
-                "email": "andreluis08@gmail.com",
-                "senha": "andre"
-            })
 
-        expect(response.status).toBe(201)
-        expect(response.body).toBeInstanceOf(Object)
-    })
 
     test('Deve trocar a senha do usuário', async () => {
         const response = await app

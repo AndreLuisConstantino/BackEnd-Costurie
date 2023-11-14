@@ -80,10 +80,8 @@ mongoose
         STRING_CONNECTION
     )
     .then(() => {
-        app.listen(8080, function () {
-            console.log('Servidor aguardando requisições na porta 8080')
+        app.listen(3000, function () {
+            console.log('Servidor aguardando requisições na porta 3000')
         })        
     })
     .catch((err) => console.log(err))
-
-app.listen(3000, () => console.log('Servidor rodando na porta 3000'))

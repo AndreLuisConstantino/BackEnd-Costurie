@@ -70,34 +70,37 @@ const selectComentariosByIdPublicacao = async (id_publicacao) => {
 
                 let comentario = dadosComentarios[i]
 
-                // console.log(comentario);
+                // console.log(comentario.id_usuario);
 
-                let usuario = await usuarioModel.selectProfileByIdModel(comentario.id_usuario)
-
-                let respostas = await respostasModel.selectAllRespostasByIdComentario(comentario.id)
-
-                for (let i = 0; i < respostas.length; i++) {
-                    let resposta = respostas[i]
-
-                    let usuarioResposta = await usuarioModel.selectProfileByIdModel(resposta.id_usuario)
-
-                    // console.log(usuarioResposta);
-
-                    let usuarioRespostaJson = {
-                        nome_de_usuario: usuarioResposta[0].nome_de_usuario,
-                        foto: usuarioResposta[0].foto
-                    }
-
-                    resposta.usuario = usuarioRespostaJson
-
-                    arrayRespostas.push(resposta)
-                }
-
-                // console.log(respostas);
-
-                comentario.respostas = arrayRespostas
+                let usuario = await usuarioModel.selectUserByIdModel(comentario.id_usuario)
 
                 // console.log(usuario);
+
+                let respostas = await respostasModel.selectAllRespostasByIdComentario(comentario.id)
+                // console.log(respostas);
+
+                if (respostas) {
+                    for (let i = 0; i < respostas.length; i++) {
+                        let resposta = respostas[i]
+
+                        let usuarioResposta = await usuarioModel.selectUserByIdModel(resposta.id_usuario)
+
+                        // console.log(resposta);
+
+                        let usuarioRespostaJson = {
+                            nome_de_usuario: usuarioResposta[0].nome_de_usuario,
+                            foto: usuarioResposta[0].foto
+                        }
+
+                        resposta.usuario = usuarioRespostaJson
+
+                        arrayRespostas.push(resposta)
+
+                        comentario.respostas = arrayRespostas
+                    }
+                } else {
+                    comentario.respostas = false
+                }
 
                 let usuarioJson = {
                     nome_de_usuario: usuario[0].nome_de_usuario,

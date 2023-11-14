@@ -251,14 +251,6 @@ const selectProfileById = async (id) => {
 
         let publicacaoArray = []
 
-        // publicacoesUsuario.forEach(async (publicacao) => {
-        //   let anexosPublicacao = await anexosModel.selectAnexosByIdModel(publicacao.id)
-
-        //   publicacao.anexos = anexosPublicacao
-
-        //   publicacaoArray.push(publicacao)
-        // })
-
         for (let i = 0; i < publicacoesUsuario.length; i++) {
           let publicacao = publicacoesUsuario[i]
 
@@ -301,6 +293,30 @@ const selectProfileById = async (id) => {
       // console.log('test3');
       let dadosUsuario = await usuarioModel.selectUserAndLocalityById(id)
       // console.log(dadosUsuario);
+
+      //Colocar as publicações dentro de um array
+      let publicacoesUsuario = await publicacaoModel.selectAllPublicationsByIdUsuario(dadosUsuario[0].id_usuario)
+
+      let publicacaoArray = []
+
+      for (let i = 0; i < publicacoesUsuario.length; i++) {
+        let publicacao = publicacoesUsuario[i]
+
+        let anexosPublicacao = await anexosModel.selectAnexosByIdModel(publicacao.id)
+
+        publicacao.anexos = anexosPublicacao
+
+        publicacaoArray.push(publicacao)
+      }
+
+      if (publicacoesUsuario) {
+        //Colocar todas as publicações de um JSON
+        dadosUsuario[0].publicacoes = publicacaoArray
+      } else {
+        dadosUsuario[0].publicacoes = 'O usuário não possui nenhuma publicação'
+      }
+
+      dadosUsuario[0].tags = []
 
       dadosUsuarioJson.usuario = dadosUsuario[0]
       if (dadosUsuario) {
