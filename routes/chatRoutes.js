@@ -120,6 +120,68 @@ const getChat = async (idChat) => {
     }
 }
 
+const getListContacts = async (idUsuario) => {
+    try {
+        const result = await Chat.find({ 'users.id': parseInt(idUsuario)});
+
+        if (result) {
+            let listUsers = []
+
+            for (let i = 0; i < result.length; i++) {
+
+                const user = result[i];
+
+                const newUser = {
+                    id_chat: user._id.toString(),
+                    users: user.users,
+                    isGroup: user.isGroup,
+                    data_criacao: user.data_criacao,
+                    hora_criacao: user.hora_criacao
+                }
+
+                listUsers.push(newUser)
+            }
+
+            return {users: listUsers}
+        } else {
+            return config.ERROR_CHAT_NOT_FOUND
+        }
+    } catch (err) {
+        return config.ERROR_INTERNAL_SERVER
+    }
+}
+
+const insertChat = async (users) => {
+    if (
+        !users || users.length == 0 || users == undefined
+    ) {
+        response.status(config.ERROR_REQUIRE_FIELDS.status).json(config.ERROR_REQUIRE_FIELDS)
+    } else {
+        const data_criacao = moment().format("YYYY-MM-DD")
+        const hora_criacao = moment().format("HH:mm:ss")
+
+        const chat = {
+            users,
+            data_criacao,
+            hora_criacao
+        }
+
+        try {
+            await Chat.create(chat)
+
+            const lastChat = await Chat.find({}).sort({ _id: -1 }).limit(1)
+
+            const lastId = lastChat[0]._id.toString()
+
+            const insertSQL = await createChat(users, lastId)
+
+            return insertSQL
+        } catch (error) {
+            return config.ERROR_INTERNAL_SERVER
+        }
+    }
+}
+
 router.get('/v1/chat/:idChat', cors(), async (request, response) => {
     const idChat = request.params.idChat;
 
