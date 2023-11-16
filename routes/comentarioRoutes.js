@@ -58,6 +58,8 @@ router.post('/comentario/inserir', verifyJWT, cors(), bodyParserJSON, async (req
 
         let dadosInserirComentario = await comentarioController.insertComentario(dadosBody)
 
+        // console.log(dadosInserirComentario);
+
         if (dadosInserirComentario) {
             response.status(dadosInserirComentario.status)
             response.json(dadosInserirComentario)

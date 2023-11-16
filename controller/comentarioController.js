@@ -24,7 +24,7 @@ const insertComentario = async (dadosBody) => {
         return message.ERROR_REQUIRED_FIELDS
     } else {
 
-        let usuario = await usuarioModel.selectProfileByIdModel(dadosBody.id_usuario)
+        let usuario = await usuarioModel.selectUserById(dadosBody.id_usuario)
 
         if (usuario) {
             let publicacao = await publicacaoModel.selectPublicacaoByIdModel(dadosBody.id_publicacao)
@@ -99,7 +99,7 @@ const selectComentariosByIdPublicacao = async (id_publicacao) => {
                         comentario.respostas = arrayRespostas
                     }
                 } else {
-                    comentario.respostas = false
+                    comentario.respostas = []
                 }
 
                 let usuarioJson = {

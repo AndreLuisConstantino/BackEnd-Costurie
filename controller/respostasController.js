@@ -15,7 +15,7 @@ const usuarioModel = require('../model/usuarioModel.js')
 
 const inserirResposta = async (dadosBody) => {
 
-    console.log(dadosBody);
+    // console.log(dadosBody);
 
     if (dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario) ||
         dadosBody.id_comentario == '' || dadosBody.id_comentario == undefined || isNaN(dadosBody.id_comentario)
@@ -41,7 +41,9 @@ const inserirResposta = async (dadosBody) => {
 
                     let comentario = await comentarioModel.selectComentarioByIdModel(dadosBody.id_comentario)
 
-                    let usuario = await usuarioModel.selectProfileByIdModel(dadosBody.id_usuario)
+                    let usuario = await usuarioModel.selectUserById(dadosBody.id_usuario)
+
+                    // console.log(usuario);
 
                     let usuarioJson = {
                         nome_de_usuario: usuario[0].nome_de_usuario,
@@ -116,6 +118,8 @@ const selectRespostasByIdComentario = async (id_comentario) => {
     } else {
         let comentario = await comentarioModel.selectComentarioByIdModel(id_comentario)
 
+        console.log(comentario);
+
         if (comentario) {
             
             let dadosRespostas = await respostasModel.selectAllRespostasByIdComentario(id_comentario)
@@ -140,6 +144,8 @@ const selectRespostasByIdComentario = async (id_comentario) => {
                 dadosRespostasJson.message = message.SUCCESS_COMENTARY_RESPONSES_FOUND.message
                 dadosRespostasJson.status = message.SUCCESS_COMENTARY_RESPONSES_FOUND.status
                 dadosRespostasJson.respostas = dadosRespostas
+
+                console.log(dadosRespostasJson);
 
                 return dadosRespostasJson
             } else {

@@ -207,134 +207,17 @@ const selectProfileById = async (id) => {
 
     let usuarioPossuiTag = await tagUsuarioModel.selectAllTagsWithUserIdModel(id)
 
-    // console.log(usuarioPossuiTag); 
+    console.log(usuarioPossuiTag); 
 
     if (usuarioPossuiTag.length) {
-      // console.log('teste 1');
-      let dadosPerfilUsuario = await usuarioModel.selectProfileByIdModel(id)
 
-      // console.log(dadosPerfilUsuario);
+      let usuario = await usuarioModel.selectUserById(id)
 
-      if (dadosPerfilUsuario) {
-        dadosPerfilUsuario.forEach((usuario) => {
+      usuarioPossuiTag.forEach(async (tagUsuario) => {
 
-          let dadosTagJson = {}
-
-          dadosTagJson.id_tag = usuario.id_tag
-          dadosTagJson.nome_tag = usuario.nome_tag
-          dadosTagJson.imagem_tag = usuario.imagem_tag
-          dadosTagJson.id_categoria = usuario.id_categoria
-          dadosTagJson.nome_categoria = usuario.nome_categoria
-
-          tagArray.push(dadosTagJson)
-        })
-
-        dadosPerfilUsuario.forEach((usuario) => {
-          dadosNovoUsuarioJson.id_usuario = usuario.id_usuario
-          dadosNovoUsuarioJson.nome = usuario.nome
-          dadosNovoUsuarioJson.descricao = usuario.descricao
-          dadosNovoUsuarioJson.nome_de_usuario = usuario.nome_de_usuario
-          dadosNovoUsuarioJson.foto = usuario.foto
-          dadosNovoUsuarioJson.cidade = usuario.cidade
-          dadosNovoUsuarioJson.estado = usuario.estado
-          dadosNovoUsuarioJson.bairro = usuario.bairro
-          dadosNovoUsuarioJson.email = usuario.email
-          dadosNovoUsuarioJson.senha = usuario.senha
-
-          dadosNovoUsuarioJson.id_localizacao = usuario.id_localizacao
-        })
-
-        // console.log(dadosNovoUsuarioJson);
-
-        //Colocar as publicações dentro de um array
-        let publicacoesUsuario = await publicacaoModel.selectAllPublicationsByIdUsuario(dadosNovoUsuarioJson.id_usuario)
-
-        let publicacaoArray = []
-
-        for (let i = 0; i < publicacoesUsuario.length; i++) {
-          let publicacao = publicacoesUsuario[i]
-
-          let anexosPublicacao = await anexosModel.selectAnexosByIdModel(publicacao.id)
-
-          publicacao.anexos = anexosPublicacao
-
-          publicacaoArray.push(publicacao)
-        }
-
-        if (publicacoesUsuario) {
-          //Colocar todas as publicações de um JSON
-          dadosNovoUsuarioJson.publicacoes = publicacaoArray
-        } else {
-          dadosNovoUsuarioJson.publicacoes = 'O usuário não possui nenhuma publicação'
-        }
-
-        //Colocar todas as tags dentro de um JSON
-        dadosNovoUsuarioJson.tags = tagArray
-
-        //Colocar o usuário dentro do JSON
-        dadosUsuarioJson.usuario = dadosNovoUsuarioJson
-
-        if (dadosPerfilUsuario) {
-          dadosUsuarioJson.status = 200
-          dadosUsuarioJson.message = 'Usuário encontrado com sucesso'
-
-          return dadosUsuarioJson
-        } else {
-          dadosUsuarioJson.message = 'Usuário não encontrado em nosso sistema'
-          dadosUsuarioJson.status = 404
-
-          return dadosUsuarioJson
-        }
-      } else {
-        // console.log('teste 2');
-        return message.ERROR_INTERNAL_SERVER
-      }
-    } else {
-      // console.log('test3');
-      let dadosUsuario = await usuarioModel.selectUserAndLocalityById(id)
-      // console.log(dadosUsuario);
-
-      //Colocar as publicações dentro de um array
-      let publicacoesUsuario = await publicacaoModel.selectAllPublicationsByIdUsuario(dadosUsuario[0].id_usuario)
-
-      let publicacaoArray = []
-
-      for (let i = 0; i < publicacoesUsuario.length; i++) {
-        let publicacao = publicacoesUsuario[i]
-
-        let anexosPublicacao = await anexosModel.selectAnexosByIdModel(publicacao.id)
-
-        publicacao.anexos = anexosPublicacao
-
-        publicacaoArray.push(publicacao)
-      }
-
-      if (publicacoesUsuario) {
-        //Colocar todas as publicações de um JSON
-        dadosUsuario[0].publicacoes = publicacaoArray
-      } else {
-        dadosUsuario[0].publicacoes = 'O usuário não possui nenhuma publicação'
-      }
-
-      dadosUsuario[0].tags = []
-
-      dadosUsuarioJson.usuario = dadosUsuario[0]
-      if (dadosUsuario) {
-
-        dadosUsuarioJson.status = 200
-        dadosUsuarioJson.message = 'Usuário encontrado com sucesso'
-
-        // console.log(dadosUsuarioJson);
-
-        return dadosUsuarioJson
-      } else {
-        dadosUsuarioJson.message = 'Usuário não encontrado em nosso sistema'
-        dadosUsuarioJson.status = 404
-
-        return dadosUsuarioJson
-      }
+        // let tag = await tagUsuarioModel.
+      })
     }
-
   }
 }
 
@@ -491,19 +374,41 @@ const selectAllUsuariosByTag = async (tag) => {
 
     let dadosUsuarios = await tagUsuarioModel.selectAllUsuariosByTag(tag)
 
+    // console.log(dadosUsuarios);
+
     if (dadosUsuarios) {
 
       for (let i = 0; i < dadosUsuarios.length; i++) {
         let usuarioIndex = dadosUsuarios[i]
 
+        // console.log(usuarioIndex);
+
         let usuario = await usuarioModel.selectUserByIdModel(usuarioIndex.id_usuario)
+
+        // console.log(usuario);
 
         usuariosArray.push(usuario[0])
       }
 
+      // console.log(usuariosArray);  
+
+      for (let i = 0; i < usuariosArray.length; i++) {
+        let elemento = usuariosArray[i]
+
+        // console.log(elemento);
+
+        if (elemento == undefined || elemento == null) {
+          usuariosArray.splice(i, 1)
+        }
+      }
+
+      // console.log(usuariosArray);
+
       dadosUsuariosJson.usuarios = usuariosArray
       dadosUsuariosJson.message = message.SUCCESS_USER_FOUND.message
       dadosUsuariosJson.status = message.SUCCESS_USER_FOUND.status
+
+      // console.log(dadosUsuariosJson);
 
       return dadosUsuariosJson
     } else {
@@ -591,4 +496,4 @@ module.exports = {
   deleteUserById,
   registrarUsuario,
   updateTag
-};
+}
