@@ -18,6 +18,7 @@ const jwt = require("../middleware/middlewareJWT.js")
 const usuarioModel = require("../model/usuarioModel.js");
 const tagModel = require("../model/tagModel.js");
 const tagUsuarioModel = require("../model/tagUsuarioModel.js");
+const localizacaoModel = require("../model/localizacaoModel.js")
 // const localizacaoModel = require("../model/localizacaoModel.js");
 const publicacaoModel = require("../model/publicacaoModel.js");
 const anexosModel = require("../model/anexosModel.js");
@@ -198,26 +199,87 @@ const selectProfileById = async (id) => {
   // console.log(id);
 
   let dadosUsuarioJson = {}
-  let dadosNovoUsuarioJson = {}
   let tagArray = []
 
   if (id == '' || id == undefined || isNaN(id)) {
     return message.ERROR_INVALID_ID
   } else {
 
-    let usuarioPossuiTag = await tagUsuarioModel.selectAllTagsWithUserIdModel(id)
+    let usuario = await usuarioModel.selectUserById(id)
 
-    console.log(usuarioPossuiTag); 
+    console.log(usuario[0]);
 
-    if (usuarioPossuiTag.length) {
+    if (usuario.length) {
 
-      let usuario = await usuarioModel.selectUserById(id)
+      usuario[0].id_usuario = usuario[0].id
+      
+      delete usuario[0].id
 
-      usuarioPossuiTag.forEach(async (tagUsuario) => {
+      // console.log(usuario[0]);
 
-        // let tag = await tagUsuarioModel.
-      })
+      let usuarioPossuiTag = await tagUsuarioModel.selectAllTagsWithUserIdModel(id)
+
+      if (usuarioPossuiTag.length) {
+        for (let i = 0; i < usuarioPossuiTag.length; i++) {
+          let tagUsuario = usuarioPossuiTag[i]
+
+          let tag = await tagModel.selectTagByIdModel(tagUsuario.id_tag)
+
+          tagArray.push(tag[0])
+        }
+
+        usuario[0].tags = tagArray
+      } else {
+        usuario[0].tags = []
+      }
+
+      if (usuario[0].id_localizacao == null) {
+        usuario[0].id_localizacao = false
+        usuario[0].localizacao = []
+      } else {
+        let localizacaoUsuario = await localizacaoModel.selectLocationByIdSemIdNoRetorno(usuario[0].id_usuario)
+        usuario[0].localizacao = localizacaoUsuario[0]
+      }
+
+      // console.log(usuario[0].id_usuario);
+
+      let publicacoesUsuario = await publicacaoModel.selectAllPublicationsByIdUsuario(usuario[0].id_usuario)
+
+      let publicacaoArray = []
+
+      if (publicacoesUsuario.length) {
+        for (let i = 0; i < publicacoesUsuario.length; i++) {
+
+          let publicacao = publicacoesUsuario[i]
+
+          let anexosPublicacao = await anexosModel.selectAnexosByIdModel(publicacao.id)
+
+          publicacao.anexos = anexosPublicacao
+
+          publicacaoArray.push(publicacao)
+        }
+
+        usuario[0].publicacoes = publicacaoArray
+      } else {
+        usuario[0].publicacoes = []
+      }
+
+      if (usuario) {
+        let dadosUsuarioJson = {}
+
+        dadosUsuarioJson.usuario = usuario[0]
+        dadosUsuarioJson.message = 'Usuário encontrado com sucesso'
+        dadosUsuarioJson.status = 200
+
+        return dadosUsuarioJson
+      } else {
+        return message.ERROR_INTERNAL_SERVER
+      }
+
+    } else {
+      return message.ERROR_USER_NOT_FOUND
     }
+
   }
 }
 
