@@ -207,7 +207,7 @@ const selectProfileById = async (id) => {
 
     let usuario = await usuarioModel.selectUserById(id)
 
-    console.log(usuario[0]);
+    // console.log(usuario[0]);
 
     if (usuario.length) {
 

@@ -171,7 +171,7 @@ const selectPublicacaoById = async (id_publicacao) => {
 
         // console.log(dadosPublicacao);
 
-        let usuario = await usuarioModel.selectUserByIdModel(dadosPublicacao[0].id_usuario)
+        let usuario = await usuarioModel.selectUserById(dadosPublicacao[0].id_usuario)
 
         let anexos = await anexosModel.selectAnexosByIdModel(dadosPublicacao[0].id)
 
