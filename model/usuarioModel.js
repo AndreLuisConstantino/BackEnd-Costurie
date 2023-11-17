@@ -77,6 +77,17 @@ const selectUserByEmailModel = async (email) => {
     }
 }
 
+const selectUserByPasswordModel = async (senha) => {
+    let sql = `select tbl_usuario.id, tbl_usuario.nome_de_usuario, tbl_usuario.senha from tbl_usuario where tbl_usuario.senha = ?;`
+
+    let response = await prisma.$queryRawUnsafe(sql, senha)
+    if (response.length > 0) {
+        return response
+    } else {
+        return false
+    }
+}
+
 const selectUserByIdModel = async (id) => {
     // console.log(id);
     let sql = `select
@@ -338,5 +349,6 @@ module.exports = {
     selectUserAndLocalityById,
     selectUserEmailModel,
     selectUserByTagNameModel,
-    selectUserById
+    selectUserById,
+    selectUserByPasswordModel
 }

@@ -21,10 +21,9 @@ const alterarEmail = async (dadosBody) => {
     } else if (dadosBody.email == '' || dadosBody.email == undefined || dadosBody.email.length > 255) {
         return message.ERROR_REQUIRED_FIELDS
     } else {
+        let updateEmail = await configuracaoModel.updateEmailModel(dadosBody)
 
-        try {
-            await configuracaoModel.updateEmailModel(dadosBody)
-
+        if (updateEmail) {
             let novoEmail = await usuarioModel.selectUserByEmailModel(dadosBody)
 
             let dadosUpdateEmailJson = {}
@@ -34,13 +33,44 @@ const alterarEmail = async (dadosBody) => {
             dadosUpdateEmailJson.status = message.SUCCESS_UPDATED_EMAIL.status
 
             return dadosUpdateEmailJson
-
-        } catch (err) {
-            return message.ERROR_UNABLE_TO_UPDATE
+        } else {
+            return message.ERROR_UPDATE_PASSWORD
         }
     }
 }
 
+const alterarSenha = async (dadosBody) => {
+    // console.log(dadosBody);
+    if (dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario)) {
+        // console.log('testeMonstro');
+        return message.ERROR_INVALID_ID
+    } else if (dadosBody.senha == '' || dadosBody.senha == undefined || dadosBody.senha.length > 515) {
+        // console.log('testeMonstro');
+        return message.ERROR_REQUIRED_FIELDS
+    } else {
+
+        // console.log(dadosBody);
+        let updatePassword = await configuracaoModel.updateSenhaModel(dadosBody)
+
+        if (updatePassword) {
+            let novaSenha = await usuarioModel.selectUserByPasswordModel(dadosBody.senha)
+
+            let dadosUpdateSenhaJson = {}
+
+            dadosUpdateSenhaJson.nova_senha = novaSenha[0]
+            dadosUpdateSenhaJson.message = message.SUCCESS_UPDATED_PASSWORD.message
+            dadosUpdateSenhaJson.status = message.SUCCESS_UPDATED_PASSWORD.status
+
+            return dadosUpdateSenhaJson
+        } else {
+            return message.ERROR_UPDATE_PASSWORD
+        }
+
+    }
+    // console.log(dadosBody);
+}
+
 module.exports = {
-    alterarEmail
+    alterarEmail,
+    alterarSenha
 }

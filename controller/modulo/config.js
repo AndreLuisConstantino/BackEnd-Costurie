@@ -70,6 +70,8 @@ const ERROR_COMMENTARY_NOT_FOUND = {status: 400, message: 'Comentário não foi 
 
 const ERROR_COMMENTARY_RESPONSES_NOT_FOUND = {status: 400, message: 'Não existem respostas para este comentário'}
 
+const ERROR_UPDATE_PASSWORD = {status: 400, message: 'Não existem respostas para este comentário'}
+
 /******************************** MENSAGENS DE SUCESSO **********************************************/
 const SUCCESS_CREATED_ITEM = {status: 201, message: 'Item criado com sucesso.'}
 
@@ -84,6 +86,8 @@ const SUCCES_REQUEST = {status: 200, message: 'Requisição bem secedida'}
 const SUCCESS_EMAIL_FOUND = {status: 200, message: 'Email encontrado com sucesso.'}
 
 const SUCCESS_UPDATED_EMAIL = {status: 200, message: 'Email atualizado com sucesso.'}
+
+const SUCCESS_UPDATED_PASSWORD = {status: 200, message: 'Senha atualizado com sucesso.'}
 
 const SUCCESS_CATEGORY_FOUND = {status: 200, message: 'Tags encontradas com sucesso'}
 
@@ -138,5 +142,7 @@ module.exports = {
     ERROR_COMMENTARY_RESPONSES_NOT_FOUND,
     SUCCESS_COMENTARY_RESPONSES_FOUND,
     ERROR_UNABLE_TO_UPDATE_EMAIL,
-    SUCCESS_UPDATED_EMAIL
+    SUCCESS_UPDATED_EMAIL,
+    SUCCESS_UPDATED_PASSWORD,
+    ERROR_UPDATE_PASSWORD
 }

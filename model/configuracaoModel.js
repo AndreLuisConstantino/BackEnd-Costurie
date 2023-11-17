@@ -11,19 +11,36 @@ var { PrismaClient } = require("@prisma/client");
 var prisma = new PrismaClient();
 
 const updateEmailModel = async (dadosBody) => {
-        //Script sql para atualizar os dados no BD
-        let sql = `update tbl_usuario set email = ? where id = ?;`
+    //Script sql para atualizar os dados no BD
+    let sql = `update tbl_usuario set email = ? where id = ?;`
 
-        //Executa o script no BD
-        let resultStatus = await prisma.$executeRawUnsafe(sql, dadosBody.email, dadosBody.id_usuario)
-    
-        if (resultStatus) {
-            return true
-        } else {
-            return false
-        }
+    //Executa o script no BD
+    let resultStatus = await prisma.$executeRawUnsafe(sql, dadosBody.email, dadosBody.id_usuario)
+
+    if (resultStatus) {
+        return true
+    } else {
+        return false
+    }
+}
+
+const updateSenhaModel = async (dadosBody) => {
+    // console.log(dadosBody);
+
+    //Script sql para atualizar os dados no BD
+    let sql = `update tbl_usuario set senha = ? where id = ?;`
+
+    //Executa o script no BD
+    let resultStatus = await prisma.$executeRawUnsafe(sql, dadosBody.senha, dadosBody.id_usuario)
+
+    if (resultStatus) {
+        return true
+    } else {
+        return false
+    }
 }
 
 module.exports = {
-    updateEmailModel
+    updateEmailModel,
+    updateSenhaModel
 }
