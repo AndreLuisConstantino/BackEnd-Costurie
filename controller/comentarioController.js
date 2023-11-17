@@ -72,7 +72,7 @@ const selectComentariosByIdPublicacao = async (id_publicacao) => {
 
                 // console.log(comentario.id_usuario);
 
-                let usuario = await usuarioModel.selectUserByIdModel(comentario.id_usuario)
+                let usuario = await usuarioModel.selectUserById(comentario.id_usuario)
 
                 // console.log(usuario);
 

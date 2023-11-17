@@ -30,6 +30,8 @@ const ERROR_INVALID_WEB_TOKEN = {status: 401, message: 'O webtoken encaminhado n
 
 const ERROR_UNABLE_TO_UPDATE = {status: 401, message: 'O token encaminhado na requisicão não está valido'}
 
+const ERROR_UNABLE_TO_UPDATE_EMAIL = {status: 400, message: 'O email não pode ser atualizado'}
+
 const ERROR_INVALID_TOKEN = {status: 401, message: 'O token encaminhado na requisicão não está valido'}
 
 const ERROR_CATEGORY_NOT_FOUND = {status: 404, message: 'A categoria não foi encontrada no nosso sistema'}
@@ -80,6 +82,8 @@ const SUCCESS_LIKED_PUBLICATION = {status: 200, message: 'Publicação curtida c
 const SUCCES_REQUEST = {status: 200, message: 'Requisição bem secedida'}
 
 const SUCCESS_EMAIL_FOUND = {status: 200, message: 'Email encontrado com sucesso.'}
+
+const SUCCESS_UPDATED_EMAIL = {status: 200, message: 'Email atualizado com sucesso.'}
 
 const SUCCESS_CATEGORY_FOUND = {status: 200, message: 'Tags encontradas com sucesso'}
 
@@ -132,5 +136,7 @@ module.exports = {
     ERROR_PUBLICATION_NOT_FOUND,
     ERROR_COMMENTARY_NOT_FOUND,
     ERROR_COMMENTARY_RESPONSES_NOT_FOUND,
-    SUCCESS_COMENTARY_RESPONSES_FOUND
+    SUCCESS_COMENTARY_RESPONSES_FOUND,
+    ERROR_UNABLE_TO_UPDATE_EMAIL,
+    SUCCESS_UPDATED_EMAIL
 }
