@@ -6,7 +6,7 @@
  *****************************************************************************/
 
 const Message = require('../model_mongodb/message.js')
-const config = require('../../controller/modulo/config.js')
+const config = require('../model_mongodb/modulo/config.js')
 const moment = require('moment')
 
 const createMessage = async ( messageBy, messageTo, message, image, chatId) => {
