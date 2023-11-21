@@ -22,7 +22,7 @@ var { PrismaClient } = require('@prisma/client')
 //Instancia da Classe PrismaClient 
 var prisma = new PrismaClient()
 
-router.post('/v1/chat', bodyParserJSON, cors(), async (request, response) => {
+router.post('/chat', bodyParserJSON, cors(), async (request, response) => {
 
     const { users } = request.body
 
@@ -57,7 +57,7 @@ router.post('/v1/chat', bodyParserJSON, cors(), async (request, response) => {
     }
 })
 
-router.get('/v1/chat/:idChat', cors(), async (request, response) => {
+router.get('/chat/:idChat', cors(), async (request, response) => {
     const idChat = request.params.idChat;
 
     try {
@@ -85,7 +85,7 @@ router.get('/v1/chat/:idChat', cors(), async (request, response) => {
     }
 });
 
-router.get('/v1/chat/user/:idUsuario', cors(), async (request, response) => {
+router.get('/chat/user/:idUsuario', cors(), async (request, response) => {
     const idUsuario = request.params.idUsuario;
 
     try {

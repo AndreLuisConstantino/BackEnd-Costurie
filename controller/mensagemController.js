@@ -5,7 +5,7 @@
  * Versão: 1.0
  *****************************************************************************/
 
-const Message = require('../../models_mongoDB/message.js')
+const Message = require('../model_mongodb/message.js')
 const config = require('../../controller/modulo/config.js')
 const moment = require('moment')
 

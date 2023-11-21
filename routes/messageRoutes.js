@@ -13,7 +13,6 @@ const bodyParser = require('body-parser');
 const moment = require('moment')    
 const bodyParserJSON = bodyParser.json();
 
-//Criar um mensagem
 router.post('/message', bodyParserJSON, cors(), async (request, response) => {
 
     const { messageBy, messageTo, message, image, chatId } = request.body
@@ -25,6 +24,7 @@ router.post('/message', bodyParserJSON, cors(), async (request, response) => {
         !chatId || chatId == undefined ||
         image == undefined
     ) {
+        console.log('testezika');
         response.status(404).json(`Morreu, mBy: ${messageBy}, mTo: ${messageTo}, m: ${message}, chat: ${chatId}`)
     } else {
         const data_criacao = moment().format("YYYY-MM-DD")
@@ -40,12 +40,12 @@ router.post('/message', bodyParserJSON, cors(), async (request, response) => {
             chatId
         }
 
-        console.log(mensagem);
+        // console.log(mensagem);
 
         try {
             await Message.create(mensagem)
 
-            response.status(config.SUCCESS_CREATED_ITEM.status).json(config.SUCCESS_CREATED_ITEM)
+            response.status(201).json({status: 201, message: 'mensagem criada com sucesso!', mensagem: mensagem})
         } catch (error) {
             response.status(500).json(error)
         }

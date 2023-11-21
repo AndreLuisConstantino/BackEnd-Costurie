@@ -87,3 +87,63 @@ mongoose
         })        
     })
     .catch((err) => console.log(err))
+
+/*****************************************************************************************************************
+* Objetivo: Chat com Socket.IO
+* Data: 01/11/2023
+* Autor: André
+* Versão: 1.0
+******************************************************************************************************************/
+const server = require('http').createServer(app)
+const io = require('socket.io')(server, {cors: {origin: '*'}})
+const chatControler = require('./controller/chatController.js')
+const mensagemController = require('./controller/mensagemController.js')
+var lista = []
+
+io.on('connection', socket => {
+    console.log('Usuario Conectado', socket.id);
+
+    socket.on('createRooom', async listUsers => {
+        const newChat = await chatControler.insertChat(listUsers)
+
+        io.emit('newChat', newChat)
+    })
+
+    socket.on('listMessages', async chat => {
+        const listMessages = await chatControler.getChat(chat)
+
+        lista = listMessages
+        
+        io.emit('receive_message', listMessages)
+    })
+
+    socket.on('listContacts', async user => {
+        const listContacts = await chatControler.getListContacts(user)
+
+        io.emit('receive_contacts', listContacts)
+    })
+
+    socket.on('message', async text => {
+        console.log("Mensagem: " + text); 
+
+        let retornoMensagem = await mensagemController.createMessage(text.messageBy, text.messageTo, text.message, text.image, text.chatId)
+
+        lista.mensagens.push(retornoMensagem)
+        
+        io.emit('receive_message', lista)
+    })
+
+    socket.on('deleteMessage', async message => {
+        const messageDeleted = await mensagemController.deleteMessage(message)
+
+        lista.mensagens.filter( mensagem => (mensagem != message))
+
+        io.emit('receive_message', messageDeleted)
+    })
+
+    socket.on('disconnect', reason => {
+        console.log('Usuário desconectado');
+    })
+})
+
+server.listen(3001, () => console.log('SERVER SOCKEET.IO LIGADO: 3001'))
