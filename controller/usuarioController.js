@@ -234,7 +234,7 @@ const selectProfileById = async (id) => {
       }
 
       if (usuario[0].id_localizacao == null) {
-        usuario[0].id_localizacao = false
+        usuario[0].id_localizacao = 0
         usuario[0].localizacao = []
       } else {
         let localizacaoUsuario = await localizacaoModel.selectLocationByIdSemIdNoRetorno(usuario[0].id_usuario)
