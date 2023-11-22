@@ -53,10 +53,13 @@ const selectUserByLogin = async (dadosLogin) => {
 };
 
 const getUserByEmail = async (email) => {
-  let resultEmail = await usuarioModel.selectUserByEmailModel(email);
-  if (resultEmail) {
+  let dadosBody = {email}
+  let resultEmail = await usuarioModel.selectUserByEmailModel(dadosBody);
+
+  // console.log(resultEmail);
+  if (resultEmail ) {
     let dadosEmailJson = {};
-    dadosEmailJson.email = resultEmail;
+    dadosEmailJson.email = resultEmail[0];
     dadosEmailJson.status = message.ERROR_EMAIL_ALREADY_EXISTS.status
     dadosEmailJson.message = message.ERROR_EMAIL_ALREADY_EXISTS.message
     return dadosEmailJson;

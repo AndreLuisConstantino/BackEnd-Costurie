@@ -44,6 +44,8 @@ router.post('/publicacao/inserir', verifyJWT, cors(), bodyParserJSON, async (req
     if (String(contentType).toLowerCase() == 'application/json') {
         let dadosBody = request.body
 
+        // console.log(dadosBody);
+
         let dadosInserirPublicacao = await publicacaoController.insertPublicacao(dadosBody)
 
         if (dadosInserirPublicacao) {

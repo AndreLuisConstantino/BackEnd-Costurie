@@ -34,6 +34,8 @@ const insertPublicacao = async (dadosBody) => {
 
         let dadosInsertPublicacao = await publicacaoModel.inserirPublicacaoModel(dadosBody)
 
+        console.log(dadosInsertPublicacao);
+
         let dadosTagsInseridas = await insertTagsPublicacao(dadosBody.tags)
 
         // console.log(dadosBody.anexos);
@@ -202,6 +204,8 @@ const selectPublicacaoById = async (id_publicacao) => {
 }
 
 const updatePublicacao = async (dadosBody) => {
+
+    // console.log(dadosBody);
 
     if (dadosBody.id_publicacao == '' || dadosBody.id_publicacao == undefined || isNaN(dadosBody.id_publicacao) ||
         dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario) ||

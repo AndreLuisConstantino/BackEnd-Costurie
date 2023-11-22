@@ -111,6 +111,7 @@ io.on('connection', socket => {
 
     socket.on('listMessages', async chat => {
         const listMessages = await chatControler.getChat(chat)
+        // console.log(listMessages);
 
         lista = listMessages
 
