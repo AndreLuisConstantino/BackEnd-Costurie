@@ -355,6 +355,8 @@ const updateProfileTagLocality = async (dadosBody) => {
     if (resultDadosDeletado) {
       const usuarioAtualizado = await updateTag(dadosBody)
 
+      console.log('teste');
+
       if (usuarioAtualizado) {
         dadosPerfilUsuarioJson.usuario_atualizado = usuarioAtualizado
         dadosPerfilUsuarioJson.message = message.SUCCESS_UPDATED_ITEM.message
@@ -370,7 +372,7 @@ const updateProfileTagLocality = async (dadosBody) => {
   } else {
     const usuarioAtualizado = await updateTag(dadosBody)
 
-    console.log(usuarioAtualizado);
+    // console.log(usuarioAtualizado);a
 
     if (usuarioAtualizado) {
       dadosPerfilUsuarioJson.usuario_atualizado = usuarioAtualizado

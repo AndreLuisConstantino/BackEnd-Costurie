@@ -50,9 +50,27 @@ const verifySqlInjection = (dadosBody) => {
     return dadosBody;
 };
 
+const verifyJWT = async (request, response, next) => {
+    const jwt = require('../middleware/middlewareJWT.js')
+
+    let token = request.headers['x-access-token']
+
+    const autenticidadeToken = await jwt.validateJWT(token)
+
+    // console.log(autenticidadeToken);
+
+    if (autenticidadeToken) {
+        next()
+    } else {
+        // console.log('teste');
+        return response.status(401).json({message: 'O token de acesso não é valido ou não foi encaminhado', status: 401}).end()
+    }
+}
+
 module.exports = {
     SECRET,
     EXPIRE,
     smtp, 
-    verifySqlInjection
+    verifySqlInjection,
+    verifyJWT
 }

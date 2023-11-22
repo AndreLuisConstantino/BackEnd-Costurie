@@ -10,6 +10,10 @@ const router = express.Router();
 const usuarioController = require('../controller/usuarioController.js')
 const localizacaoController = require('../controller/localizacaoController.js')
 
+const { verifyJWT } = require('../module/secret.js')
+
+//Dependencia para gerenciar as permissões da API
+const cors = require('cors')
 //Permissões do cors
 router.use((request, response, next) => {
     //Define quem poderá acessar a API (* = Todos)
@@ -23,33 +27,11 @@ router.use((request, response, next) => {
     next()
 })
 
-//Dependencia para gerenciar as permissões da API
-const cors = require('cors')
 //Dependencia para gerenciar o corpo de requisições da API
 const bodyParser = require('body-parser')
 
 //Define que os dados que iram chegar na requisição será no padrão JSON
 const bodyParserJSON = bodyParser.json()
-
-const verifyJWT = async (request, response, next) => {
-    const jwt = require('../middleware/middlewareJWT.js')
-
-    let token = request.headers['x-access-token']
-
-    // console.log(token);
-
-    // console.log(typeof(token))
-
-    const autenticidadeToken = await jwt.validateJWT(token)
-
-    // console.log(autenticidadeToken);
-
-    if (autenticidadeToken) {
-        next()
-    } else {
-        return response.status(401).end()
-    }
-}
  
 //Import do arquivo de configuração das variáveis, constantes e funções globais
 var message = require('../controller/modulo/config.js')

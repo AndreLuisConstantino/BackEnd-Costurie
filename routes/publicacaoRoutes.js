@@ -10,6 +10,9 @@ const router = express.Router();
 
 const publicacaoController = require('../controller/publicacaoController.js')
 
+
+//Dependencia para gerenciar as permissões da API
+const cors = require('cors')
 //Permissões do cors
 router.use((request, response, next) => {
     //Define quem poderá acessar a API (* = Todos)
@@ -22,28 +25,13 @@ router.use((request, response, next) => {
 
     next()
 })
-
-//Dependencia para gerenciar as permissões da API
-const cors = require('cors')
 //Dependencia para gerenciar o corpo de requisições da API
 const bodyParser = require('body-parser')
 
 //Define que os dados que iram chegar na requisição será no padrão JSON
 const bodyParserJSON = bodyParser.json()
 
-const verifyJWT = async (request, response, next) => {
-    const jwt = require('../middleware/middlewareJWT.js')
-
-    let token = request.headers['x-access-token']
-
-    const autenticidadeToken = await jwt.validateJWT(token)
-
-    if (autenticidadeToken) {
-        next()
-    } else {
-        return response.status(401).end()
-    }
-}
+const { verifyJWT } = require('../module/secret.js')
 
 //Import do arquivo de configuração das variáveis, constantes e funções globais
 var message = require('../controller/modulo/config.js')
@@ -187,6 +175,8 @@ router.get('/publicacao/', verifyJWT, cors(), async (request, response) => {
 router.get('/publicacao/populares', verifyJWT, cors(), async (request, response) => {
 
     let dadosPublicacoesPopulares = await publicacaoController.selectMostPopularPublications()
+
+    // console.log(dadosPublicacoesPopulares);
 
     response.status(dadosPublicacoesPopulares.status)
     response.json(dadosPublicacoesPopulares)

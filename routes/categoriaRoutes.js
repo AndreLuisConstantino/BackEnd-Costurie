@@ -31,23 +31,10 @@ const bodyParser = require('body-parser')
 //Define que os dados que iram chegar na requisição será no padrão JSON
 const bodyParserJSON = bodyParser.json()
 
-const verifyJWT = async (request, response, next) => {
-    const jwt = require('../middleware/middlewareJWT.js')
-
-    let token = request.headers['x-access-token']
-
-    const autenticidadeToken = await jwt.validateJWT(token)
-
-    if (autenticidadeToken) {
-        next()
-    } else {
-        return response.status(401).end()
-    }
-}
+const { verifyJWT } = require('../module/secret.js')
 
 //Import do arquivo de configuração das variáveis, constantes e funções globais
 var message = require('../controller/modulo/config.js')
-
 
 //Selecionar todas as categorias
 router.get('/categoria/select_all', verifyJWT, cors(), async (request, response) => {
