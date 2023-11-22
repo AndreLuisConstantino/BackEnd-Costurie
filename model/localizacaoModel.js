@@ -153,6 +153,8 @@ const selectLocationByIdSemIdNoRetorno = async (id_localizacao) => {
     from tbl_localizacao
 where tbl_localizacao.id = ${id_localizacao};`
 
+    console.log(sql);
+
     let response = await prisma.$queryRawUnsafe(sql)
 
 

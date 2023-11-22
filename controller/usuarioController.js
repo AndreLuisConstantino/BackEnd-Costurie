@@ -237,7 +237,10 @@ const selectProfileById = async (id) => {
         usuario[0].id_localizacao = 0
         usuario[0].localizacao = {}
       } else {
-        let localizacaoUsuario = await localizacaoModel.selectLocationByIdSemIdNoRetorno(usuario[0].id_usuario)
+        let localizacaoUsuario = await localizacaoModel.selectLocationByIdSemIdNoRetorno(usuario[0].id_localizacao)
+
+        // console.log('testezika');
+        // console.log(localizacaoUsuario);
         usuario[0].localizacao = localizacaoUsuario[0]
       }
 
@@ -366,6 +369,8 @@ const updateProfileTagLocality = async (dadosBody) => {
     }
   } else {
     const usuarioAtualizado = await updateTag(dadosBody)
+
+    console.log(usuarioAtualizado);
 
     if (usuarioAtualizado) {
       dadosPerfilUsuarioJson.usuario_atualizado = usuarioAtualizado

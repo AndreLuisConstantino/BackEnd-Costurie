@@ -5,11 +5,11 @@
  * Versão: 1.0
  *****************************************************************************/
 
- const mongoose = require('mongoose')
+const mongoose = require('mongoose')
 
- //Constantes MongoDB
+//Constantes MongoDB
 const DB_USER = 'muryllovieira59'
-const DB_PASSWORD = '9BEzjV00xrXvFv65'
+const DB_PASSWORD = 'NEnQyCRQNB9CsKya'
 const STRING_CONNECTION = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@chat-tcc-costurie.lenlxrh.mongodb.net/?retryWrites=true&w=majority`
 //teste
 
@@ -82,9 +82,9 @@ mongoose
         STRING_CONNECTION
     )
     .then(() => {
-        app.listen(3000, function () {
+        app.listen(3000, () => {
             console.log('Servidor aguardando requisições na porta 3000')
-        })        
+        })
     })
     .catch((err) => console.log(err))
 
@@ -95,7 +95,7 @@ mongoose
 * Versão: 1.0
 ******************************************************************************************************************/
 const server = require('http').createServer(app)
-const io = require('socket.io')(server, {cors: {origin: '*'}})
+const io = require('socket.io')(server, { cors: { origin: '*' } })
 const chatControler = require('./controller/chatController.js')
 const mensagemController = require('./controller/mensagemController.js')
 var lista = []
@@ -113,7 +113,7 @@ io.on('connection', socket => {
         const listMessages = await chatControler.getChat(chat)
 
         lista = listMessages
-        
+
         io.emit('receive_message', listMessages)
     })
 
@@ -124,19 +124,19 @@ io.on('connection', socket => {
     })
 
     socket.on('message', async text => {
-        console.log("Mensagem: " + text); 
+        console.log("Mensagem: " + text);
 
         let retornoMensagem = await mensagemController.createMessage(text.messageBy, text.messageTo, text.message, text.image, text.chatId)
 
         lista.mensagens.push(retornoMensagem)
-        
+
         io.emit('receive_message', lista)
     })
 
     socket.on('deleteMessage', async message => {
         const messageDeleted = await mensagemController.deleteMessage(message)
 
-        lista.mensagens.filter( mensagem => (mensagem != message))
+        lista.mensagens.filter(mensagem => (mensagem != message))
 
         io.emit('receive_message', messageDeleted)
     })
