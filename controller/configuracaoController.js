@@ -16,10 +16,14 @@ const alterarEmail = async (dadosBody) => {
 
     // console.log(dadosBody);
 
+    let emailExistente = await usuarioModel.selectUserByEmailModel(dadosBody)
+
     if (dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario)) {
         return message.ERROR_INVALID_ID
     } else if (dadosBody.email == '' || dadosBody.email == undefined || dadosBody.email.length > 255) {
         return message.ERROR_REQUIRED_FIELDS
+    } else if (emailExistente) {
+        return message.ERROR_EMAIL_ALREADY_EXISTS
     } else {
         let updateEmail = await configuracaoModel.updateEmailModel(dadosBody)
 
