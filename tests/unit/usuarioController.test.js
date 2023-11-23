@@ -40,13 +40,13 @@ describe(`Testes de Insert Usuário`, () => {
 
 describe('Testes de Login', () => {
     test('Deve selecionar o usuário pelo login', async () => {
-        const usuarioLoginAcerto = { "email": "andredograu@gmail.com", "senha": "Teste@123" }
+        const usuarioLoginAcerto = { "email": "andredograu@mail.com", "senha": "Teste@123" }
         const res = await selectUserByLogin(usuarioLoginAcerto)
         expect(res.status).toBe(res.status = 200)
     })
 
     test('Deve selecionar o usuário pelo login e fazer a validação do id_login', async () => {
-        const usuarioLoginAcerto = { "email": "andredograu@gmail.com", "senha": "Teste@123" }
+        const usuarioLoginAcerto = { "email": "andredograu@mail.com", "senha": "Teste@123" }
         const res = await selectUserByLogin(usuarioLoginAcerto)
         const usuario = await selectProfileById(res.login.id)
         // console.log(usuario.usuario.id_usuario);
@@ -63,7 +63,7 @@ describe('Testes de Login', () => {
 
 describe('Testes de Select by Email', () => {
     test('Deve selecionar Usuário pelo email', async () => {
-        let email = { "email": "andredograu@gmail.com" }
+        let email = "andreluis081205@gmail.com"
         let res = await getUserByEmail(email)
 
         expect(res.status).toBe(400)

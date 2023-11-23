@@ -19,7 +19,7 @@ describe('Teste de integração com a controller de usuário', () => {
         const response = await app
             .post('/usuario/login')
             .send({
-                "email": "andredograu@gmail.com",
+                "email": "andredograu@mail.com",
                 "senha": "Teste@123"
             })
 
@@ -82,18 +82,18 @@ describe('Teste de integração com a controller de usuário', () => {
     })
 
     test('Deve inserir um nome, foto e descrição', async () => {
-      const response = await app
-        .put('/usuario/personalizar_perfil')
-        .send(
-            {
-                "id": 1,
-                "nome": "andrezindograu",
-                "foto": "https://i.pinimg.com/originals/18/13/3c/18133ce8bad079045a32260bc70d6efe.jpg",
-                "descricao": "dando grau na zona sul"
-            }
-        )
+        const response = await app
+            .put('/usuario/personalizar_perfil')
+            .send(
+                {
+                    "id": 1,
+                    "nome": "andrezindograu",
+                    "foto": "https://i.pinimg.com/originals/18/13/3c/18133ce8bad079045a32260bc70d6efe.jpg",
+                    "descricao": "dando grau na zona sul"
+                }
+            )
     })
-    
+
 
     test('Deve selecionar todos os usuários pela tag', async () => {
 
@@ -105,13 +105,28 @@ describe('Teste de integração com a controller de usuário', () => {
                 "nome_tag": "Casual"
             })
 
-    
-            expect(response.status).toBe(200)
-            expect(response.body).toBeInstanceOf(Object)
-            expect(response.body.usuarios).toBeInstanceOf(Array)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body.usuarios).toBeInstanceOf(Array)
     })
 
 
+    test('Deve selecionar o usuário pelo email', async () => {
+
+        const email = 'andreluis081205@gmail.com'
+
+        const response = await app
+            .get(`/usuario/${email}`)
+            .set('x-access-token', TOKEN)
+
+
+        // console.log(response);
+
+        expect(response.status).toBe(400)
+        expect(response.body).toBeInstanceOf(Object)
+        expect(response.body.email).toBeInstanceOf(Object)
+    })
 
 
 })

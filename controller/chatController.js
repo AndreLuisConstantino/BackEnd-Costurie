@@ -117,6 +117,8 @@ const getListContacts = async (idUsuario) => {
 }
 
 const insertChat = async (usuarios) => {
+    console.log(usuarios);
+
     if (
         !usuarios || usuarios.length == 0 || usuarios == undefined
     ) {
