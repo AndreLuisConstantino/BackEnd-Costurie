@@ -21,43 +21,6 @@ var { PrismaClient } = require('@prisma/client')
 //Instancia da Classe PrismaClient 
 var prisma = new PrismaClient()
 
-const createChat = async (users, chatId) => {
-
-    if (
-        !users || users.length == 0 || users == undefined || users == "" ||
-        !chatId || chatId == ""
-    ) {
-        return config.ERROR_REQUIRE_FIELDS
-    } else {
-        for (let i = 0; i < users.length; i++) {
-            const idUser = users[i].id;
-
-            const sql = `insert into tbl_chat(id_mongo, id_usuario) values ("${chatId}", ${idUser})`
-
-            const resultStatus = await prisma.$executeRawUnsafe(sql)
-
-            if (!resultStatus)
-                return config.ERROR_INTERNAL_SERVER
-        }
-
-        const lastIds = `select * from tbl_chat order by id desc limit 2`
-
-        const rsChat = await prisma.$queryRawUnsafe(lastIds)
-
-        const dadosJSON = {
-            status: config.SUCCESS_REQUEST.status,
-            config: config.SUCCESS_REQUEST.config,
-            chat: rsChat
-        }
-
-        if (lastIds.length > 0) {
-            return dadosJSON
-        } else {
-            return config.ERROR_INTERNAL_SERVER.status
-        }
-    }
-}
-
 const getChat = async (idChat) => {
 
     try {
@@ -117,17 +80,19 @@ const getListContacts = async (idUsuario) => {
 }
 
 const insertChat = async (usuarios) => {
-    console.log(usuarios);
-
     if (
         !usuarios || usuarios.length == 0 || usuarios == undefined
     ) {
+        console.log(usuarios);
         response.status(config.ERROR_REQUIRE_FIELDS.status).json(config.ERROR_REQUIRE_FIELDS)
     } else {
         const data_criacao = moment().format("YYYY-MM-DD")
         const hora_criacao = moment().format("HH:mm:ss")
 
         let users = usuarios.users
+
+        // usuarios.users[0].status_user = true
+        // usuarios.users[1].status_user = true
 
         const chat = {
             users,
@@ -136,6 +101,7 @@ const insertChat = async (usuarios) => {
         }
 
         try {
+            console.log('foiiiiii');
             const verificarChat = await Chat.find({
                 $and: [
                   { 'users.id': users[0].id },
@@ -143,20 +109,27 @@ const insertChat = async (usuarios) => {
                 ]
               })
 
+              console.log('oi' + verificarChat);
+
             if (verificarChat.length > 0) {
                 const chatOld = await getChat(verificarChat[0]._id.toString())
 
+                console.log(chatOld);
                 return chatOld
             } else {
                 await Chat.create(chat)
 
                 const lastChat = await Chat.find({}).sort({ _id: -1 }).limit(1)
 
+                console.log(lastChat);
+
                 const lastId = lastChat[0]._id.toString()
 
                 //const insertSQL = await createChat(users, lastId)
 
-                const newChat = await getChat(lastChat)
+                const newChat = await getChat(lastId)
+
+                console.log(newChat);
 
                 return newChat
             }
@@ -167,7 +140,6 @@ const insertChat = async (usuarios) => {
 }
 
 module.exports = {
-    createChat,
     getChat,
     getListContacts,
     insertChat

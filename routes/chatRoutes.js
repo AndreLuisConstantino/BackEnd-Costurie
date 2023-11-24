@@ -14,6 +14,7 @@ const {createChat, getChat, getListContacts, insertChat} = require('../controlle
 
 const Message = require('../model_mongodb/message.js')
 const Chat = require('../model_mongodb/chat.js')
+const chatFunctions = require('../controller/chatController.js')
 const config = require('../model_mongodb/modulo/config.js')
 
 //Import da biblioteca do prisma client
@@ -23,7 +24,6 @@ var { PrismaClient } = require('@prisma/client')
 var prisma = new PrismaClient()
 
 router.post('/chat', bodyParserJSON, cors(), async (request, response) => {
-
     const { users } = request.body
 
     if (
@@ -41,47 +41,28 @@ router.post('/chat', bodyParserJSON, cors(), async (request, response) => {
         }
 
         try {
-            await Chat.create(chat)
+            const verificarChat = await Chat.find({ 'users.id': users[0].id && users[1].id })
 
-            const lastChat = await Chat.find({}).sort({ _id: -1 }).limit(1)
+            if (verificarChat.length > 0) {
+                const chatOld = await chatFunctions.getChat(verificarChat[0]._id.toString())
 
-            const lastId = lastChat[0]._id.toString()
+                response.status(200).json(chatOld)
+            } else {
+                await Chat.create(chat)
 
-            const insertSQL = await createChat(users, lastId)
+                const lastChat = await Chat.find({}).sort({ _id: -1 }).limit(1)
 
-            response.status(insertSQL.status).json(insertSQL)
+                const lastId = lastChat[0]._id.toString()
 
-        } catch (error) {
-            response.status(config.ERROR_INTERNAL_SERVER.status).json(config.ERROR_INTERNAL_SERVER);
-        }
-    }
-})
+                //const insertSQL = await createChat(users, lastId)
 
-router.get('/chat/:idChat', cors(), async (request, response) => {
-    const idChat = request.params.idChat;
+                const newChat = await chatFunctions.getChat(lastChat)
 
-    try {
-        const resultChat = await Chat.findOne({ _id: idChat });
-
-        if (resultChat) {
-            const listMessages = await Message.find({ chatId: idChat })
-
-            const dadosJSON = {
-                status: config.SUCCESS_REQUEST.status,
-                message: config.SUCCESS_REQUEST.message,
-                id_chat: resultChat._id,
-                usuarios: resultChat.users,
-                data_criacao: resultChat.data_criacao,
-                hora_criacao: resultChat.hora_criacao,
-                mensagens: listMessages
+                response.status(200).json(newChat)
             }
-
-            response.status(dadosJSON.status).json(dadosJSON)
-        } else {
-            response.status(config.ERROR_CHAT_NOT_FOUND.status).json(config.ERROR_CHAT_NOT_FOUND)
+        } catch (error) {
+            response.status(config.ERROR_INTERNAL_SERVER.status).json(config.ERROR_INTERNAL_SERVER)
         }
-    } catch (err) {
-        response.status(config.ERROR_INTERNAL_SERVER.status).json(config.ERROR_INTERNAL_SERVER);
     }
 });
 
@@ -89,7 +70,7 @@ router.get('/chat/user/:idUsuario', cors(), async (request, response) => {
     const idUsuario = request.params.idUsuario;
 
     try {
-        const result = await Chat.find({ 'users.id': parseInt(idUsuario) });
+        const result = await Chat.find({ 'users.id': parseInt(idUsuario)});
 
         if (result) {
             let listUsers = []
