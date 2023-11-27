@@ -22,6 +22,7 @@ const localizacaoModel = require("../model/localizacaoModel.js")
 // const localizacaoModel = require("../model/localizacaoModel.js");
 const publicacaoModel = require("../model/publicacaoModel.js");
 const anexosModel = require("../model/anexosModel.js");
+const { response } = require("express");
 
 const selectUserByLogin = async (dadosLogin) => {
   if (
@@ -53,11 +54,11 @@ const selectUserByLogin = async (dadosLogin) => {
 };
 
 const getUserByEmail = async (email) => {
-  let dadosBody = {email}
+  let dadosBody = { email }
   let resultEmail = await usuarioModel.selectUserByEmailModel(dadosBody);
 
   // console.log(resultEmail);
-  if (resultEmail ) {
+  if (resultEmail) {
     let dadosEmailJson = {};
     dadosEmailJson.email = resultEmail[0];
     dadosEmailJson.status = message.ERROR_EMAIL_ALREADY_EXISTS.status
@@ -215,7 +216,7 @@ const selectProfileById = async (id) => {
     if (usuario.length) {
 
       usuario[0].id_usuario = usuario[0].id
-      
+
       delete usuario[0].id
 
       // console.log(usuario[0]);
@@ -553,6 +554,53 @@ const registrarUsuario = async (dadosBody) => {
   }
 }
 
+const sendMail = async (dadosBody) => {
+
+  let emailExistente = await usuarioModel.selectUserByEmailModel(dadosBody)
+
+  // console.log(emailExistente);
+
+  if (emailExistente.length) {
+
+    const token = Math.floor(Math.random() * 1000000)
+
+    const now = new Date()
+    now.setHours(now.getHours() + 1)
+
+    const dataFormatada = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+
+    let updateToken = await updateUserTokenAndExpires(emailExistente[0].id, token, dataFormatada)
+
+    if (updateToken.atualizado) {
+      let nodemailer = require('../module/secret.js')
+      let smtp = nodemailer.smtp
+
+      let mailOptions = {
+        from: 'tcccosturie@gmail.com',
+        to: emailExistente[0].email,
+        replyTo: emailExistente,
+        subject: "Olá Bem vindo!",
+        text: 'Olá faça a sua redefinição de senha aqui',
+        template: 'index',
+        context: { token }
+      }
+
+      smtp.sendMail(mailOptions).then(async info => {
+        // info.id = emailExistente[0].id
+        emailExistente[0].status = 200
+
+      }).catch(error => {
+        emailExistente[0] = error
+      })
+
+      return emailExistente[0]
+    }
+
+  } else {
+    return message.ERROR_EMAIL_NOT_FOUND
+  }
+}
+
 module.exports = {
   selectUserByLogin,
   getUserByEmail,
@@ -567,5 +615,6 @@ module.exports = {
   selectAllUsuariosByTag,
   deleteUserById,
   registrarUsuario,
-  updateTag
+  updateTag,
+  sendMail
 }

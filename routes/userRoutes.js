@@ -90,48 +90,26 @@ router.get('/usuario/token', verifyJWT, cors(), bodyParserJSON, async (request, 
     response.json({ 'Validate': 'Validado, pode usar o app ;)', status: true })
 })
 
-//Endpoint para enviar email no esqueci a senha
+//Endpoint para enviar o email
 router.post('/usuario/esqueceu_a_senha', cors(), bodyParserJSON, async (request, response) => {
 
-    let email = request.body
+    let contentType = request.headers['content-type']
 
-    let resultUserEmail = await usuarioController.getUserByEmail(email)
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let dadosBody = request.body
 
-    if (resultUserEmail.message == 'O email já existe em nosso sistema') {
+        let dadosSendEmail = await usuarioController.sendMail(dadosBody)
 
-        const token = Math.floor(Math.random() * 1000000)
+        // console.log(dadosSendEmail);
 
-        const now = new Date()
-        now.setHours(now.getHours() + 1)
-
-        const dataFormatada = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
-
-        let updateToken = await usuarioController.updateUserTokenAndExpires(resultUserEmail.email[0].id, token, dataFormatada)
-
-        if (updateToken.atualizado) {
-            let nodemailer = require('../module/secret.js')
-            let smtp = nodemailer.smtp
-
-            let mailOptions = {
-                from: 'tcccosturie@gmail.com',
-                to: email.email,
-                replyTo: email,
-                subject: "Olá Bem vindo!",
-                text: 'Olá faça a sua redefinição de senha aqui',
-                template: 'index',
-                context: { token }
-            }
-
-            smtp.sendMail(mailOptions).then(info => {
-                info.id = resultUserEmail.email[0].id
-                response.send(info)
-            }).catch(error => {
-                response.send(error)
-            })
+        if (dadosSendEmail) {
+            response.send(dadosSendEmail)       
+        } else {
+            response.send(dadosSendEmail)
         }
     } else {
-        response.status(message.ERROR_EMAIL_NOT_FOUND.status)
-        response.json(message.ERROR_EMAIL_NOT_FOUND)
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
     }
 })
 

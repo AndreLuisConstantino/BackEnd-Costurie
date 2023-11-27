@@ -13,12 +13,15 @@ const EXPIRE = 30000000
 
 const path = require('path')
 
+/* 
+    logger: true,
+    debug: true,
+*/
+
 const smtp = nodemailer.createTransport({
     service: 'Gmail',
     port: 465,
     secure: false,
-    logger: true,
-    debug: true,
     secureConnection: false,
     auth: {
         user: 'tcccosturie@gmail.com',
@@ -63,14 +66,14 @@ const verifyJWT = async (request, response, next) => {
         next()
     } else {
         // console.log('teste');
-        return response.status(401).json({message: 'O token de acesso não é valido ou não foi encaminhado', status: 401}).end()
+        return response.status(401).json({ message: 'O token de acesso não é valido ou não foi encaminhado', status: 401 }).end()
     }
 }
 
 module.exports = {
     SECRET,
     EXPIRE,
-    smtp, 
+    smtp,
     verifySqlInjection,
     verifyJWT
 }
