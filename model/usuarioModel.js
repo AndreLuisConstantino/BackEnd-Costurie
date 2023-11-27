@@ -67,9 +67,9 @@ const selectUserByLoginModel = async (dadosLogin) => {
 }
 
 const selectUserByEmailModel = async (email) => {
-    let sql = `select tbl_usuario.id, tbl_usuario.nome_de_usuario, tbl_usuario.email from tbl_usuario where tbl_usuario.email = '${email.email}';`
+    let sql = `select tbl_usuario.id, tbl_usuario.nome_de_usuario, tbl_usuario.email from tbl_usuario where tbl_usuario.email = ?;`
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, email.email)
     if (response.length > 0) {
         return response
     } else {
@@ -108,11 +108,11 @@ const selectUserByIdModel = async (id) => {
                     tbl_usuario
                 on
                     tbl_usuario.id_localizacao = tbl_localizacao.id
-                    where tbl_usuario.id = ${id};`
+                    where tbl_usuario.id = ?;`
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, id)
 
-    // console.log(response);
+    console.log(response);
     // console.log(sql);
 
     if (response.length > 0) {
@@ -124,10 +124,10 @@ const selectUserByIdModel = async (id) => {
 
 const updateUserTokenAndExpiresModel = async (id, token, tempo_expiracao) => {
     //Script sql para atualizar os dados no BD
-    let sql = `update tbl_usuario set token = '${token}', tempo_expiracao = '${tempo_expiracao}' where id = ${id};`
+    let sql = `update tbl_usuario set token = ?, tempo_expiracao = ? where id = ?;`
 
     //Executa o script no BD
-    let resultStatus = await prisma.$executeRawUnsafe(sql)
+    let resultStatus = await prisma.$executeRawUnsafe(sql, token, tempo_expiracao, id)
 
     if (resultStatus) {
         return true
@@ -143,10 +143,11 @@ const selectTokenAndIdModel = async (dadosBody) => {
     tbl_usuario.nome_de_usuario, 
     tbl_usuario.email, tbl_usuario.token, 
     tbl_usuario.tempo_expiracao 
-    from tbl_usuario where tbl_usuario.token = '${dadosBody.token}' and tbl_usuario.id = '${dadosBody.id}'`
+    from tbl_usuario where tbl_usuario.token = ? and tbl_usuario.id = ?`
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, dadosBody.token, dadosBody.id)
 
+    // console.log(response);
 
     if (response.length > 0) {
         return response
@@ -157,10 +158,10 @@ const selectTokenAndIdModel = async (dadosBody) => {
 
 const updateUserPasswordModel = async (dadosBody) => {
     //Script sql para atualizar os dados no BD
-    let sql = `update tbl_usuario set senha = '${dadosBody.senha}' where id = ${dadosBody.id};`
+    let sql = `update tbl_usuario set senha = ? where id = ?`
 
     //Executa o script no BD
-    let resultStatus = await prisma.$executeRawUnsafe(sql)
+    let resultStatus = await prisma.$executeRawUnsafe(sql, dadosBody.senha, dadosBody.id)
 
     if (resultStatus) {
         return resultStatus
@@ -171,12 +172,12 @@ const updateUserPasswordModel = async (dadosBody) => {
 
 const dadosUpdatePersonalizarPerfilModel = async (dadosBody) => {
     //Script sql para atualizar os dados no BD
-    let sql = `update tbl_usuario set nome = '${dadosBody.nome}', descricao = '${dadosBody.descricao}', foto = '${dadosBody.foto}' where id = ${dadosBody.id};`
+    let sql = `update tbl_usuario set nome = ?, descricao = ?, foto = ? where id = ?;`
 
     // console.log(sql);
 
     //Executa o script no BD
-    let resultStatus = await prisma.$executeRawUnsafe(sql)
+    let resultStatus = await prisma.$executeRawUnsafe(sql, dadosBody.nome, dadosBody.descricao, dadosBody.foto, dadosBody.id)
 
     if (resultStatus) {
         return resultStatus
@@ -188,10 +189,10 @@ const dadosUpdatePersonalizarPerfilModel = async (dadosBody) => {
 const selectUserByEmailTagNameModel = async (dadosBody) => {
     let sql = `select tbl_usuario.id ,tbl_usuario.nome_de_usuario, tbl_usuario.email from tbl_usuario 
                     where 
-                    tbl_usuario.email = '${dadosBody.email}' 
-                    and tbl_usuario.nome_de_usuario = '${dadosBody.nome_de_usuario}';`
+                    tbl_usuario.email = ?
+                    and tbl_usuario.nome_de_usuario = ?;`
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, dadosBody.email, dadosBody.nome_de_usuario)
 
     if (response.length > 0) {
         return response
@@ -201,10 +202,10 @@ const selectUserByEmailTagNameModel = async (dadosBody) => {
 }
 
 const selectProfileByIdModel = async (id) => {
-    let sql = `select * from tags_usuario where id_usuario = ${id};`
+    let sql = `select * from tags_usuario where id_usuario = ?;`
     // console.log(sql);
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, id)
     // console.log(response);
 
     if (response.length > 0) {
@@ -255,11 +256,11 @@ const selectAllUsersModel = async () => {
 }
 
 const deleteUserByIdModel = async (id) => {
-    let sql = `delete from tbl_usuario where id = ${id}`
+    let sql = `delete from tbl_usuario where id = ?`
 
     // console.log(sql);
 
-    let response = await prisma.$executeRawUnsafe(sql)
+    let response = await prisma.$executeRawUnsafe(sql, id)
 
     if (response) {
         return true
@@ -283,9 +284,9 @@ const selectUserAndLocalityById = async (id) => {
                 from tbl_usuario
                 inner join tbl_localizacao
                     on tbl_localizacao.id = tbl_usuario.id_localizacao
-                where tbl_usuario.id = ${id}`
+                where tbl_usuario.id = ?`
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, id)
 
     // console.log(response);
 
@@ -297,9 +298,9 @@ const selectUserAndLocalityById = async (id) => {
 } 
 
 const selectUserEmailModel = async (email) => {
-    let sql = `select tbl_usuario.id, tbl_usuario.nome_de_usuario, tbl_usuario.email from tbl_usuario where tbl_usuario.email = '${email}'`
+    let sql = `select tbl_usuario.id, tbl_usuario.nome_de_usuario, tbl_usuario.email from tbl_usuario where tbl_usuario.email = ?`
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, email)
     if (response.length > 0) {
         return response
     } else {
@@ -320,9 +321,9 @@ const selectUserByTagNameModel = async (nome_de_usuario) => {
 }
 
 const selectUserById = async (id_usuario) => {
-    let sql = `select * from tbl_usuario where id = ${id_usuario}`
+    let sql = `select * from tbl_usuario where id = ?`
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, id_usuario)
     // console.log(response);
     if (response.length > 0) {
         return response

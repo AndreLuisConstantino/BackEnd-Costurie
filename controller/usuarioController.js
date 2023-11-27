@@ -96,7 +96,7 @@ const selectTokenById = async (dadosBody) => {
     return message.ERROR_MISTAKE_IN_THE_FILDS
   } else {
 
-    let resultUser = await usuarioModel.selectUserByIdModel(dadosBody.id)
+    let resultUser = await usuarioModel.selectUserById(dadosBody.id)
 
     if (resultUser) {
 

@@ -19,15 +19,15 @@ const insertComentarioModel = async (dadosBody) => {
                                             data_comentario,
                                             hora_comentario
                                             ) values (
-                                                        ${dadosBody.id_publicacao},
-                                                        ${dadosBody.id_usuario},
-                                                        '${dadosBody.mensagem}',
+                                                        ?,
+                                                        ?,
+                                                        ?,
                                                         DATE(NOW()),
                                                         TIME(NOW())
                                                         )`
 
     //Executa o script no BD
-    let resultStatus = await prisma.$executeRawUnsafe(sql)
+    let resultStatus = await prisma.$executeRawUnsafe(sql, dadosBody.id_publicacao, dadosBody.id_usuario, dadosBody.mensagem)
 
     // console.log(dadosBody);
 
@@ -51,9 +51,9 @@ const selectLastIdComentarioModel = async () => {
 }
 
 const selectComentariosByIdPublicacaoModel = async (id_publicacao) => {
-    let sql = `select * from tbl_comentario where id_publicacao = ${id_publicacao}`
+    let sql = `select * from tbl_comentario where id_publicacao = ?`
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, id_publicacao)
 
     if (response.length > 0) {
         return response
@@ -75,9 +75,9 @@ const selectAllComentariosModel = async () => {
 }
 
 const selectComentarioByIdModel = async (id_comentario) => {
-    let sql = `select * from tbl_comentario where id = ${id_comentario}`
+    let sql = `select * from tbl_comentario where id = ?`
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, id_comentario)
 
     if (response.length > 0) {
         return response
@@ -87,11 +87,11 @@ const selectComentarioByIdModel = async (id_comentario) => {
 }
 
 const deleteComentarioModel = async (id_comentario) => {
-    let sql = `delete from tbl_comentario where id = ${id_comentario}`;
+    let sql = `delete from tbl_comentario where id = ?`;
 
     // console.log(sql)
   
-    let resultStatus = await prisma.$executeRawUnsafe(sql);
+    let resultStatus = await prisma.$executeRawUnsafe(sql, id_comentario);
   
     // console.log(resultStatus);
   

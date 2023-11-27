@@ -80,12 +80,12 @@ const selectAllLocationsModel = async () => {
 
 const updateLocalizacaoModel = async (dadosBody) => {
     //Script sql para atualizar os dados no BD
-    let sql = `update tbl_localizacao set estado = '${dadosBody.estado}', cidade = '${dadosBody.cidade}', bairro = '${dadosBody.bairro}' where id = ${dadosBody.id_localizacao}`
+    let sql = `update tbl_localizacao set estado = ?, cidade = ?, bairro = ?' where id = ?`
 
     // console.log(sql);
 
     //Executa o script no BD
-    let resultStatus = await prisma.$executeRawUnsafe(sql)
+    let resultStatus = await prisma.$executeRawUnsafe(sql, dadosBody.estado, dadosBody.cidade, dadosBody.bairro, dadosBody.id_localizacao)
 
     if (resultStatus) {
         return resultStatus
@@ -107,9 +107,9 @@ const selectLocalizacaoByIdModel = async (id) => {
                 inner join
                     tbl_usuario
                 on
-                    tbl_usuario.id_localizacao = tbl_localizacao.id where id_localizacao = ${id}`
+                    tbl_usuario.id_localizacao = tbl_localizacao.id where id_localizacao = ?`
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, id)
 
     // console.log(response);
 
@@ -121,9 +121,9 @@ const selectLocalizacaoByIdModel = async (id) => {
 }
 
 const deleteLocalizacaoModel = async (id) => {
-    let sql = `delete from tbl_localizacao where id = ${id}`
+    let sql = `delete from tbl_localizacao where id = ?`
 
-    let response = await prisma.$executeRawUnsafe(sql)
+    let response = await prisma.$executeRawUnsafe(sql, id)
 
     if (response) {
         return true
@@ -133,9 +133,9 @@ const deleteLocalizacaoModel = async (id) => {
 }
 
 const selectLocationById = async (id_localizacao) => {
-    let sql = `select * from tbl_localizacao where id = ${id_localizacao}`
+    let sql = `select * from tbl_localizacao where id = ?`
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, id_localizacao)
 
 
     if (response.length > 0) {
@@ -151,11 +151,11 @@ const selectLocationByIdSemIdNoRetorno = async (id_localizacao) => {
     tbl_localizacao.estado,
     tbl_localizacao.bairro
     from tbl_localizacao
-where tbl_localizacao.id = ${id_localizacao};`
+where tbl_localizacao.id = ?`
 
     // console.log(sql);
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, id_localizacao)
 
 
     if (response.length > 0) {

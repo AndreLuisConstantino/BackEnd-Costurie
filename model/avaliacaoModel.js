@@ -11,9 +11,9 @@ var { PrismaClient } = require("@prisma/client");
 var prisma = new PrismaClient();
 
 const selectAllAvaliationsByIdPublicacao = async (id_publicacao) => {
-    let sql = `select * from tbl_avaliacao_publicacao where id_publicacao = ${id_publicacao}`
+    let sql = `select * from tbl_avaliacao_publicacao where id_publicacao = ?`
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, id_publicacao)
 
     if (response.length > 0) {
         return response
@@ -23,11 +23,11 @@ const selectAllAvaliationsByIdPublicacao = async (id_publicacao) => {
 }
 
 const retirarCurtidaModel = async (dadosBody) => {
-    let sql = `delete from tbl_avaliacao_publicacao where id_publicacao = ${dadosBody.id_publicacao} and id_usuario = ${dadosBody.id_usuario}`
+    let sql = `delete from tbl_avaliacao_publicacao where id_publicacao = ? and id_usuario = ?`
 
     // console.log(sql);
 
-    let response = await prisma.$executeRawUnsafe(sql)
+    let response = await prisma.$executeRawUnsafe(sql, dadosBody.id_publicacao, dadosBody.id_usuario)
 
     if (response) {
         return true

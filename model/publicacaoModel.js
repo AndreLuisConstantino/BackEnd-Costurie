@@ -19,15 +19,15 @@ const inserirPublicacaoModel = async (dadosBody) => {
                                             descricao,
                                             id_usuario
                                             ) values (
-                                            '${dadosBody.titulo}',
+                                            ?,
                                             DATE(NOW()),
                                             TIME(NOW()),
-                                            '${dadosBody.descricao}',
-                                            ${dadosBody.id_usuario}
+                                            ?,
+                                            ?
                                             );`
 
     //Executa o script no BD
-    let resultStatus = await prisma.$executeRawUnsafe(sql)
+    let resultStatus = await prisma.$executeRawUnsafe(sql, dadosBody.titulo, dadosBody.descricao, dadosBody.id_usuario)
 
     // console.log(dadosBody);
 
@@ -63,11 +63,11 @@ const selectAllPublicationsModel = async () => {
 }
 
 const selectPublicacaoByIdModel = async (id_publicacao) => {
-    let sql = `select * from tbl_publicacao where id = ${id_publicacao}`
+    let sql = `select * from tbl_publicacao where id = ?`
 
     // console.log(sql);
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, id_publicacao)
 
     if (response.length > 0) {
         return response
@@ -79,16 +79,16 @@ const selectPublicacaoByIdModel = async (id_publicacao) => {
 const updatePublicacaoModel = async (dadosBody) => {
     //Script sql para atualizar os dados no BD
     let sql = `update tbl_publicacao set 
-                                        tbl_publicacao.titulo = '${dadosBody.titulo}',
+                                        tbl_publicacao.titulo = ?,
                                         tbl_publicacao.data_publicacao = DATE(NOW()), 
                                         tbl_publicacao.hora = TIME(NOW()), 
-                                        tbl_publicacao.descricao = '${dadosBody.descricao}' 
-                                    where tbl_publicacao.id = ${dadosBody.id_publicacao};`
+                                        tbl_publicacao.descricao = ? 
+                                    where tbl_publicacao.id = ?;`
 
     // console.log(sql);
 
     //Executa o script no BD
-    let resultStatus = await prisma.$executeRawUnsafe(sql)
+    let resultStatus = await prisma.$executeRawUnsafe(sql, dadosBody.titulo, dadosBody.descricao, dadosBody.id_publicacao)
 
     if (resultStatus) {
         return resultStatus
@@ -98,11 +98,11 @@ const updatePublicacaoModel = async (dadosBody) => {
 }
 
 const deletePublicacaoModel = async (id_publicacao) => {
-    let sql = `delete from tbl_publicacao where id = ${id_publicacao}`
+    let sql = `delete from tbl_publicacao where id = ?`
 
     // console.log(sql);
 
-    let response = await prisma.$executeRawUnsafe(sql)
+    let response = await prisma.$executeRawUnsafe(sql, id_publicacao)
 
     if (response) {
         return true
@@ -112,11 +112,11 @@ const deletePublicacaoModel = async (id_publicacao) => {
 }
 
 const selectAllPublicationsByIdUsuario = async (id_usuario) => {
-    let sql = `select * from tbl_publicacao where id_usuario = ${id_usuario};`
+    let sql = `select * from tbl_publicacao where id_usuario = ?`
 
     // console.log(sql);
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, id_usuario)
 
     if (response.length > 0) {
         return response
@@ -134,12 +134,12 @@ const insertCurtidaPublicacaoModel = async (dadosBody) => {
                                                     id_usuario
                                                     ) values (
                                                         1, 
-                                                        ${dadosBody.id_publicacao},
-                                                        ${dadosBody.id_usuario}
+                                                        ?,
+                                                        ?
                                                         );`
 
     //Executa o script no BD
-    let resultStatus = await prisma.$executeRawUnsafe(sql)
+    let resultStatus = await prisma.$executeRawUnsafe(sql, dadosBody.id_publicacao, dadosBody.id_usuario)
 
     // console.log(dadosBody);
 
@@ -151,11 +151,11 @@ const insertCurtidaPublicacaoModel = async (dadosBody) => {
 }
 
 const selectCurtidaPublicacaoModel = async (dadosBody) => {
-    let sql = `select * from tbl_avaliacao_publicacao where id_publicacao = ${dadosBody.id_publicacao} and id_usuario = ${dadosBody.id_usuario};`
+    let sql = `select * from tbl_avaliacao_publicacao where id_publicacao = ? and id_usuario = ?`
 
     // console.log(sql);
 
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, dadosBody.id_publicacao, dadosBody.id_usuario)
 
     if (response.length > 0) {
         return response

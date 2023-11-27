@@ -12,12 +12,12 @@ var prisma = new PrismaClient();
 
 const insertTagPublicacaoModel = async (id_tag, id_publicacao) => {
     //ScriptSQL para inserir dados
-    let sql = `insert into tbl_tag_publicacao (id_tag, id_publicacao) values (${id_tag}, ${id_publicacao})`;
+    let sql = `insert into tbl_tag_publicacao (id_tag, id_publicacao) values (?, ?)`;
 
     // console.log(sql);
 
     //Executa o script sql no banco de dados
-    let resultStatus = await prisma.$executeRawUnsafe(sql);
+    let resultStatus = await prisma.$executeRawUnsafe(sql, id_tag, id_publicacao);
 
     // console.log(resultStatus);
 
@@ -41,11 +41,11 @@ const selectLastId = async () => {
 }
 
 const deleteAllTagsByIdPublicacao = async (id_publicacao) => {
-    let sql = `delete from tbl_tag_publicacao where tbl_tag_publicacao.id_publicacao = ${id_publicacao}`;
+    let sql = `delete from tbl_tag_publicacao where tbl_tag_publicacao.id_publicacao = ?`;
 
     // console.log(sql)
   
-    let resultStatus = await prisma.$executeRawUnsafe(sql);
+    let resultStatus = await prisma.$executeRawUnsafe(sql, id_publicacao);
   
     // console.log(resultStatus);
   
@@ -57,9 +57,9 @@ const deleteAllTagsByIdPublicacao = async (id_publicacao) => {
 }
 
 const selectAllTagsByIdPublicacaoModel = async (id_publicacao) => {
-  let sql = `select * from tbl_tag_publicacao where id_publicacao = ${id_publicacao}`;
+  let sql = `select * from tbl_tag_publicacao where id_publicacao = ?`;
 
-  let rsUsuario = await prisma.$queryRawUnsafe(sql);
+  let rsUsuario = await prisma.$queryRawUnsafe(sql, id_publicacao);
 
   if (rsUsuario.length > 0) {
     return rsUsuario;

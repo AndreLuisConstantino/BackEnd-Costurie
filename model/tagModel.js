@@ -15,11 +15,11 @@ const selectTagByIdModel = async (id_tag) => {
     from tbl_tag
         inner join tbl_categoria
             on tbl_tag.id_categoria = tbl_categoria.id
-    where tbl_tag.id = ${id_tag}`
+    where tbl_tag.id = ?`
 
     // console.log(sql);
 
-    let response = await prisma.$queryRawUnsafe(sql);
+    let response = await prisma.$queryRawUnsafe(sql, id_tag);
 
     // console.log(response);
 
@@ -36,11 +36,11 @@ const selectAllTagsByCategoriaModel = async (categoria) => {
     from tbl_tag
         inner join tbl_categoria
             on tbl_tag.id_categoria = tbl_categoria.id
-    where tbl_categoria.nome = '${categoria}';`
+    where tbl_categoria.nome = ?;`
 
     // console.log(sql);
 
-    let response = await prisma.$queryRawUnsafe(sql);
+    let response = await prisma.$queryRawUnsafe(sql, categoria);
 
     // console.log(response);
 
@@ -57,11 +57,11 @@ const selectAllTagsByCategoriaIdModel = async (id) => {
     from tbl_tag
         inner join tbl_categoria
             on tbl_tag.id_categoria = tbl_categoria.id
-    where tbl_categoria.id = ${id};`
+    where tbl_categoria.id = ?;`
 
     // console.log(sql);
 
-    let response = await prisma.$queryRawUnsafe(sql);
+    let response = await prisma.$queryRawUnsafe(sql, id);
 
     // console.log(response);
 
@@ -100,13 +100,13 @@ const insertTagModel = async (dadosBody) => {
                                     imagem, 
                                     id_categoria
                                     ) values (
-                                    '${dadosBody.nome}',
-                                    '${dadosBody.imagem}',
-                                    ${dadosBody.id_categoria}
+                                    ?,
+                                    ?,
+                                    ?
                                     );`;
 
     //Executa o script sql no banco de dados
-    let resultStatus = await prisma.$executeRawUnsafe(sql);
+    let resultStatus = await prisma.$executeRawUnsafe(sql, dadosBody.nome, dadosBody.imagem, dadosBody.id_categoria);
 
     if (resultStatus) {
         return true;

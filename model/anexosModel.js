@@ -16,14 +16,14 @@ const insertAnexoModel = async (conteudo, id_publicacao) => {
             anexo, 
             id_publicacao
             ) values (
-                '${conteudo}',
-                ${id_publicacao}
+                ?,
+                ?
             );`;
 
         // console.log(sql);
     
         //Executa o script sql no banco de dados
-        let resultStatus = await prisma.$executeRawUnsafe(sql);
+        let resultStatus = await prisma.$executeRawUnsafe(sql, conteudo, id_publicacao);
     
         // console.log(resultStatus);
     
@@ -47,11 +47,11 @@ const selectLastIdAnexoModel = async () => {
 }
 
 const deleteAllAnexosByIdPublicacao = async (id_publicacao) => {
-    let sql = `delete from tbl_anexo_publicacao where tbl_anexo_publicacao.id_publicacao = ${id_publicacao}`;
+    let sql = `delete from tbl_anexo_publicacao where tbl_anexo_publicacao.id_publicacao = ?`;
 
     // console.log(sql)
   
-    let resultStatus = await prisma.$executeRawUnsafe(sql);
+    let resultStatus = await prisma.$executeRawUnsafe(sql, id_publicacao);
   
     // console.log(resultStatus);
   
@@ -63,9 +63,9 @@ const deleteAllAnexosByIdPublicacao = async (id_publicacao) => {
 } 
 
 const selectAnexosByIdModel = async (id_publicacao) => {
-  let sql = `select * from tbl_anexo_publicacao where id_publicacao = ${id_publicacao}`;
+  let sql = `select * from tbl_anexo_publicacao where id_publicacao = ?`;
 
-  let rsUsuario = await prisma.$queryRawUnsafe(sql);
+  let rsUsuario = await prisma.$queryRawUnsafe(sql, id_publicacao);
 
   if (rsUsuario.length > 0) {
     return rsUsuario;

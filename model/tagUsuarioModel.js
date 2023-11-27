@@ -11,11 +11,11 @@ var { PrismaClient } = require("@prisma/client");
 var prisma = new PrismaClient();
 
 const deleteAllTagsWithUserIdModel = async (id_usuario) => {
-  let sql = `delete from tbl_tag_usuario where tbl_tag_usuario.id_usuario = ${id_usuario}`;
+  let sql = `delete from tbl_tag_usuario where tbl_tag_usuario.id_usuario = ?`;
 
   // console.log(sql);
 
-  let resultStatus = await prisma.$executeRawUnsafe(sql);
+  let resultStatus = await prisma.$executeRawUnsafe(sql, id_usuario);
 
   // console.log(resultStatus);
 
@@ -40,10 +40,10 @@ const selectTagUsuarioLastId = async () => {
 
 const insertTagUsuario = async (tag, id_usuario) => {
   //ScriptSQL para inserir dados
-  let sql = `insert into tbl_tag_usuario (id_tag, id_usuario) values (${tag}, ${id_usuario});`;
+  let sql = `insert into tbl_tag_usuario (id_tag, id_usuario) values (?, ?);`;
 
   //Executa o script sql no banco de dados
-  let resultStatus = await prisma.$executeRawUnsafe(sql);
+  let resultStatus = await prisma.$executeRawUnsafe(sql, tag, id_usuario);
 
   if (resultStatus) {
     return true;
@@ -53,9 +53,9 @@ const insertTagUsuario = async (tag, id_usuario) => {
 };
 
 const selectAllTagsWithUserIdModel = async (id_usuario) => {
-  let sql = `select * from tbl_tag_usuario where tbl_tag_usuario.id_usuario = ${id_usuario}`;
+  let sql = `select * from tbl_tag_usuario where tbl_tag_usuario.id_usuario = ?`;
   
-  let rsUsuario = await prisma.$queryRawUnsafe(sql);
+  let rsUsuario = await prisma.$queryRawUnsafe(sql, id_usuario);
 
   // console.log(rsUsuario);
   if (rsUsuario.length > 0) {
@@ -66,9 +66,9 @@ const selectAllTagsWithUserIdModel = async (id_usuario) => {
 }
 
 const selectAllUsuariosByTag = async (tag) => {
-  let sql = `select * from tbl_tag_usuario where tbl_tag_usuario.id_tag = ${tag.id_tag};`;
+  let sql = `select * from tbl_tag_usuario where tbl_tag_usuario.id_tag = ?;`;
   
-  let response = await prisma.$queryRawUnsafe(sql);
+  let response = await prisma.$queryRawUnsafe(sql, tag.id_tag);
 
   // console.log(rsUsuario);
   if (response.length > 0) {
