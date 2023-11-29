@@ -4,5 +4,8 @@
         ".vscode{,/**}"
     ],
     "appService.defaultWebAppToDeploy": "/subscriptions/c67414e7-e407-4c50-b705-841edd8ef3ac/resourceGroups/TCC-TARDE-G4/providers/Microsoft.Web/sites/back-end-costuriee",
-    "appService.deploySubpath": "."
+    "appService.deploySubpath": ".",
+    "material-icon-theme.folders.associations": {
+        "model_mongoDB": "server"
+    }
 }

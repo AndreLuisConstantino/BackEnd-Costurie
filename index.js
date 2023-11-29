@@ -135,11 +135,14 @@ io.on('connection', socket => {
     })
 
     socket.on('deleteMessage', async message => {
+        console.log(message);
         const messageDeleted = await mensagemController.deleteMessage(message)
 
-        lista.mensagens.filter(mensagem => (mensagem != message))
+        let newList = lista.mensagens.filter(mensagem => mensagem._id != message)
 
-        io.emit('receive_message', messageDeleted)
+        lista.mensagens = newList
+
+        io.emit('receive_message', lista)
     })
 
     socket.on('disconnect', reason => {
@@ -147,4 +150,4 @@ io.on('connection', socket => {
     })
 })
 
-server.listen(3001, () => console.log('SERVER SOCKEET.IO LIGADO: 3001'))
+server.listen(3001, () => console.log('SERVER SOCKET.IO LIGADO: 3001'))
