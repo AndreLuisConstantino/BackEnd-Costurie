@@ -98,6 +98,7 @@ const server = require('http').createServer(app)
 const io = require('socket.io')(server, { cors: { origin: '*' } })
 const chatControler = require('./routes/mongoDB/chatFunctions.js')
 const mensagemController = require('./routes/mongoDB/mensagemFunctions.js')
+const { log } = require('console')
 var lista = []
 
 io.on('connection', socket => {
@@ -137,11 +138,14 @@ io.on('connection', socket => {
     })
 
     socket.on('deleteMessage', async message => {
+        console.log(message);
         const messageDeleted = await mensagemController.deleteMessage(message)
 
-        lista.mensagens.filter(mensagem => (mensagem != message))
+        let newList = lista.mensagens.filter(mensagem => mensagem._id != message)
 
-        io.emit('receive_message', messageDeleted)
+        lista.mensagens = newList
+
+        io.emit('receive_message', lista)
     })
 
     socket.on('disconnect', reason => {
