@@ -88,30 +88,33 @@ mongoose
     })
     .catch((err) => console.log(err))
 
-/*****************************************************************************************************************
+/***************************************
 * Objetivo: Chat com Socket.IO
 * Data: 01/11/2023
-* Autor: André
+* Autor: Muryllo
 * Versão: 1.0
-******************************************************************************************************************/
+**************************************/
 const server = require('http').createServer(app)
 const io = require('socket.io')(server, { cors: { origin: '*' } })
-const chatControler = require('./controller/chatController.js')
-const mensagemController = require('./controller/mensagemController.js')
+const chatControler = require('./routes/mongoDB/chatFunctions.js')
+const mensagemController = require('./routes/mongoDB/mensagemFunctions.js')
+const { log } = require('console')
 var lista = []
 
 io.on('connection', socket => {
     console.log('Usuario Conectado', socket.id);
 
-    socket.on('createRooom', async listUsers => {
-        const newChat = await chatControler.insertChat(listUsers)
+    socket.on('createRoom', async listUsers => {
+        console.log(typeof(listUsers));
+        const list = JSON.parse(listUsers)
+
+        let newChat = await chatControler.insertChat(list)
 
         io.emit('newChat', newChat)
     })
 
     socket.on('listMessages', async chat => {
         const listMessages = await chatControler.getChat(chat)
-        // console.log(listMessages);
 
         lista = listMessages
 
@@ -120,6 +123,8 @@ io.on('connection', socket => {
 
     socket.on('listContacts', async user => {
         const listContacts = await chatControler.getListContacts(user)
+
+        listContacts.id_user = parseInt(user)
 
         io.emit('receive_contacts', listContacts)
     })

@@ -83,7 +83,7 @@ const selectComentariosByIdPublicacao = async (id_publicacao) => {
                     for (let i = 0; i < respostas.length; i++) {
                         let resposta = respostas[i]
 
-                        let usuarioResposta = await usuarioModel.selectUserByIdModel(resposta.id_usuario)
+                        let usuarioResposta = await usuarioModel.selectUserById(resposta.id_usuario)
 
                         // console.log(resposta);
 
