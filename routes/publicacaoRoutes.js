@@ -184,4 +184,27 @@ router.get('/publicacao/populares', verifyJWT, cors(), async (request, response)
     response.json(dadosPublicacoesPopulares)
 })
 
+//Endpoint para verificar a curtida
+router.post('/publicacao/verificar_curtida', cors(), verifyJWT, bodyParserJSON,async (request, response) => {
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let dadosBody = request.body
+
+        let dadosVerificarCurtida = await publicacaoController.verificarCurtida(dadosBody)
+
+        if (dadosVerificarCurtida) {
+            response.status(dadosVerificarCurtida.status)
+            response.json(dadosVerificarCurtida)
+        } else {
+            response.status(dadosVerificarCurtida.status)
+            response.json(dadosVerificarCurtida)
+        }
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+})
+
 module.exports = router 

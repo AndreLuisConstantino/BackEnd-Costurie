@@ -443,6 +443,32 @@ const retirarCurtida = async (dadosBody) => {
     }
 }
 
+const verificarCurtida = async (dadosBody) => {
+
+    if (dadosBody.id_usuario == '' || dadosBody.id_usuario == undefined || isNaN(dadosBody.id_usuario) ||
+        dadosBody.id_publicacao == '' || dadosBody.id_publicacao == undefined || isNaN(dadosBody.id_publicacao)) {
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let dadosVerificarCurtida = await avaliacaoModel.selectCurtidaByIdUsuario(dadosBody)
+
+        console.log(dadosVerificarCurtida);
+
+        if (dadosVerificarCurtida) {
+
+            let dadosVerificarCurtidaJson = {}
+
+            dadosVerificarCurtidaJson.status = message.SUCCES_REQUEST.status
+            dadosVerificarCurtidaJson.message = message.SUCCES_REQUEST.message
+            dadosVerificarCurtidaJson.curtida = true
+
+            return dadosVerificarCurtidaJson
+        } else {
+            return message.ERROR_INTERNAL_SERVER
+        }
+    }
+}
+
 module.exports = {
     insertPublicacao,
     selectMostRecentPublications,
@@ -452,5 +478,6 @@ module.exports = {
     curtirPublicacao,
     selectAllPublicationsOfSystem,
     selectMostPopularPublications,
-    retirarCurtida
+    retirarCurtida,
+    verificarCurtida
 }

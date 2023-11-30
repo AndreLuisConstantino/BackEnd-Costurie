@@ -36,7 +36,20 @@ const retirarCurtidaModel = async (dadosBody) => {
     }
 }
 
+const selectCurtidaByIdUsuario = async (dadosBody) => {
+    let sql = `select * from tbl_avaliacao_publicacao where id_publicacao = ? and id_usuario = ?`
+
+    let response = await prisma.$queryRawUnsafe(sql, dadosBody.id_publicacao, dadosBody.id_usuario)
+
+    if (response.length > 0) {
+        return response
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     selectAllAvaliationsByIdPublicacao,
-    retirarCurtidaModel
+    retirarCurtidaModel,
+    selectCurtidaByIdUsuario
 }
