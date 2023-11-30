@@ -38,7 +38,7 @@ const { verifyJWT } = require('../module/secret.js')
 var message = require('../controller/modulo/config.js')
 
 //Endpoint para pegar todas as tags pela categoria
-router.post('/tag/tag_by_categoria', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.post('/tag/tag_by_categoria', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
     let contentType = request.headers['content-type']
 
     let dadosBody = request.body
@@ -60,7 +60,7 @@ router.post('/tag/tag_by_categoria', verifyJWT, cors(), bodyParserJSON, async (r
 })
 
 //Endpoint que pega a tag pelo id
-router.get('/tag/:id', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.get('/tag/:id', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
     let idTag = request.params.id
 
     let dadosTag = await tagController.selectTagById(idTag)
@@ -75,7 +75,7 @@ router.get('/tag/:id', verifyJWT, cors(), bodyParserJSON, async (request, respon
 })
 
 //Endpoint que retorna todos as tags existentes no BD
-router.get('/tag', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.get('/tag', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
 
     let dadosTag = await tagController.selectTagsByCategoria()
 
@@ -89,7 +89,7 @@ router.get('/tag', verifyJWT, cors(), bodyParserJSON, async (request, response) 
 })
 
 //Endpoint que insere tag
-router.post('/tag/inserir', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.post('/tag/inserir', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
     let contentType = request.headers['content-type']
 
     let dadosBody = request.body
@@ -111,7 +111,7 @@ router.post('/tag/inserir', verifyJWT, cors(), bodyParserJSON, async (request, r
 })
 
 //Endpoint para inserir as tags do usuário
-router.post('/tag/inserir_tags', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.post('/tag/inserir_tags', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
     let contentType = request.headers['content-type']
 
     let dadosBody = request.body

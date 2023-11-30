@@ -37,7 +37,7 @@ const { verifyJWT } = require('../module/secret.js')
 var message = require('../controller/modulo/config.js')
 
 //Endpoint para alterar o email
-router.put('/configuracao/alterar_email', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.put('/configuracao/alterar_email', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
     //Recebe o content-type da requisição
     let contentType = request.headers['content-type']
 
@@ -61,7 +61,7 @@ router.put('/configuracao/alterar_email', verifyJWT, cors(), bodyParserJSON, asy
 })
 
 //Endpoint para alterar a senha
-router.put('/configuracao/alterar_senha', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.put('/configuracao/alterar_senha', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
     //Recebe o content-type da requisição
     let contentType = request.headers['content-type']
 

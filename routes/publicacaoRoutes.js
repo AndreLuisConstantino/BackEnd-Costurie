@@ -37,7 +37,7 @@ const { verifyJWT } = require('../module/secret.js')
 var message = require('../controller/modulo/config.js')
 
 //Endpoint para inserir uma publicação
-router.post('/publicacao/inserir', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.post('/publicacao/inserir', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
     //Recebe o content-type da requisição
     let contentType = request.headers['content-type']
 
@@ -62,7 +62,7 @@ router.post('/publicacao/inserir', verifyJWT, cors(), bodyParserJSON, async (req
 })
 
 //Endpoint que retorna todas as publicações
-router.get('/publicacao/select_all', verifyJWT, cors(), async (request, response) => {
+router.get('/publicacao/select_all', cors(), verifyJWT, async (request, response) => {
 
     let dadosPublicacao = await publicacaoController.selectMostRecentPublications()
 
@@ -71,7 +71,7 @@ router.get('/publicacao/select_all', verifyJWT, cors(), async (request, response
 })
 
 //Endpoint que retorna a publicação pelo id
-router.get('/publicacao/select_by_id/:id', verifyJWT, cors(), async (request, response) => {
+router.get('/publicacao/select_by_id/:id', cors(), verifyJWT, async (request, response) => {
 
     let idPublicacao = request.params.id
 
@@ -82,7 +82,7 @@ router.get('/publicacao/select_by_id/:id', verifyJWT, cors(), async (request, re
 })
 
 //Endpoint que atualiza uma publicação que já existe
-router.put('/publicacao/editar_publicacao', verifyJWT, bodyParserJSON, cors(), async (request, response) => {
+router.put('/publicacao/editar_publicacao', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
 
     let contentType = request.headers['content-type']
 
@@ -107,7 +107,7 @@ router.put('/publicacao/editar_publicacao', verifyJWT, bodyParserJSON, cors(), a
 })
 
 //Endpoint que deleta uma publicação
-router.delete('/publicacao/:id', verifyJWT, cors(), async (request, response) => {
+router.delete('/publicacao/:id', cors(), verifyJWT, async (request, response) => {
 
     let idPublicacao = request.params.id
 
@@ -118,7 +118,7 @@ router.delete('/publicacao/:id', verifyJWT, cors(), async (request, response) =>
 })
 
 //Endpoint para curtir uma publicação
-router.post('/publicacao/curtir', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.post('/publicacao/curtir', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
     //Recebe o content-type da requisição
     let contentType = request.headers['content-type']
 
@@ -141,7 +141,7 @@ router.post('/publicacao/curtir', verifyJWT, cors(), bodyParserJSON, async (requ
 })
 
 //Endpoint para retirar a curtida
-router.post('/publicacao/retirar_curtida', verifyJWT, cors(), bodyParserJSON, async (request, response) => { 
+router.post('/publicacao/retirar_curtida', cors(), verifyJWT, bodyParserJSON, async (request, response) => { 
     //Recebe o content-type da requisição
     let contentType = request.headers['content-type']
 
@@ -165,7 +165,7 @@ router.post('/publicacao/retirar_curtida', verifyJWT, cors(), bodyParserJSON, as
 })
 
 //Endpoint que traz todas as publicações existentes no sistema
-router.get('/publicacao/', verifyJWT, cors(), async (request, response) => {
+router.get('/publicacao/', cors(), verifyJWT, async (request, response) => {
 
     let dadosPublicacoes = await publicacaoController.selectAllPublicationsOfSystem()
 
@@ -174,7 +174,7 @@ router.get('/publicacao/', verifyJWT, cors(), async (request, response) => {
 })
 
 //Endpoint de selecionar as publicações mais populares
-router.get('/publicacao/populares', verifyJWT, cors(), async (request, response) => {
+router.get('/publicacao/populares', cors(), verifyJWT, async (request, response) => {
 
     let dadosPublicacoesPopulares = await publicacaoController.selectMostPopularPublications()
 

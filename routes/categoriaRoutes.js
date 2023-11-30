@@ -37,7 +37,7 @@ const { verifyJWT } = require('../module/secret.js')
 var message = require('../controller/modulo/config.js')
 
 //Selecionar todas as categorias
-router.get('/categoria/select_all', verifyJWT, cors(), async (request, response) => {
+router.get('/categoria/select_all', cors(), verifyJWT, async (request, response) => {
 
     let dadosCategorias = await categoriaController.selectAllCategories()
 
@@ -51,7 +51,7 @@ router.get('/categoria/select_all', verifyJWT, cors(), async (request, response)
 })
 
 //Endpoint para selecionar todas as categorias pelo id
-router.get('/categoria/:id', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.get('/categoria/:id', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
     let idCategoria = request.params.id
 
     let dadosCategorias = await categoriaController.selectCategoriaById(idCategoria)

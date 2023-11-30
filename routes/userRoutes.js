@@ -85,7 +85,7 @@ router.post('/usuario/login', cors(), bodyParserJSON, async (request, response) 
 })
 
 //Endpoint para a validação de token JWT
-router.get('/usuario/token', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.get('/usuario/token',  cors(), verifyJWT, bodyParserJSON, async (request, response) => {
     response.status(200)
     response.json({ 'Validate': 'Validado, pode usar o app ;)', status: true })
 })
@@ -184,7 +184,7 @@ router.put('/usuario/personalizar_perfil', cors(), bodyParserJSON, async (reques
 })
 
 //Endpoint que pega as informações da tela de perfil
-router.get('/usuario/meu_perfil/:id', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.get('/usuario/meu_perfil/:id',  cors(), verifyJWT, bodyParserJSON, async (request, response) => {
 
     let usuarioId = request.params.id
 
@@ -202,7 +202,7 @@ router.get('/usuario/meu_perfil/:id', verifyJWT, cors(), bodyParserJSON, async (
 })
 
 //Endpoint que atualiza a tela de perfil
-router.put('/usuario/editar_perfil', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.put('/usuario/editar_perfil', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
     //Recebe o content-type da requisição
     let contentType = request.headers['content-type']
 
@@ -226,7 +226,7 @@ router.put('/usuario/editar_perfil', verifyJWT, cors(), bodyParserJSON, async (r
 })
 
 //Endpoint para inserir a tela de localização
-router.post('/usuario/inserir_localizacao', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.post('/usuario/inserir_localizacao', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
     //Recebe o content-type da requisição 
     let contentType = request.headers['content-type']
 
@@ -252,7 +252,7 @@ router.post('/usuario/inserir_localizacao', verifyJWT, cors(), bodyParserJSON, a
 })
 
 //Endpoint para selecionar os usuarios pela tag
-router.post('/usuario/select_by_tag', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.post('/usuario/select_by_tag', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
     //Recebe o content-type da requisição
     let contentType = request.headers['content-type']
 
@@ -276,7 +276,7 @@ router.post('/usuario/select_by_tag', verifyJWT, cors(), bodyParserJSON, async (
 })
 
 // Endpoint para selecionar todos os usuários
-router.get('/usuario/select_all', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.get('/usuario/select_all', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
 
     let dadosUsuario = await usuarioController.selectAllUsers()
 
@@ -290,7 +290,7 @@ router.get('/usuario/select_all', verifyJWT, cors(), bodyParserJSON, async (requ
 })
 
 //Endpoint para selecionar usuário pelo email
-router.get('/usuario/:email', verifyJWT, cors(), async (request, response) => {
+router.get('/usuario/:email', cors(), verifyJWT, async (request, response) => {
     let emailUsuario = request.params.email
 
     let dadosUsuario = await usuarioController.getUserByEmail(emailUsuario)
@@ -300,7 +300,7 @@ router.get('/usuario/:email', verifyJWT, cors(), async (request, response) => {
 })
 
 //Endpoint para deletar um usuário pelo id
-router.delete('/usuario/:id', verifyJWT, cors(), async (request, response) => {
+router.delete('/usuario/:id', cors(), verifyJWT, async (request, response) => {
     let idUsuario = request.params.id
 
     let usuarioDeletado = await usuarioController.deleteUserById(idUsuario)

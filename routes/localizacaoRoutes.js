@@ -37,7 +37,7 @@ const { verifyJWT } = require('../module/secret.js')
 var message = require('../controller/modulo/config.js')
 
 //Endpoint para pegar todos os estados
-router.get('/localizacao/estados/', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.get('/localizacao/estados/', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
 
     let dadosEstados = await localizacaoController.selectAllStates()
 
@@ -51,12 +51,12 @@ router.get('/localizacao/estados/', verifyJWT, cors(), bodyParserJSON, async (re
 })
 
 //Endpoint para pegar todas as cidades
-router.get('/localizacao/cidades/', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.get('/localizacao/cidades/', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
 
     let dadosCidades = localizacaoController.selectAllCitiesByState()
 })
 
-router.get('/localizacao/select_all', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.get('/localizacao/select_all', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
 
     let dadosLocalizacao = await localizacaoController.selectAllLocations()
 
@@ -69,7 +69,7 @@ router.get('/localizacao/select_all', verifyJWT, cors(), bodyParserJSON, async (
     }
 })
 
-router.put('/localizacao/atualizar', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.put('/localizacao/atualizar', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
     let contentType = request.headers['content-type']
 
     let dadosBody = request.body

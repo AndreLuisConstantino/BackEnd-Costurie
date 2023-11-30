@@ -37,7 +37,7 @@ const { verifyJWT } = require('../module/secret.js')
 var message = require('../controller/modulo/config.js')
 
 //Endpoint para fazer uma resposta de comentário
-router.post('/respostas_comentario/inserir', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.post('/respostas_comentario/inserir', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
     //Recebe o content-type da requisição
     let contentType = request.headers['content-type']
 
@@ -62,7 +62,7 @@ router.post('/respostas_comentario/inserir', verifyJWT, cors(), bodyParserJSON, 
 })
 
 //Endpoint para selecionar todas as respostas de comentário
-router.get('/respostas_comentario', verifyJWT, cors(), async (request, response) => {
+router.get('/respostas_comentario', cors(), verifyJWT, async (request, response) => {
     // console.log('teste');
     let dadosResposta = await respostasController.selectAllRespostas()
 
@@ -70,7 +70,7 @@ router.get('/respostas_comentario', verifyJWT, cors(), async (request, response)
     response.json(dadosResposta)
 })
 
-router.get('/respostas_comentario/:id_comentario', verifyJWT, cors(), async (request, response) => {
+router.get('/respostas_comentario/:id_comentario', cors(), verifyJWT, async (request, response) => {
 
     let idComentario = request.params.id_comentario
 
@@ -81,7 +81,7 @@ router.get('/respostas_comentario/:id_comentario', verifyJWT, cors(), async (req
 })
 
 //Endpoint para deletar uma resposta de comentário
-router.delete('/respostas_comentario/:id', verifyJWT, cors(), async (request, response) => {
+router.delete('/respostas_comentario/:id', cors(), verifyJWT, async (request, response) => {
     let idResposta = request.params.id
 
     let dadosDeletarResposta = await respostasController.deleteResposta(idResposta)

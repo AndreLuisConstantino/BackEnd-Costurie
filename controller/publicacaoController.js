@@ -452,7 +452,7 @@ const verificarCurtida = async (dadosBody) => {
 
         let dadosVerificarCurtida = await avaliacaoModel.selectCurtidaByIdUsuario(dadosBody)
 
-        console.log(dadosVerificarCurtida);
+        // console.log(dadosVerificarCurtida);
 
         if (dadosVerificarCurtida) {
 

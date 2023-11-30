@@ -37,7 +37,7 @@ const { verifyJWT } = require('../module/secret.js')
 var message = require('../controller/modulo/config.js')
 
 //Endpoint que insere comentário
-router.post('/comentario/inserir', verifyJWT, cors(), bodyParserJSON, async (request, response) => {
+router.post('/comentario/inserir', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
     //Recebe o content-type da requisição
     let contentType = request.headers['content-type']
 
@@ -62,7 +62,7 @@ router.post('/comentario/inserir', verifyJWT, cors(), bodyParserJSON, async (req
 })
 
 //Endpoint que seleciona os comentários pelo id da publicação
-router.get('/comentario/select_by_id_publicacao/:id', verifyJWT, cors(), async (request, response) => {
+router.get('/comentario/select_by_id_publicacao/:id', cors(), verifyJWT, async (request, response) => {
     
     let idPublicacao = request.params.id
 
@@ -73,7 +73,7 @@ router.get('/comentario/select_by_id_publicacao/:id', verifyJWT, cors(), async (
 })
 
 //Endpoint para selecionar todos os comentários do sistema
-router.get('/comentario/select_all', verifyJWT, cors(), async (request, response) => {
+router.get('/comentario/select_all', cors(), verifyJWT, async (request, response) => {
     
     let dadosComentarios = await comentarioController.selectAllComentarios()
 
@@ -82,7 +82,7 @@ router.get('/comentario/select_all', verifyJWT, cors(), async (request, response
 })
 
 //Endpoint para deletar um comentario
-router.delete('/comentario/:id', verifyJWT, cors(), async (request, response) => {
+router.delete('/comentario/:id', cors(), verifyJWT, async (request, response) => {
 
     let idComentario = request.params.id
 
