@@ -61,7 +61,7 @@ const getUserByEmail = async (email) => {
   if (resultEmail) {
     let dadosEmailJson = {};
     dadosEmailJson.email = resultEmail[0];
-    dadosEmailJson.status = message.ERROR_EMAIL_ALREADY_EXISTS.status
+    dadosEmailJson.status = message.ERROR_EMAIL_ALREADY_EXISTS.statusx
     dadosEmailJson.message = message.ERROR_EMAIL_ALREADY_EXISTS.message
     return dadosEmailJson;
   } else {
@@ -71,7 +71,7 @@ const getUserByEmail = async (email) => {
 
 const updateUserTokenAndExpires = async (id, token, tempo_expiracao) => {
 
-  let userResponseId = await usuarioModel.selectUserByIdModel(id);
+  let userResponseId = await usuarioModel.selectUserById(id);
 
   if (userResponseId) {
     let userUpdatePassword = await usuarioModel.updateUserTokenAndExpiresModel(id, token, tempo_expiracao);
@@ -359,7 +359,7 @@ const updateProfileTagLocality = async (dadosBody) => {
     if (resultDadosDeletado) {
       const usuarioAtualizado = await updateTag(dadosBody)
 
-      console.log('teste');
+      // console.log('teste');
 
       if (usuarioAtualizado) {
         dadosPerfilUsuarioJson.usuario_atualizado = usuarioAtualizado
@@ -447,7 +447,7 @@ const selectAllUsuariosByTag = async (tag) => {
 
     let dadosUsuarios = await tagUsuarioModel.selectAllUsuariosByTag(tag)
 
-    // console.log(dadosUsuarios);
+    console.log(dadosUsuarios)
 
     if (dadosUsuarios) {
 

@@ -202,7 +202,7 @@ const selectUserByEmailTagNameModel = async (dadosBody) => {
 }
 
 const selectProfileByIdModel = async (id) => {
-    let sql = `select * from tags_usuario where id_usuario = ?;`
+    let sql = `select * from tbl_tag_usuario where id_usuario = ?;`
     // console.log(sql);
 
     let response = await prisma.$queryRawUnsafe(sql, id)
