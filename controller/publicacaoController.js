@@ -352,11 +352,14 @@ const selectAllPublicationsOfSystem = async () => {
 
         publicacao.anexos = dadosAnexos
 
+        console.log(dadosAnexos);
+
         dadosPublicacaoComAnexoArray.push(publicacao)
     }
 
     if (dadosPublicacao) {
         let dadosPublicacaoJson = {}
+        console.log(dadosPublicacaoJson);
 
         dadosPublicacaoJson.publicacoes = dadosPublicacaoComAnexoArray
         dadosPublicacaoJson.status = message.SUCCES_REQUEST.status
