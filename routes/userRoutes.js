@@ -276,7 +276,7 @@ router.post('/usuario/select_by_tag', cors(), verifyJWT, bodyParserJSON, async (
 })
 
 // Endpoint para selecionar todos os usuários
-router.get('/usuario/select_all', cors(), verifyJWT, bodyParserJSON, async (request, response) => {
+router.get('/usuario/select_all', cors(), bodyParserJSON, async (request, response) => {
 
     let dadosUsuario = await usuarioController.selectAllUsers()
 

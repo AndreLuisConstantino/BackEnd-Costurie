@@ -8,9 +8,14 @@
 const mongoose = require('mongoose')
 
 //Constantes MongoDB
-const DB_USER = 'muryllovieira59'
-const DB_PASSWORD = 'NEnQyCRQNB9CsKya'
-const STRING_CONNECTION = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@chat-tcc-costurie.lenlxrh.mongodb.net/?retryWrites=true&w=majority`
+// const DB_USER = 'muryllovieira59'
+// const DB_PASSWORD = 'NEnQyCRQNB9CsKya'
+// const STRING_CONNECTION = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@chat-tcc-costurie.lenlxrh.mongodb.net/?retryWrites=true&w=majority`
+
+//Constantes MongoDB
+const DB_USER = 'muryllo'
+const DB_PASSWORD = 'senai123'
+const STRING_CONNECTION = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@costuriecluster.gx44w4b.mongodb.net/?retryWrites=true&w=majority`
 //teste
 
 /* 
@@ -82,7 +87,7 @@ mongoose
         STRING_CONNECTION
     )
     .then(() => {
-        app.listen(3000, () => {
+        app.listen(8080, () => {
             console.log('Servidor aguardando requisições na porta 3000')
         })
     })
@@ -91,7 +96,7 @@ mongoose
 /***************************************
 * Objetivo: Chat com Socket.IO
 * Data: 01/11/2023
-* Autor: Muryllo
+* Autor: Luizão Maldoso
 * Versão: 1.0
 **************************************/
 const server = require('http').createServer(app)
