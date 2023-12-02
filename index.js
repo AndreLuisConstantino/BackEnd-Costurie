@@ -105,6 +105,12 @@ const chatControler = require('./routes/mongoDB/chatFunctions.js')
 const mensagemController = require('./routes/mongoDB/mensagemFunctions.js')
 const { log } = require('console')
 var lista = []
+const { useAzureSocketIO } = require("@azure/web-pubsub-socket.io");
+
+useAzureSocketIO(io, {
+    hub: "Hub", // The hub name can be any valid string.
+    connectionString: "Endpoint=https://socketcosturieapp.webpubsub.azure.com;AccessKey=VzJoSPIRIl+w/esgHz5PIlAGQENhYStjjDAbPLrfyNE=;Version=1.0;"
+});
 
 io.on('connection', socket => {
     console.log('Usuario Conectado', socket.id);
