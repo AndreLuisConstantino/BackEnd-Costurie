@@ -223,6 +223,8 @@ const selectProfileById = async (id) => {
 
       let usuarioPossuiTag = await tagUsuarioModel.selectAllTagsWithUserIdModel(id)
 
+      console.log(usuarioPossuiTag);
+
       if (usuarioPossuiTag.length) {
         for (let i = 0; i < usuarioPossuiTag.length; i++) {
           let tagUsuario = usuarioPossuiTag[i]

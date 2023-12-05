@@ -467,7 +467,13 @@ const verificarCurtida = async (dadosBody) => {
 
             return dadosVerificarCurtidaJson
         } else {
-            return message.ERROR_INTERNAL_SERVER
+            let dadosVerificarCurtidaJson = {}
+
+            dadosVerificarCurtidaJson.status = 200
+            dadosVerificarCurtidaJson.message = 'Usuário não curtiu esta publicação'
+            dadosVerificarCurtidaJson.curtida = false
+
+            return dadosVerificarCurtidaJson
         }
     }
 }
