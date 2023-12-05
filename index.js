@@ -96,74 +96,75 @@ mongoose
 /***************************************
 * Objetivo: Chat com Socket.IO
 * Data: 01/11/2023
-* Autor: Luizão Maldoso
+* Autor: Muryllo
 * Versão: 1.0
 **************************************/
-const server = require('http').createServer(app)
+const server = require('https').createServer(app)
 const io = require('socket.io')(server, { cors: { origin: '*' } })
 const chatControler = require('./routes/mongoDB/chatFunctions.js')
 const mensagemController = require('./routes/mongoDB/mensagemFunctions.js')
-const { log } = require('console')
-var lista = []
 const { useAzureSocketIO } = require("@azure/web-pubsub-socket.io");
 
+// Configuração para o Web PubSub
 useAzureSocketIO(io, {
-    hub: "Hub", // The hub name can be any valid string.
-    connectionString: "Endpoint=https://socketcosturieapp.webpubsub.azure.com;AccessKey=VzJoSPIRIl+w/esgHz5PIlAGQENhYStjjDAbPLrfyNE=;Version=1.0;"
+    hub: "Hub", // O nome do hub no Web PubSub
+    connectionString: "Endpoint=https://socketcosturie.webpubsub.azure.com;AccessKey=SZhgav068+IriLMjFsuO3PP21PY3RVNODn44wDemEgk=;Version=1.0;"
 });
 
+var lista = []
+
 io.on('connection', socket => {
-    console.log('Usuario Conectado', socket.id);
+        console.log('Usuario Conectado', socket.id);
 
-    socket.on('createRoom', async listUsers => {
-        console.log(typeof(listUsers));
-        const list = JSON.parse(listUsers)
+        socket.on('createRoom', async listUsers => {
+            console.log(typeof (listUsers));
+            const list = JSON.parse(listUsers)
 
-        let newChat = await chatControler.insertChat(list)
+            let newChat = await chatControler.insertChat(list)
 
-        io.emit('newChat', newChat)
+            io.emit('newChat', newChat)
+        })
+
+        socket.on('listMessages', async chat => {
+            const listMessages = await chatControler.getChat(chat)
+
+            lista = listMessages
+
+            io.emit('receive_message', listMessages)
+        })
+
+        socket.on('listContacts', async user => {
+            const listContacts = await chatControler.getListContacts(user)
+
+            listContacts.id_user = parseInt(user)
+
+            io.emit('receive_contacts', listContacts)
+        })
+
+        socket.on('message', async text => {
+            console.log("Mensagem: " + text);
+
+            let retornoMensagem = await mensagemController.createMessage(text.messageBy, text.messageTo, text.message, text.image, text.chatId)
+
+            lista.mensagens.push(retornoMensagem)
+
+            io.emit('receive_message', lista)
+        })
+
+        socket.on('deleteMessage', async message => {
+            console.log(message);
+            const messageDeleted = await mensagemController.deleteMessage(message)
+
+            let newList = lista.mensagens.filter(mensagem => mensagem._id != message)
+
+            lista.mensagens = newList
+
+            io.emit('receive_message', lista)
+        })
+
+        socket.on('disconnect', reason => {
+            console.log('Usuário desconectado');
+        })
     })
-
-    socket.on('listMessages', async chat => {
-        const listMessages = await chatControler.getChat(chat)
-
-        lista = listMessages
-
-        io.emit('receive_message', listMessages)
-    })
-
-    socket.on('listContacts', async user => {
-        const listContacts = await chatControler.getListContacts(user)
-
-        listContacts.id_user = parseInt(user)
-
-        io.emit('receive_contacts', listContacts)
-    })
-
-    socket.on('message', async text => {
-        console.log("Mensagem: " + text);
-
-        let retornoMensagem = await mensagemController.createMessage(text.messageBy, text.messageTo, text.message, text.image, text.chatId)
-
-        lista.mensagens.push(retornoMensagem)
-
-        io.emit('receive_message', lista)
-    })
-
-    socket.on('deleteMessage', async message => {
-        console.log(message);
-        const messageDeleted = await mensagemController.deleteMessage(message)
-
-        let newList = lista.mensagens.filter(mensagem => mensagem._id != message)
-
-        lista.mensagens = newList
-
-        io.emit('receive_message', lista)
-    })
-
-    socket.on('disconnect', reason => {
-        console.log('Usuário desconectado');
-    })
-})
 
 server.listen(3001, () => console.log('SERVER SOCKET.IO LIGADO: 3001'))
