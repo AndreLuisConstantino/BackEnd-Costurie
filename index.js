@@ -108,7 +108,7 @@ const { useAzureSocketIO } = require("@azure/web-pubsub-socket.io");
 // Configuração para o Web PubSub
 useAzureSocketIO(io, {
     hub: "Hub", // O nome do hub no Web PubSub
-    connectionString: "Endpoint=https://socketcosturie.webpubsub.azure.com;AccessKey=SZhgav068+IriLMjFsuO3PP21PY3RVNODn44wDemEgk=;Version=1.0;"
+    connectionString: "Endpoint=https://socket-costurie.webpubsub.azure.com;AccessKey=bnPTzT5WN84S1lxh/aN9Ixkpp/s3KYhR3VBFBpFQdKw=;Version=1.0;"
 });
 
 var lista = []
