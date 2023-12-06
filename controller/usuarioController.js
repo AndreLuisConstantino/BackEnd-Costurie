@@ -223,7 +223,7 @@ const selectProfileById = async (id) => {
 
       let usuarioPossuiTag = await tagUsuarioModel.selectAllTagsWithUserIdModel(id)
 
-      console.log(usuarioPossuiTag);
+      // console.log(usuarioPossuiTag);
 
       if (usuarioPossuiTag.length) {
         for (let i = 0; i < usuarioPossuiTag.length; i++) {
@@ -449,7 +449,7 @@ const selectAllUsuariosByTag = async (tag) => {
 
     let dadosUsuarios = await tagUsuarioModel.selectAllUsuariosByTag(tag)
 
-    console.log(dadosUsuarios)
+    // console.log(dadosUsuarios)
 
     if (dadosUsuarios) {
 
@@ -458,7 +458,7 @@ const selectAllUsuariosByTag = async (tag) => {
 
         // console.log(usuarioIndex);
 
-        let usuario = await usuarioModel.selectUserById(usuarioIndex.id_usuario)
+        let usuario = await usuarioModel.selectUserByIdModel(usuarioIndex.id_usuario)
 
         // console.log(usuario);
 
