@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">26.98% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>18/63</span>
+                <span class='fraction'>17/63</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">10% </span>
+                <span class="strong">5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/20</span>
+                <span class='fraction'>1/20</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">26.98% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>18/63</span>
+                <span class='fraction'>17/63</span>
             </div>
         
             
@@ -377,16 +377,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -484,15 +484,15 @@ const inserirPublicacaoModel = <span class="fstat-no" title="function not covere
                                             descricao,
                                             id_usuario
                                             ) values (
-                                            '${dadosBody.titulo}',
+                                            ?,
                                             DATE(NOW()),
                                             TIME(NOW()),
-                                            '${dadosBody.descricao}',
-                                            ${dadosBody.id_usuario}
+                                            ?,
+                                            ?
                                             );`
 &nbsp;
     //Executa o script no BD
-    let resultStatus = <span class="cstat-no" title="statement not covered" >await prisma.$executeRawUnsafe(sql)</span>
+    let resultStatus = <span class="cstat-no" title="statement not covered" >await prisma.$executeRawUnsafe(sql, dadosBody.titulo, dadosBody.descricao, dadosBody.id_usuario)</span>
 &nbsp;
     // console.log(dadosBody);
 &nbsp;
@@ -528,11 +528,11 @@ const selectAllPublicationsModel = <span class="fstat-no" title="function not co
 }
 &nbsp;
 const selectPublicacaoByIdModel = <span class="fstat-no" title="function not covered" >as</span>ync (id_publicacao) =&gt; {
-    let sql = <span class="cstat-no" title="statement not covered" >`select * from tbl_publicacao where id = ${id_publicacao}`</span>
+    let sql = <span class="cstat-no" title="statement not covered" >`select * from tbl_publicacao where id = ?`</span>
 &nbsp;
     // console.log(sql);
 &nbsp;
-    let response = <span class="cstat-no" title="statement not covered" >await prisma.$queryRawUnsafe(sql)</span>
+    let response = <span class="cstat-no" title="statement not covered" >await prisma.$queryRawUnsafe(sql, id_publicacao)</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (response.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >        return response</span>
@@ -544,16 +544,16 @@ const selectPublicacaoByIdModel = <span class="fstat-no" title="function not cov
 const updatePublicacaoModel = <span class="fstat-no" title="function not covered" >as</span>ync (dadosBody) =&gt; {
     //Script sql para atualizar os dados no BD
     let sql = <span class="cstat-no" title="statement not covered" >`update tbl_publicacao set </span>
-                                        tbl_publicacao.titulo = '${dadosBody.titulo}',
+                                        tbl_publicacao.titulo = ?,
                                         tbl_publicacao.data_publicacao = DATE(NOW()), 
                                         tbl_publicacao.hora = TIME(NOW()), 
-                                        tbl_publicacao.descricao = '${dadosBody.descricao}' 
-                                    where tbl_publicacao.id = ${dadosBody.id_publicacao};`
+                                        tbl_publicacao.descricao = ? 
+                                    where tbl_publicacao.id = ?;`
 &nbsp;
     // console.log(sql);
 &nbsp;
     //Executa o script no BD
-    let resultStatus = <span class="cstat-no" title="statement not covered" >await prisma.$executeRawUnsafe(sql)</span>
+    let resultStatus = <span class="cstat-no" title="statement not covered" >await prisma.$executeRawUnsafe(sql, dadosBody.titulo, dadosBody.descricao, dadosBody.id_publicacao)</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (resultStatus) {</span>
 <span class="cstat-no" title="statement not covered" >        return resultStatus</span>
@@ -563,11 +563,11 @@ const updatePublicacaoModel = <span class="fstat-no" title="function not covered
 }
 &nbsp;
 const deletePublicacaoModel = <span class="fstat-no" title="function not covered" >as</span>ync (id_publicacao) =&gt; {
-    let sql = <span class="cstat-no" title="statement not covered" >`delete from tbl_publicacao where id = ${id_publicacao}`</span>
+    let sql = <span class="cstat-no" title="statement not covered" >`delete from tbl_publicacao where id = ?`</span>
 &nbsp;
     // console.log(sql);
 &nbsp;
-    let response = <span class="cstat-no" title="statement not covered" >await prisma.$executeRawUnsafe(sql)</span>
+    let response = <span class="cstat-no" title="statement not covered" >await prisma.$executeRawUnsafe(sql, id_publicacao)</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (response) {</span>
 <span class="cstat-no" title="statement not covered" >        return true</span>
@@ -577,16 +577,16 @@ const deletePublicacaoModel = <span class="fstat-no" title="function not covered
 }
 &nbsp;
 const selectAllPublicationsByIdUsuario = async (id_usuario) =&gt; {
-    let sql = `select * from tbl_publicacao where id_usuario = ${id_usuario};`
+    let sql = `select * from tbl_publicacao where id_usuario = ?`
 &nbsp;
     // console.log(sql);
 &nbsp;
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, id_usuario)
 &nbsp;
     if (response.length &gt; 0) {
         return response
-    } else {
-        return false
+    } else <span class="missing-if-branch" title="else path not taken" >E</span>{
+<span class="cstat-no" title="statement not covered" >        return false</span>
     }
 }
 &nbsp;
@@ -599,12 +599,12 @@ const insertCurtidaPublicacaoModel = <span class="fstat-no" title="function not 
                                                     id_usuario
                                                     ) values (
                                                         1, 
-                                                        ${dadosBody.id_publicacao},
-                                                        ${dadosBody.id_usuario}
+                                                        ?,
+                                                        ?
                                                         );`
 &nbsp;
     //Executa o script no BD
-    let resultStatus = <span class="cstat-no" title="statement not covered" >await prisma.$executeRawUnsafe(sql)</span>
+    let resultStatus = <span class="cstat-no" title="statement not covered" >await prisma.$executeRawUnsafe(sql, dadosBody.id_publicacao, dadosBody.id_usuario)</span>
 &nbsp;
     // console.log(dadosBody);
 &nbsp;
@@ -616,11 +616,11 @@ const insertCurtidaPublicacaoModel = <span class="fstat-no" title="function not 
 }
 &nbsp;
 const selectCurtidaPublicacaoModel = <span class="fstat-no" title="function not covered" >as</span>ync (dadosBody) =&gt; {
-    let sql = <span class="cstat-no" title="statement not covered" >`select * from tbl_avaliacao_publicacao where id_publicacao = ${dadosBody.id_publicacao} and id_usuario = ${dadosBody.id_usuario};`</span>
+    let sql = <span class="cstat-no" title="statement not covered" >`select * from tbl_avaliacao_publicacao where id_publicacao = ? and id_usuario = ?`</span>
 &nbsp;
     // console.log(sql);
 &nbsp;
-    let response = <span class="cstat-no" title="statement not covered" >await prisma.$queryRawUnsafe(sql)</span>
+    let response = <span class="cstat-no" title="statement not covered" >await prisma.$queryRawUnsafe(sql, dadosBody.id_publicacao, dadosBody.id_usuario)</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (response.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >        return response</span>
@@ -670,7 +670,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-23T19:53:20.364Z
+                at 2023-12-05T18:41:45.365Z
             </div>
         <script src="../prettify.js"></script>
         <script>

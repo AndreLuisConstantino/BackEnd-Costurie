@@ -388,7 +388,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -397,11 +397,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -499,12 +499,12 @@ const selectAllLocationsModel = <span class="fstat-no" title="function not cover
 &nbsp;
 const updateLocalizacaoModel = <span class="fstat-no" title="function not covered" >as</span>ync (dadosBody) =&gt; {
     //Script sql para atualizar os dados no BD
-    let sql = <span class="cstat-no" title="statement not covered" >`update tbl_localizacao set estado = '${dadosBody.estado}', cidade = '${dadosBody.cidade}', bairro = '${dadosBody.bairro}' where id = ${dadosBody.id_localizacao}`</span>
+    let sql = <span class="cstat-no" title="statement not covered" >`update tbl_localizacao set estado = ?, cidade = ?, bairro = ?' where id = ?`</span>
 &nbsp;
     // console.log(sql);
 &nbsp;
     //Executa o script no BD
-    let resultStatus = <span class="cstat-no" title="statement not covered" >await prisma.$executeRawUnsafe(sql)</span>
+    let resultStatus = <span class="cstat-no" title="statement not covered" >await prisma.$executeRawUnsafe(sql, dadosBody.estado, dadosBody.cidade, dadosBody.bairro, dadosBody.id_localizacao)</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (resultStatus) {</span>
 <span class="cstat-no" title="statement not covered" >        return resultStatus</span>
@@ -526,9 +526,9 @@ const selectLocalizacaoByIdModel = <span class="fstat-no" title="function not co
                 inner join
                     tbl_usuario
                 on
-                    tbl_usuario.id_localizacao = tbl_localizacao.id where id_localizacao = ${id}`
+                    tbl_usuario.id_localizacao = tbl_localizacao.id where id_localizacao = ?`
 &nbsp;
-    let response = <span class="cstat-no" title="statement not covered" >await prisma.$queryRawUnsafe(sql)</span>
+    let response = <span class="cstat-no" title="statement not covered" >await prisma.$queryRawUnsafe(sql, id)</span>
 &nbsp;
     // console.log(response);
 &nbsp;
@@ -540,9 +540,9 @@ const selectLocalizacaoByIdModel = <span class="fstat-no" title="function not co
 }
 &nbsp;
 const deleteLocalizacaoModel = <span class="fstat-no" title="function not covered" >as</span>ync (id) =&gt; {
-    let sql = <span class="cstat-no" title="statement not covered" >`delete from tbl_localizacao where id = ${id}`</span>
+    let sql = <span class="cstat-no" title="statement not covered" >`delete from tbl_localizacao where id = ?`</span>
 &nbsp;
-    let response = <span class="cstat-no" title="statement not covered" >await prisma.$executeRawUnsafe(sql)</span>
+    let response = <span class="cstat-no" title="statement not covered" >await prisma.$executeRawUnsafe(sql, id)</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (response) {</span>
 <span class="cstat-no" title="statement not covered" >        return true</span>
@@ -552,9 +552,9 @@ const deleteLocalizacaoModel = <span class="fstat-no" title="function not covere
 }
 &nbsp;
 const selectLocationById = <span class="fstat-no" title="function not covered" >as</span>ync (id_localizacao) =&gt; {
-    let sql = <span class="cstat-no" title="statement not covered" >`select * from tbl_localizacao where id = ${id_localizacao}`</span>
+    let sql = <span class="cstat-no" title="statement not covered" >`select * from tbl_localizacao where id = ?`</span>
 &nbsp;
-    let response = <span class="cstat-no" title="statement not covered" >await prisma.$queryRawUnsafe(sql)</span>
+    let response = <span class="cstat-no" title="statement not covered" >await prisma.$queryRawUnsafe(sql, id_localizacao)</span>
 &nbsp;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (response.length &gt; 0) {</span>
@@ -570,11 +570,11 @@ const selectLocationByIdSemIdNoRetorno = async (id_localizacao) =&gt; {
     tbl_localizacao.estado,
     tbl_localizacao.bairro
     from tbl_localizacao
-where tbl_localizacao.id = ${id_localizacao};`
+where tbl_localizacao.id = ?`
 &nbsp;
     // console.log(sql);
 &nbsp;
-    let response = await prisma.$queryRawUnsafe(sql)
+    let response = await prisma.$queryRawUnsafe(sql, id_localizacao)
 &nbsp;
 &nbsp;
     if (response.length &gt; 0) {
@@ -601,7 +601,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-23T19:53:20.364Z
+                at 2023-12-05T18:41:45.365Z
             </div>
         <script src="../prettify.js"></script>
         <script>

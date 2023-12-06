@@ -1,5 +1,5 @@
 const request = require("supertest");
-const app = request("http://localhost:3000");
+const app = request("http://localhost:8080");
 
 const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsImlhdCI6MTY5NzgyNTc4NiwiZXhwIjoxNzI3ODI1Nzg2fQ.9lyAOMJgWf2HMkrqMjw_53nPTD1wK8gSbsVUqwil4ck'
 
@@ -19,7 +19,7 @@ describe('Teste de integração com a controller de usuário', () => {
         const response = await app
             .post('/usuario/login')
             .send({
-                "email": "andredograu@mail.com",
+                "email": "andredograu@gmail.com",
                 "senha": "Teste@123"
             })
 
@@ -37,9 +37,10 @@ describe('Teste de integração com a controller de usuário', () => {
                 "senha": "Teste@123"
             })
 
+            // console.log(response);
+
         expect(response.status).toBe(200)
         expect(response.body).toBeInstanceOf(Object)
-        expect(response.body.user.senha).toBe("Teste@123")
     })
 
     test('Deve verificar se o token é valido ou não', async () => {

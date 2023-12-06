@@ -118,6 +118,7 @@ io.on('connection', socket => {
 
         socket.on('createRoom', async listUsers => {
             console.log(typeof (listUsers));
+            console.log(listUsers);
             const list = JSON.parse(listUsers)
 
             let newChat = await chatControler.insertChat(list)
@@ -146,7 +147,9 @@ io.on('connection', socket => {
 
             let retornoMensagem = await mensagemController.createMessage(text.messageBy, text.messageTo, text.message, text.image, text.chatId)
 
-            lista.mensagens.push(retornoMensagem)
+            if(lista.mensagens != undefined){
+                lista.mensagens.push(retornoMensagem)
+            }
 
             io.emit('receive_message', lista)
         })

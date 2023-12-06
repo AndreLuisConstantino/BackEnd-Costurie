@@ -458,7 +458,7 @@ const selectAllUsuariosByTag = async (tag) => {
 
         // console.log(usuarioIndex);
 
-        let usuario = await usuarioModel.selectUserByIdModel(usuarioIndex.id_usuario)
+        let usuario = await usuarioModel.selectUserById(usuarioIndex.id_usuario)
 
         // console.log(usuario);
 
