@@ -1,15 +1,14 @@
-/******************************
+/**************************************************************************************
  *  Objetivo: FUNÇÕES DE CONTROLE DE DADOS DA ENTIDADE CHAT
- *  Autor: Luiz Gustavo
- *  Data: 24/11/2023
+ *  Autor: Muryllo Vieira
+ *  Data: 14/11/2023
  *  Versão: 1.0
- ******************************/
+ **************************************************************************************/
 
 const moment = require('moment')
 const Message = require('../../model_mongodb/message.js')
 const Chat = require('../../model_mongodb/chat.js')
 const config = require('../../model_mongodb/modulo/config.js')
-
 
 //Import da biblioteca do prisma client
 var { PrismaClient } = require('@prisma/client')
@@ -49,7 +48,15 @@ const createChat = async (users, chatId) => {
         if (lastIds.length > 0) {
             return dadosJSON
         } else {
-            return config.ERROR_INTERNAL_SERVER.status
+            return {
+                status: config.ERROR_INTERNAL_SERVER.status,
+                message: config.ERROR_INTERNAL_SERVER.message,
+                id_chat: "",
+                usuarios: [],
+                data_criacao: "",
+                hora_criacao: "",
+                mensagens: []
+            }
         }
     }
 }
@@ -74,10 +81,26 @@ const getChat = async (idChat) => {
 
             return dadosJSON
         } else {
-            return config.ERROR_CHAT_NOT_FOUND
+            return {
+                status: config.ERROR_CHAT_NOT_FOUND.status,
+                message: config.ERROR_CHAT_NOT_FOUND.message,
+                id_chat: "",
+                usuarios: [],
+                data_criacao: "",
+                hora_criacao: "",
+                mensagens: []
+            }
         }
     } catch (err) {
-        return config.ERROR_INTERNAL_SERVER
+        return {
+            status: config.ERROR_INTERNAL_SERVER.status,
+            message: config.ERROR_INTERNAL_SERVER.message,
+            id_chat: "",
+            usuarios: [],
+            data_criacao: "",
+            hora_criacao: "",
+            mensagens: []
+        }
     }
 }
 
@@ -105,10 +128,27 @@ const getListContacts = async (idUsuario) => {
 
             return { users: listUsers }
         } else {
-            return config.ERROR_CHAT_NOT_FOUND
+            //return config.ERROR_CHAT_NOT_FOUND
+            return {
+                status: config.ERROR_CHAT_NOT_FOUND.status,
+                message: config.ERROR_CHAT_NOT_FOUND.message,
+                id_chat: "",
+                usuarios: [],
+                data_criacao: "",
+                hora_criacao: "",
+                mensagens: []
+            }
         }
     } catch (err) {
-        return config.ERROR_INTERNAL_SERVER
+        return {
+            status: config.ERROR_INTERNAL_SERVER.status,
+            message: config.ERROR_INTERNAL_SERVER.message,
+            id_chat: "",
+            usuarios: [],
+            data_criacao: "",
+            hora_criacao: "",
+            mensagens: []
+        }
     }
 }
 
@@ -122,8 +162,6 @@ const insertChat = async (usuarios) => {
         const hora_criacao = moment().format("HH:mm:ss")
 
         let users = usuarios.users
-
-        console.log(users);
 
         // usuarios.users[0].status_user = true
         // usuarios.users[1].status_user = true
@@ -142,12 +180,9 @@ const insertChat = async (usuarios) => {
                 ]
               })
 
-              console.log('verificar:' + verificarChat);
-
             if (verificarChat.length > 0) {
                 const chatOld = await getChat(verificarChat[0]._id.toString())
 
-                console.log('chatOld' + chatOld);
                 return chatOld
             } else {
                 await Chat.create(chat)
@@ -160,11 +195,18 @@ const insertChat = async (usuarios) => {
 
                 const newChat = await getChat(lastId)
 
-                console.log(`newChat: ${newChat}`);
                 return newChat
             }
         } catch (error) {
-            return config.ERROR_INTERNAL_SERVER
+            return {
+                status: config.ERROR_INTERNAL_SERVER.status,
+                message: config.ERROR_INTERNAL_SERVER.message,
+                id_chat: "",
+                usuarios: [],
+                data_criacao: "",
+                hora_criacao: "",
+                mensagens: []
+            }
         }
     }
 }
