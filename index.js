@@ -99,7 +99,7 @@ mongoose
 * Autor: Muryllo
 * Versão: 1.0
 **************************************/
-const server = require('https').createServer(app)
+const server = require('http').createServer(app)
 const io = require('socket.io')(server, { cors: { origin: '*' } })
 const chatControler = require('./routes/mongoDB/chatFunctions.js')
 const mensagemController = require('./routes/mongoDB/mensagemFunctions.js')
